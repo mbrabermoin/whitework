@@ -17,7 +17,7 @@ const SessionProvider = ({ children }) => {
     });
   }, []);
 
-  if (!user) return <Login createAccountMail={auth.CreateUserWithEmailAndPassword} signInGoogle={auth.signInGoogle} signInFacebook={auth.signInFacebook} status={status} />;
+  if (!user) return <Login createAccountMail={auth.CreateUserWithEmailAndPassword} signInGoogle={auth.signInGoogle} signInTwitter={auth.signInTwitter} signInFacebook={auth.signInFacebook} status={status} />;
 
   const state = { user };
   const actions = { signOut: auth.signOut, signIn: auth.signIn };

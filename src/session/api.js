@@ -9,6 +9,7 @@ export default {
  
   signInGoogle: () => auth.signInWithPopup(providers.google),
   signInFacebook: () => auth.signInWithPopup(providers.facebook),
+  signInTwitter: () => auth.signInWithPopup(providers.twitter),
   signOut: () => auth.signOut(),
   onChange: (callback) => auth.onAuthStateChanged(callback),
 };

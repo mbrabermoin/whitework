@@ -17,6 +17,7 @@ const auth = firebase.auth();
 const providers = {
   google: new firebase.auth.GoogleAuthProvider(),
   facebook: new firebase.auth.FacebookAuthProvider(),
+  twitter: new firebase.auth.TwitterAuthProvider(),
 };
 
 export { auth, providers };
