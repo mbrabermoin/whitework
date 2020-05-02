@@ -33,11 +33,11 @@ class LoginScreenModal extends React.Component {
 
             <footer>
               <div class="right form-actions">
-                <a href="#password" onClick={this.props.resetModal} class="ui-button inactive login">¿Olvido contraseña?</a>
+                <a href="#password" onClick={this.props.resetModal} class="ui-button inactive login">¿Olvidó su contraseña?</a>
                 <a href="#login" onClick={signInMail} class="ui-button inactive register">Login</a>
               </div>
               <div class="left social-login">
-                Loguearse con
+                Ingresá con
                 <i onClick={this.props.signInFacebook} class="fa fa-fw fa-facebook" style={{cursor: 'pointer'}}></i>
                 <i onClick={this.props.signInGoogle} class="fa fa-fw fa-google-plus" style={{cursor: 'pointer'}}></i>
                 {/*    <i onClick={this.props.signInTwitter} class="fa fa-fw fa-twitter"></i>*/}
