@@ -38,8 +38,8 @@ class LoginScreenModal extends React.Component {
               </div>
               <div class="left social-login">
                 Loguearse con
-                <i onClick={this.props.signInFacebook} class="fa fa-fw fa-facebook"></i>
-                <i onClick={this.props.signInGoogle} class="fa fa-fw fa-google-plus"></i>
+                <i onClick={this.props.signInFacebook} class="fa fa-fw fa-facebook" style={{cursor: 'pointer'}}></i>
+                <i onClick={this.props.signInGoogle} class="fa fa-fw fa-google-plus" style={{cursor: 'pointer'}}></i>
                 {/*    <i onClick={this.props.signInTwitter} class="fa fa-fw fa-twitter"></i>*/}
               </div>
             </footer>
