@@ -17,7 +17,18 @@ function userOptions() {
     show = false;
   }
 };
-
+function abrirEmpleador(){
+  document.getElementById("modoEmpleador").style.display = "block";
+  document.getElementById("modoEmpleado").style.display = "none";
+  document.getElementById("empleador-li").style.color = "#eeeeee";
+  document.getElementById("empleado-li").style.color = "#b2bbbd";
+}
+function abrirEmpleado(){
+  document.getElementById("modoEmpleador").style.display = "none";
+  document.getElementById("modoEmpleado").style.display = "block";
+  document.getElementById("empleador-li").style.color = "#b2bbbd";
+  document.getElementById("empleado-li").style.color = "#eeeeee";
+}
 
 function App() {
   const user = useUser();
@@ -30,11 +41,11 @@ function App() {
   return (
     <div className="App">
       <nav class='navbar'>
-        <ul class='left-ui'>
+        <ul class="left-ui">
           <li><img class='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
           <li class='home'>Principal</li>
-          <li>Ofertas</li>
-          <li>Demandas</li>
+          <li id="empleado-li" onClick={abrirEmpleado} >Modo Empleado</li>
+          <li id="empleador-li" onClick={abrirEmpleador}>Modo Empleador</li>
         </ul>
         <ul class='right-ui'>
           <li class='points'>{user.displayName}</li>
@@ -49,8 +60,12 @@ function App() {
           <li onClick={auth.signOut}>Cerrar Sesion</li>
         </ul>
       </div>
-      <ModoEmpleado/>
-      <ModoEmpleador/>
+      <div id="modoEmpleado">
+        <ModoEmpleado/>
+        </div>
+        <div id="modoEmpleador" >
+        <ModoEmpleador/>
+        </div>      
     </div>
   );
 }

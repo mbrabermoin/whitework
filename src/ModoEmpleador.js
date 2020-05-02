@@ -2,48 +2,35 @@ import React from 'react';
 import TrabajoTarjeta from "./components/TrabajoTarjeta";
 
 class ModoEmpleador extends React.Component {
-    render() {
-        return (
-            <main class='grid'>
+  render() {
+    return (
+      <main class='grid'>
         <div class='progress-bar'>
           <span>Pendientes</span>
           <span>En Proceso</span>
           <span>Completados</span>
+          <div class="push-right"><button class='agregarTrabajo-btn'>Agregar Trabajo</button></div>
         </div>
         <div class='track'>
           <div class='top'>
             <p class='ux'>Trabajos Temporales</p>
           </div>
-          <div class='middle'>
+          <div class='middle middle-empleador'>
             <h2 class='h2'>Asignados</h2>
             <p class='instruction'>Tienes asignados las siguientes trabajos:</p>
           </div>
-          <ul class='track-classes'>
-            <li><i class="fas fa-user"></i>Mudanza Mabel</li>
-            <li><i class="fas fa-play"></i>Pasear Pitbull</li>
-            <li><i class="fas fa-play"></i>Acto fin de año</li>
-          </ul>
-        </div>
-        <div class='message'>
-          <div class='r-container'>
-            <h3 class='in-progress'>Nuevas Propuestas:</h3>
-            <p>Estas buscando nuevos trabajos? Te acercamos algunos recomendados para vos...</p>
+          <div class='library'>
+            <TrabajoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
+            <TrabajoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tiempo="4 dias" descripcion="Mudando mi empresa se nos complica..." />
+            <TrabajoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
+            <TrabajoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tiempo="4 dias" descripcion="Mudando mi empresa se nos complica..." />
           </div>
-          <button class='message-btn'>Ver más</button>
         </div>
-        <div class='library'>       
-          <TrabajoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..."/>
-          <TrabajoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tiempo="4 dias" descripcion="Mudando mi empresa se nos complica..."/>
-          <TrabajoTarjeta titulo="Obra de teatro" zona="Palermo" tipo="dia" tiempo="3 horas" descripcion="Necesito actor de extra para una obra, no es muy popular, pero me ayudaria mucho..."/>
-          <TrabajoTarjeta titulo="Cocacolera en la cancha" zona="Quilmes" tipo="dia" tiempo="3 horas" descripcion="Repartimo coca con lo pibes ahi la barra y nos hacemos unos pesos..."/>
-          <TrabajoTarjeta titulo="Concierto de Arpas" zona="Morón" tipo="quincena" tiempo="2 semanas" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..."/>
-          <TrabajoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="quincena" tiempo="4 dias" descripcion="Nos juntamos en plazas a dar conciertos y necesitamos un organizador de arpas..."/>
-          <TrabajoTarjeta titulo="Obra de teatro" zona="Palermo" tipo="quincena" tiempo="3 horas" descripcion="Necesito actor de extra para una obra, no es muy popular, pero me ayudaria mucho..."/>
-          <TrabajoTarjeta titulo="Cocacolera en la cancha" zona="Quilmes" tipo="quincena" tiempo="3 horas" descripcion="Repartimo coca con lo pibes ahi la barra y nos hacemos unos pesos..."/>
-          </div>
+
+
       </main>
-        );
-    }
+    );
+  }
 }
 
 export default ModoEmpleador;

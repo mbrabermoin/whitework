@@ -32,7 +32,12 @@ ul {
   cursor: pointer;
   color: #eee;
 }
-
+#empleado-li{
+  color: #eee;
+}
+#modoEmpleador{
+  display: none;
+}
 .navbar {
   height: 70px;
   background-color: #3e474f;
@@ -195,7 +200,10 @@ ul {
   color: black;
   transition: color .25s;
 }
-
+.push-right {
+  margin-left: auto;
+  margin-right: 30px;
+}
 .track {
   grid-area: track;
   background-color: white;
@@ -234,6 +242,9 @@ ul {
   margin: 0;
   padding: 20px 0;
   text-align: left;
+}
+.middle-empleador{
+  margin-bottom: 20px;
 }
 
 .h2 {
@@ -303,7 +314,20 @@ ul {
 .resume-btn:hover {
   cursor: pointer;
 }
-
+.agregarTrabajo-btn {
+  color: #eee;
+  font-size: 15px;
+  cursor: pointer;
+  height: 40px;
+  width: 150px;
+  background-color:  #3659a2;
+  border-radius: 5px;
+}
+.agregarTrabajo-btn:hover{
+  transform: scale(1.05); 
+  background-color: #eee; 
+  color: #3659a2;
+}
 .estimate {
   color: #b2bbbd;
   margin-left: 20px;
