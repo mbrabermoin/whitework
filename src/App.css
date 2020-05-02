@@ -297,8 +297,11 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 100px;
-  background-color: #4a4290;
+  background-color:  #3659a2;
   border-radius: 5px;
+}
+.resume-btn:hover {
+  cursor: pointer;
 }
 
 .estimate {
@@ -369,8 +372,9 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 30px;
+  padding: 15px;
   color: white;
+  font-weight: bold;
   font-size: 13px;
   border-radius: 5px 5px 0 0;
 }
@@ -380,55 +384,23 @@ ul {
   text-align: left;
   border-radius: 5px;
   box-shadow: 0px 2px #b2bbbd;
-  margin-bottom: 100px;
 }
 .card:hover {
-  cursor: pointer;
+  transform: scale(1.05);
 }
-
-.one .top-library {
+.card .top-library {
   background-color: #3659a2;
 }
-.one .top-library .dots {
+.card .top-library .dots {
   font-size: 30px;
   margin-right: 170px;
 }
-.one .top-library .book {
+.card .top-library .book {
   font-size: 15px;
 }
-
-.two .top-library {
-  background-color: #008297;
-}
-.two .top-library .dots {
-  font-size: 30px;
-  margin-right: 170px;
-}
-.two .top-library .book {
-  font-size: 15px;
-}
-
-.three .top-library {
-  background-color: #3659a2;
-}
-.three .top-library .dots {
-  font-size: 30px;
-  margin-right: 170px;
-}
-.three .top-library .book {
-  font-size: 15px;
-}
-
 .middle-library {
   padding: 15px 30px;
 }
-.middle-library .btn-one, .middle-library .btn-three {
-  background-color: #3659a2;
-}
-.middle-library .btn-two {
-  background-color: #008297;
-}
-
 .desc {
   color: #b2bbbd;
 }
