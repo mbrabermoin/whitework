@@ -43,7 +43,7 @@ function App() {
       <nav class='navbar'>
         <ul class="left-ui">
           <li><img class='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
-          <li class='home'>Principal</li>
+          <li class='home'>CHANGAPP</li>
           <li id="empleado-li" onClick={abrirEmpleado} >Modo Empleado</li>
           <li id="empleador-li" onClick={abrirEmpleador}>Modo Empleador</li>
         </ul>

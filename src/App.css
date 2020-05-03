@@ -184,6 +184,7 @@ ul {
   grid-area: progress;
   background-color: white;
   display: flex;
+  height: 70px;
   align-items: center;
   border-radius: 5px;
   box-shadow: 0px 2px #b2bbbd;
@@ -313,6 +314,8 @@ ul {
 }
 .resume-btn:hover {
   cursor: pointer;
+  background-color: #eee; 
+  color: #3659a2;
 }
 .agregarTrabajo-btn {
   color: #eee;
@@ -324,7 +327,6 @@ ul {
   border-radius: 5px;
 }
 .agregarTrabajo-btn:hover{
-  transform: scale(1.05); 
   background-color: #eee; 
   color: #3659a2;
 }
@@ -438,7 +440,6 @@ ul {
   text-align: center;
   margin: 20px 120px;
   grid-template-columns: 1fr;
-  grid-template-rows: 70px 540px 70px 300px;
   grid-gap: 40px;
   grid-template-areas: "progress" "track" "message" "library";
 }

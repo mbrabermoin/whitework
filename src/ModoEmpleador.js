@@ -1,14 +1,29 @@
 import React from 'react';
 import TrabajoTarjeta from "./components/TrabajoTarjeta";
 
+function elegirEstadoPendiente(){
+  document.getElementById("pendientes-empleador").style.color = "black";
+  document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
+  document.getElementById("completados-empleador").style.color = "#b2bbbd";
+}
+function elegirEstadoEnProceso(){
+  document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
+  document.getElementById("enproceso-empleador").style.color = "black";
+  document.getElementById("completados-empleador").style.color = "#b2bbbd";
+}
+function elegirEstadoCompletado(){
+  document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
+  document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
+  document.getElementById("completados-empleador").style.color = "black";
+}
 class ModoEmpleador extends React.Component {
   render() {
     return (
       <main class='grid'>
         <div class='progress-bar'>
-          <span>Pendientes</span>
-          <span>En Proceso</span>
-          <span>Completados</span>
+          <span onClick={elegirEstadoPendiente} id="pendientes-empleador">Pendientes</span>
+          <span onClick={elegirEstadoEnProceso} id="enproceso-empleador">En Proceso</span>
+          <span onClick={elegirEstadoCompletado}id="completados-empleador">Completado</span>
           <div class="push-right"><button class='agregarTrabajo-btn'>Agregar Trabajo</button></div>
         </div>
         <div class='track'>
