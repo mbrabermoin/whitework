@@ -69,7 +69,7 @@ function App() {
       <div id='drop-container-id' class='drop-container'>
         <i class="fas fa-caret-up caret"></i>
         <ul class='dropdown'>
-          <li>Editar Perfil</li>
+          <li onClick={abrirPerfil}>Editar Perfil</li>
           <li onClick={auth.signOut}>Cerrar Sesion</li>
         </ul>
       </div>
