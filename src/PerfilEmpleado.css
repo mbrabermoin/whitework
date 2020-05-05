@@ -1,17 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext");
-html {
-  position: relative;
-  overflow-x: hidden !important;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Quicksand", sans-serif;
-  color: #324e63;
-}
 
 a,
 a:hover {
@@ -27,7 +14,7 @@ a:hover {
   fill: currentColor;
 }
 
-.wrapper {
+.wrapper1 {
   width: 100%;
   width: 100%;
   height: auto;
@@ -38,7 +25,7 @@ a:hover {
   background-image: white;
 }
 @media screen and (max-width: 768px) {
-  .wrapper {
+  .wrapper1 {
     height: auto;
     min-height: 100vh;
     padding-top: 100px;

@@ -11,7 +11,7 @@ import locacion from "./logos/locacion.png";
 class PerfilEmpleado extends React.Component {
     render() {
         return (
-            <div class="wrapper">
+            <div class="wrapper1">
 
                 <div class="profile-card js-profile-card">
                     <div class="profile-card__img">
