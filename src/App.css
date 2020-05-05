@@ -38,6 +38,9 @@ ul {
 #modoEmpleador{
   display: none;
 }
+#modoEmpleador{
+  display: none;
+}
 .navbar {
   height: 70px;
   background-color: #3e474f;
@@ -392,6 +395,11 @@ ul {
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 30px;
   margin-top: 0;
+}
+.sinTrabajos{
+  margin: 40px;
+  font-size: 20px;
+  color: #4b5558;
 }
 
 .top-library {

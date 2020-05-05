@@ -2,6 +2,7 @@ import React from 'react';
 import { useUser } from "./session/hooks";
 import ModoEmpleado from "./ModoEmpleado";
 import ModoEmpleador from "./ModoEmpleador";
+import PerfilEmpleado from "./PerfilEmpleado";
 import './App.css';
 import auth from "./session/api";
 
@@ -20,14 +21,26 @@ function userOptions() {
 function abrirEmpleador(){
   document.getElementById("modoEmpleador").style.display = "block";
   document.getElementById("modoEmpleado").style.display = "none";
+  document.getElementById("perfilEmpleado").style.display = "none";
   document.getElementById("empleador-li").style.color = "#eeeeee";
   document.getElementById("empleado-li").style.color = "#b2bbbd";
+  document.getElementById("profileTitle").style.color = "#b2bbbd";
 }
 function abrirEmpleado(){
   document.getElementById("modoEmpleador").style.display = "none";
   document.getElementById("modoEmpleado").style.display = "block";
+  document.getElementById("perfilEmpleado").style.display = "none";
   document.getElementById("empleador-li").style.color = "#b2bbbd";
   document.getElementById("empleado-li").style.color = "#eeeeee";
+  document.getElementById("profileTitle").style.color = "#b2bbbd";
+}
+function abrirPerfil(){
+  document.getElementById("modoEmpleador").style.display = "none";
+  document.getElementById("modoEmpleado").style.display = "none";
+  document.getElementById("perfilEmpleado").style.display = "block";
+  document.getElementById("empleador-li").style.color = "#b2bbbd";
+  document.getElementById("empleado-li").style.color = "#b2bbbd";
+  document.getElementById("profileTitle").style.color = "#eeeeee";
 }
 
 function App() {
@@ -48,7 +61,7 @@ function App() {
           <li id="empleador-li" onClick={abrirEmpleador}>Modo Empleador</li>
         </ul>
         <ul class='right-ui'>
-          <li class='points'>{user.displayName}</li>
+          <li class='points' id="profileTitle" onClick={abrirPerfil}>{user.displayName}</li>
   <div class='profile' onClick={userOptions}><div class='background'><i class="fas fa-user">{fotoPerfil}</i></div></div>
           <li><i class="fas fa-bell bell"></i></li>
         </ul>
@@ -65,6 +78,9 @@ function App() {
         </div>
         <div id="modoEmpleador" >
         <ModoEmpleador/>
+        </div>
+        <div id="perfilEmpleado" >
+        <PerfilEmpleado/>
         </div>      
     </div>
   );
