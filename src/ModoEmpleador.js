@@ -21,9 +21,15 @@ function elegirEstadoCompletado() {
   document.getElementById("temporales-titulo").textContent = "Trabajos Temporales - Completado";
 }
 class ModoEmpleador extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cantTrabajos: 0
+    }
+  }
   render() {
     var trabajos = "";
-    if (1 === 1) {
+    if (this.state.cantTrabajos === 0) {
       trabajos = <div className="sinTrabajos">
         No se han encontrado trabajos.
     </div>
