@@ -47,28 +47,28 @@ function App() {
   const user = useUser();
   var fotoPerfil="";
   if(user.photoURL!==null){
-    fotoPerfil=<img src={user.photoURL} alt="Avatar" class="avatar" />
+    fotoPerfil=<img src={user.photoURL} alt="Avatar" className="avatar" />
   }else{
-    fotoPerfil=<img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" class="avatar" />
+    fotoPerfil=<img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />
    }
   return (
     <div className="App">
-      <nav class='navbar'>
-        <ul class="left-ui">
-          <li><img class='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
-          <li class='home'>CHANGAPP</li>
+      <nav className='navbar'>
+        <ul className="left-ui">
+          <li><img className='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
+          <li className='home'>CHANGAPP</li>
           <li id="empleado-li" onClick={abrirEmpleado} >Modo Empleado</li>
           <li id="empleador-li" onClick={abrirEmpleador}>Modo Empleador</li>
         </ul>
-        <ul class='right-ui'>
-          <li class='points' id="profileTitle" onClick={abrirPerfil}>{user.displayName}</li>
-  <div class='profile' onClick={userOptions}><div class='background'><i class="fas fa-user">{fotoPerfil}</i></div></div>
-          <li><i class="fas fa-bell bell"></i></li>
+        <ul className='right-ui'>
+          <li className='points' id="profileTitle" onClick={abrirPerfil}>{user.displayName}</li>
+  <div className='profile' onClick={userOptions}><div className='background'><i className="fas fa-user">{fotoPerfil}</i></div></div>
+          <li><i className="fas fa-bell bell"></i></li>
         </ul>
       </nav>
-      <div id='drop-container-id' class='drop-container'>
-        <i class="fas fa-caret-up caret"></i>
-        <ul class='dropdown'>
+      <div id='drop-container-id' className='drop-container'>
+        <i className="fas fa-caret-up caret"></i>
+        <ul className='dropdown'>
           <li onClick={abrirPerfil}>Editar Perfil</li>
           <li onClick={auth.signOut}>Cerrar Sesion</li>
         </ul>

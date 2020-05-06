@@ -37,7 +37,7 @@ export default class AgregarTrabajo extends React.Component {
 
             <div >
 
-                <button class='agregarTrabajo-btn' onClick={this.handleOpen}>Agregar Trabajo</button>
+                <button className='agregarTrabajo-btn' onClick={this.handleOpen}>Agregar Trabajo</button>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}

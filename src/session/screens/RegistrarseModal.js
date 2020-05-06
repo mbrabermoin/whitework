@@ -40,27 +40,27 @@ class RegistrarseModal extends React.Component {
             <div>
                 <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
                 <link href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/67239/animate.min.css" rel="stylesheet" />
-                <div class="body"></div>
+                <div className="body"></div>
 
-                <div class="overlay">
-                    <div class="ui-panel login-panel animated bounceInDown">
+                <div className="overlay">
+                    <div className="ui-panel login-panel animated bounceInDown">
                         <header>
-                            <div class="left logo">
+                            <div className="left logo">
                                 <a href="#logo"><span>Changapp</span></a>
                             </div>
-                            <div class="right">
+                            <div className="right">
                                 <i onClick={this.props.volverLoginModal} class="fa fa-fw fa-window-close"></i>
                             </div>
                         </header>
 
-                        <div class="login-form">
-                            <div class="subtitle">Registrarse</div>
+                        <div className="login-form">
+                            <div className="subtitle">Registrarse</div>
                             <input type="text" id="email" placeholder="Usuario/email" />
                             <input id="password" type="password" placeholder="Contraseña" />
                             <input id="password2" type="password" placeholder="Repetir Contraseña" />
                         </div>
                         <footer>
-                            <div class="right form-actions">
+                            <div className="right form-actions">
                                 <a href="#login" onClick={createMailUser} class="ui-button inactive register">Registrarse</a>
                             </div>
                         </footer>

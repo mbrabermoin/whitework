@@ -1,62 +1,74 @@
 import React from 'react';
 import TrabajoTarjeta from "./components/TrabajoTarjeta";
 
-function elegirEstadoPendiente(){
-  document.getElementById("busqueda").style.color = "#b2bbbd";
-  document.getElementById("pendientes").style.color = "black";
-  document.getElementById("enproceso").style.color = "#b2bbbd";
-  document.getElementById("completados").style.color = "#b2bbbd";
-}
-function elegirEstadoEnProceso(){
-  document.getElementById("busqueda").style.color = "#b2bbbd";
-  document.getElementById("pendientes").style.color = "#b2bbbd";
-  document.getElementById("enproceso").style.color = "black";
-  document.getElementById("completados").style.color = "#b2bbbd";
-}
-function elegirEstadoCompletado(){
-  document.getElementById("busqueda").style.color = "#b2bbbd";
-  document.getElementById("pendientes").style.color = "#b2bbbd";
-  document.getElementById("enproceso").style.color = "#b2bbbd";
-  document.getElementById("completados").style.color = "black";
-}
-function elegirEstadoBusqueda(){
-  document.getElementById("busqueda").style.color = "black";
-  document.getElementById("pendientes").style.color = "#b2bbbd";
-  document.getElementById("enproceso").style.color = "#b2bbbd";
-  document.getElementById("completados").style.color = "#b2bbbd";
-}
+
 class ModoEmpleado extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modo: "busqueda"
+    }
+  }
+  elegirEstadoPendiente = () => {
+    document.getElementById("busqueda").style.color = "#b2bbbd";
+    document.getElementById("pendientes").style.color = "black";
+    document.getElementById("enproceso").style.color = "#b2bbbd";
+    document.getElementById("completados").style.color = "#b2bbbd";
+    this.setState({ modo: "pendientes" });
+  }
+  elegirEstadoEnProceso = () => {
+    document.getElementById("busqueda").style.color = "#b2bbbd";
+    document.getElementById("pendientes").style.color = "#b2bbbd";
+    document.getElementById("enproceso").style.color = "black";
+    document.getElementById("completados").style.color = "#b2bbbd";
+    this.setState({ modo: "enproceso" });
+  }
+  elegirEstadoCompletado = () => {
+    document.getElementById("busqueda").style.color = "#b2bbbd";
+    document.getElementById("pendientes").style.color = "#b2bbbd";
+    document.getElementById("enproceso").style.color = "#b2bbbd";
+    document.getElementById("completados").style.color = "black";
+    this.setState({ modo: "completados" });
+  }
+  elegirEstadoBusqueda = () => {
+    document.getElementById("busqueda").style.color = "black";
+    document.getElementById("pendientes").style.color = "#b2bbbd";
+    document.getElementById("enproceso").style.color = "#b2bbbd";
+    document.getElementById("completados").style.color = "#b2bbbd";
+    this.setState({ modo: "busqueda" });
+  }
+
   render() {
     return (
-      <main class='grid'>
-        <div class='progress-bar'>
-          <span onClick={elegirEstadoBusqueda} id="busqueda">Busqueda</span>
-          <span onClick={elegirEstadoPendiente} id="pendientes">Pendientes</span>
-          <span onClick={elegirEstadoEnProceso} id="enproceso">En Proceso</span>
-          <span onClick={elegirEstadoCompletado} id="completados">Completados</span>
+      <main className='grid'>
+        <div className='progress-bar'>
+          <span onClick={this.elegirEstadoBusqueda} id="busqueda">Busqueda</span>
+          <span onClick={this.elegirEstadoPendiente} id="pendientes">Pendientes</span>
+          <span onClick={this.elegirEstadoEnProceso} id="enproceso">En Proceso</span>
+          <span onClick={this.elegirEstadoCompletado} id="completados">Completados</span>
         </div>
-        <div class='track'>
-          <div class='top'>
-            <p class='ux'>Trabajos Temporales</p>
+        <div className='track'>
+          <div className='top'>
+            <p className='ux'>Trabajos Temporales</p>
           </div>
-          <div class='middle'>
-            <h2 class='h2'>Asignados</h2>
-            <p class='instruction'>Tienes asignados las siguientes trabajos:</p>
+          <div className='middle'>
+            <h2 className='h2'>Asignados</h2>
+            <p className='instruction'>Tienes asignados las siguientes trabajos:</p>
           </div>
-          <ul class='track-classes'>
-            <li><i class="fas fa-user"></i>Mudanza Mabel</li>
-            <li><i class="fas fa-play"></i>Pasear Pitbull</li>
-            <li><i class="fas fa-play"></i>Acto fin de año</li>
+          <ul className='track-classes'>
+            <li><i className="fas fa-user"></i>Mudanza Mabel</li>
+            <li><i className="fas fa-play"></i>Pasear Pitbull</li>
+            <li><i className="fas fa-play"></i>Acto fin de año</li>
           </ul>
         </div>
-        <div class='message'>
-          <div class='r-container'>
-            <h3 class='in-progress'>Nuevas Propuestas:</h3>
+        <div className='message'>
+          <div className='r-container'>
+            <h3 className='in-progress'>Nuevas Propuestas:</h3>
             <p>Estas buscando nuevos trabajos? Te acercamos algunos recomendados para vos...</p>
           </div>
-          <button class='message-btn'>Ver más</button>
+          <button className='message-btn'>Ver más</button>
         </div>
-        <div class='library'>
+        <div className='library'>
           <TrabajoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
           <TrabajoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tiempo="4 dias" descripcion="Mudando mi empresa se nos complica..." />
           <TrabajoTarjeta titulo="Obra de teatro" zona="Palermo" tipo="dia" tiempo="3 horas" descripcion="Necesito actor de extra para una obra, no es muy popular, pero me ayudaria mucho..." />
