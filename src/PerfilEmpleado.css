@@ -353,3 +353,49 @@ a:hover {
   border-radius: 12px;
   transition: all 0.3s;
 }
+
+
+.message-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.avatar-comments {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: 2px solid white;
+}
+
+
+.comment-box {
+  padding: 10px;
+  margin-bottom: 0;
+}
+
+.comment-box input {
+  margin-bottom: 0;
+}
+
+
+.tweet,
+.tweet-body {
+  overflow: hidden;
+  zoom: 1;
+}
+
+.tweet {
+  padding: 20px;
+  border-bottom: 1px solid #CCC;
+}
+
+.tweet-side {
+  display: block;
+  float: left;
+  margin-right: 10px;
+}
+
+.tweet .userName {
+  float: left;
+  font-weight: bold;
+}

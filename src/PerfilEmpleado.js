@@ -84,8 +84,41 @@ class PerfilEmpleado extends React.Component {
                         </div>
 
                         <div className="profile-card-ctr">
-                            <BotonDarPuntuacion/>
-                           </div>
+                            <BotonDarPuntuacion />
+                        </div>
+                        <div className="comentarios-container">
+                            <div className="titulo-comentarios">
+                                Comentarios:
+                            </div>
+                            <div className="comments-list">
+
+                                <div class="message-container">
+                                    <div class="content">
+                                        <article class="tweet">
+                                            <div class="tweet-side">
+                                                <img class="avatar-comments" src="//www.artifacting.com/blog/wp-content/uploads/2010/11/Batman.jpg" alt="Batman" />
+                                            </div>
+
+                                            <div class="tweet-body">
+                                                <span class="userName">Raul Gonzalez</span>
+                                                <p class="message">Labura genial, siempre atento</p>
+                                            </div>
+                                        </article>
+                                        <article class="tweet">
+                                            <div class="tweet-side">
+                                                <img class="avatar-comments" src="//www.artifacting.com/blog/wp-content/uploads/2010/11/Gollum.jpg" alt="Gollum" />
+                                            </div>
+
+                                            <div class="tweet-body">
+                                                <span class="userName">Pedro Mendez</span>
+                                                <p class="message">No cumple los horarios.</p>
+                                            </div>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>);

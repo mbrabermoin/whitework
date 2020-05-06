@@ -45,14 +45,15 @@ export default class AgregarTrabajo extends React.Component {
         this.setState({ open: true });
     };
     AgregarTrabajo = () => {
-        this.setState({ nombre: document.getElementById("nombre").value });
-        this.setState({ zona: document.getElementById("zona").value });
-        this.setState({ direccion: document.getElementById("direccion").value });
-        this.setState({ diaComienzo: document.getElementById("date").value });
-        this.setState({ diaFinalizacion: document.getElementById("date2").value });
-        this.setState({ horaComienzo: document.getElementById("time").value });
-        this.setState({ horaFinalizacion: document.getElementById("time2").value });
-        alert(this.state.nombre+"//"+this.state.zona+"//"+this.state.direccion+"//"+this.state.diaComienzo+"//"+this.state.diaFinalizacion+"//"+this.state.horaComienzo+"//"+this.state.horaFinalizacion)
+        var nombre =  document.getElementById("nombre").value;
+        var zona =  document.getElementById("zona").value;
+        var direccion =  document.getElementById("direccion").value;
+        var diaComienzo =  document.getElementById("date").value;
+        var diaFinalizacion =  document.getElementById("date2").value;
+        var horaComienzo =  document.getElementById("time").value;
+        var horaFinalizacion =  document.getElementById("time2").value;
+        alert(nombre+"//"+zona+"//"+direccion+"//"+diaComienzo+"//"+diaFinalizacion+"//"+horaComienzo+"//"+horaFinalizacion)
+        this.setState({ open: false });
     }
 
 
