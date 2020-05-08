@@ -320,7 +320,7 @@ ul {
   background-color: #eee; 
   color: #3659a2;
 }
-.agregarTrabajo-btn {
+.agregarEvento-btn {
   color: #eee;
   font-size: 15px;
   cursor: pointer;
@@ -329,7 +329,7 @@ ul {
   background-color:  #3659a2;
   border-radius: 5px;
 }
-.agregarTrabajo-btn:hover{
+.agregarEvento-btn:hover{
   background-color: #eee; 
   color: #3659a2;
 }
@@ -396,7 +396,7 @@ ul {
   grid-gap: 30px;
   margin-top: 0;
 }
-.sinTrabajos{
+.sinEventos{
   margin: 40px;
   font-size: 20px;
   color: #4b5558;

@@ -44,6 +44,7 @@ export default class DarPuntuacion extends React.Component {
                 alert("Debe puntuar para dejar su comentario.")
             } else {
                 alert("Comentario Agregado.")
+                this.setState({ open: false });
             }
         }
     }

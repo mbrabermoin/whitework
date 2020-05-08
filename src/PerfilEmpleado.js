@@ -92,26 +92,26 @@ class PerfilEmpleado extends React.Component {
                             </div>
                             <div className="comments-list">
 
-                                <div class="message-container">
-                                    <div class="content">
-                                        <article class="tweet">
-                                            <div class="tweet-side">
-                                                <img class="avatar-comments" src="//www.artifacting.com/blog/wp-content/uploads/2010/11/Batman.jpg" alt="Batman" />
+                                <div className="message-container">
+                                    <div className="content">
+                                        <article className="tweet">
+                                            <div className="tweet-side">
+                                                <img className="avatar-comments" src="//www.artifacting.com/blog/wp-content/uploads/2010/11/Batman.jpg" alt="Batman" />
                                             </div>
 
-                                            <div class="tweet-body">
-                                                <span class="userName">Raul Gonzalez</span>
-                                                <p class="message">Labura genial, siempre atento</p>
+                                            <div className="tweet-body">
+                                                <span className="userName">Raul Gonzalez</span>
+                                                <p className="message">Labura genial, siempre atento</p>
                                             </div>
                                         </article>
-                                        <article class="tweet">
-                                            <div class="tweet-side">
-                                                <img class="avatar-comments" src="//www.artifacting.com/blog/wp-content/uploads/2010/11/Gollum.jpg" alt="Gollum" />
+                                        <article className="tweet">
+                                            <div className="tweet-side">
+                                                <img className="avatar-comments" src="//www.artifacting.com/blog/wp-content/uploads/2010/11/Gollum.jpg" alt="Gollum" />
                                             </div>
 
-                                            <div class="tweet-body">
-                                                <span class="userName">Pedro Mendez</span>
-                                                <p class="message">No cumple los horarios.</p>
+                                            <div className="tweet-body">
+                                                <span className="userName">Pedro Mendez</span>
+                                                <p className="message">No cumple los horarios.</p>
                                             </div>
                                         </article>
                                     </div>

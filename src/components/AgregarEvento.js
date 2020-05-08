@@ -25,10 +25,11 @@ if (day.length < 2) {
 }
 const materialDateInput = year+"-"+month+"-"+day;
 
-export default class AgregarTrabajo extends React.Component {
+export default class AgregarEvento extends React.Component {
     constructor() {
         super();
         this.state = {
+            open:false,
             nombre:"",
             zona:"",
             direccion:"",
@@ -44,7 +45,7 @@ export default class AgregarTrabajo extends React.Component {
     handleOpen = () => {
         this.setState({ open: true });
     };
-    AgregarTrabajo = () => {
+    AgregarEvento = () => {
         var nombre =  document.getElementById("nombre").value;
         var zona =  document.getElementById("zona").value;
         var direccion =  document.getElementById("direccion").value;
@@ -63,7 +64,7 @@ export default class AgregarTrabajo extends React.Component {
 
             <div >
 
-                <button className='agregarTrabajo-btn' onClick={this.handleOpen}>Crear Evento</button>
+                <button className='agregarEvento-btn' onClick={this.handleOpen}>Crear Evento</button>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}

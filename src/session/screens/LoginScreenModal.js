@@ -13,7 +13,7 @@ class LoginScreenModal extends React.Component {
   render() {
     return (
       <div>
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
         <link href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/67239/animate.min.css" rel="stylesheet" />
         <div className="body"></div>
 
@@ -38,8 +38,8 @@ class LoginScreenModal extends React.Component {
               </div>
               <div className="left social-login">
                 Ingresá con
-                <i onClick={this.props.signInFacebook} className="fa fa-fw fa-facebook" style={{cursor: 'pointer'}}></i>
-                <i onClick={this.props.signInGoogle} className="fa fa-fw fa-google-plus" style={{cursor: 'pointer'}}></i>
+                <i onClick={this.props.signInFacebook} className="fa fa-fw fa-lg fa-facebook" style={{cursor: 'pointer'}}></i>
+                <i onClick={this.props.signInGoogle} className="fa fa-fw fa-lg fa-google" style={{cursor: 'pointer'}}></i>
                 {/*    <i onClick={this.props.signInTwitter} className="fa fa-fw fa-twitter"></i>*/}
               </div>
             </footer>
