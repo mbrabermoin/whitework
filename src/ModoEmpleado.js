@@ -54,10 +54,10 @@ class ModoEmpleado extends React.Component {
     </div>
     } else {
       eventos = <div className='library'>
-        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" dueñoEvento="Carlos Rodriguez" tiempo="3 horas" cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
-        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="1" descripcion="Mudando mi empresa se nos complica..." />
-        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" dueñoEvento="Carlos Perez" cantTrabajos="3" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
-        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tiempo="4 dias" dueñoEvento="Carlos Rodriguez" cantTrabajos="2" descripcion="Mudando mi empresa se nos complica..." />
+        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" privado="yes" tipoDueño="empresa" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Carlos Rodriguez" tiempo="3 horas" cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
+        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" privado="yes" tipoDueño="empresa" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="1" descripcion="Mudando mi empresa se nos complica..." />
+        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" tipoDueño="empresa" privado="yes" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Carlos Perez" cantTrabajos="3" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
+        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tipoDueño="empresa" tiempo="4 dias" privado="yes" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Carlos Rodriguez" cantTrabajos="2" descripcion="Mudando mi empresa se nos complica..." />
       </div>
     }
     if (this.state.modo === "empleado") {

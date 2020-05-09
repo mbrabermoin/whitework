@@ -14,7 +14,6 @@ class TrabajoTarjeta extends React.Component {
             <div fullwidth class="card-trabajo">
                 <img class="avatar-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="person1" />
                 <div class="skewed bg-react"></div>
-
                 <div class="content-trabajo">
                     <div className="trabajo-postularse"><h1>Asistente</h1> 
                      <button className='postularse-btn' onClick={this.postularse}>Postularse</button></div>

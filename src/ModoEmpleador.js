@@ -39,10 +39,10 @@ class ModoEmpleador extends React.Component {
     </div>
     } else {
       eventos = <div className='library'>
-        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" dueñoEvento="Miguel Suarez" tiempo="3 horas" cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
-        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="1" descripcion="Mudando mi empresa se nos complica..." />
-        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" dueñoEvento="Miguel Suarez" cantTrabajos="3" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
-        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="2" descripcion="Mudando mi empresa se nos complica..." />
+        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" privado="no" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" tipo="dia" dueñoEvento="Miguel Suarez" tiempo="3 horas" cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
+        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" privado="no" tipo="semana" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="1" descripcion="Mudando mi empresa se nos complica..." />
+        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" privado="no" tipo="dia" tiempo="3 horas" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" dueñoEvento="Miguel Suarez" cantTrabajos="3" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
+        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" privado="no" tipo="semana" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="2" descripcion="Mudando mi empresa se nos complica..." />
       </div>
     }
     return (

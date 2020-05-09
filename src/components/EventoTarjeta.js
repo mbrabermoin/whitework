@@ -23,10 +23,14 @@ class EventoTarjeta extends React.Component {
             titulo: this.props.titulo,
             tiempo: this.props.tiempo,
             zona: this.props.zona,
+            privado: this.props.privado,
+            mail: this.props.mailDueño,
+            telefono: this.props.telefonoDueño,
             descripcion: this.props.descripcion,
             direccion: this.props.direccion,
             cantTrabajos: this.props.cantTrabajos,
             dueñoEvento: this.props.dueñoEvento,
+            tipoDueño: this.props.tipoDueño,
             horario: "00:00",
             fecha: "2002-10-10",
         }
@@ -50,6 +54,11 @@ class EventoTarjeta extends React.Component {
         this.setState({ openPerfil: true });
     }
     render() {
+        var privacidad ="";
+        if(this.state.privado === "yes"){
+            privacidad=<div><h3>{this.state.mail}</h3>
+            <h3>{this.state.telefono}</h3></div>
+        }
         return (
             <div>
                 <div className='card'>
@@ -84,16 +93,16 @@ class EventoTarjeta extends React.Component {
                             direction="row"
                             justify="center"
                             alignItems="center"
-                            >
-                                <div style={{marginRight: 4+'em'}}>
+                        >
+                            <div style={{ marginRight: 4 + 'em' }}>
                                 <Button variant="outlined" size="large" onClick={this.handleOpenTrabajos}>{this.state.cantTrabajos} Trabajos</Button>
-                             
-                                </div>
-                                <div>
+
+                            </div>
+                            <div>
                                 <Button variant="outlined" size="large" onClick={this.handleOpenPerfil}>Organiza: {this.state.dueñoEvento}</Button>
-                  
-                                </div>
-                          </Grid>
+
+                            </div>
+                        </Grid>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseDetalle} color="primary">
@@ -115,11 +124,11 @@ class EventoTarjeta extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Trabajos de {this.state.titulo}</DialogTitle>
                     <DialogContent dividers>
-                        <TrabajoTarjeta/>
-                        <TrabajoTarjeta/>
-                        <TrabajoTarjeta/>
-                        <TrabajoTarjeta/>
-                        <TrabajoTarjeta/>
+                        <TrabajoTarjeta />
+                        <TrabajoTarjeta />
+                        <TrabajoTarjeta />
+                        <TrabajoTarjeta />
+                        <TrabajoTarjeta />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseTrabajos} color="primary">
@@ -130,8 +139,8 @@ class EventoTarjeta extends React.Component {
                          </Button>
                     </DialogActions>
                 </Dialog>
-                   {/*Modal Perfil*/}
-                   <Dialog
+                {/*Modal Perfil*/}
+                <Dialog
                     open={this.state.openPerfil}
                     onClose={this.handleClosePerfil}
                     TransitionComponent={Transition}
@@ -139,8 +148,18 @@ class EventoTarjeta extends React.Component {
                     maxWidth={'md'}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="confirmation-dialog-title">{this.state.dueñoEvento}</DialogTitle>
+                    <DialogTitle id="confirmation-dialog-title">Detalle del Propietario del evento</DialogTitle>
                     <DialogContent dividers>
+                        <div fullwidth class="card-trabajo">
+                            <img class="avatar-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="person1" />
+                            <div class="skewed bg-react"></div>
+                            <div class="content-trabajo">
+                                <div className="trabajo-postularse"><h1>{this.state.dueñoEvento}</h1>
+                                    {privacidad}
+                                    <p class="esp text-react">{this.state.tipoDueño}</p>
+                                </div>
+                            </div>
+                        </div>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClosePerfil} color="primary">
