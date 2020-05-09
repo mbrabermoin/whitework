@@ -4,6 +4,12 @@ import {Provider as SessionProvider} from "./session/context"
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+
+let db = firebase.firestore();
+
+export default db;
 
 ReactDOM.render(
   <React.StrictMode>

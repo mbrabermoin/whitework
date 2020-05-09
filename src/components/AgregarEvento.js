@@ -45,7 +45,7 @@ export default class AgregarEvento extends React.Component {
     handleOpen = () => {
         this.setState({ open: true });
     };
-    AgregarEvento = () => {
+    handleAgregarEvento = () => {
         var nombre =  document.getElementById("nombre").value;
         var zona =  document.getElementById("zona").value;
         var direccion =  document.getElementById("direccion").value;
@@ -53,6 +53,7 @@ export default class AgregarEvento extends React.Component {
         var diaFinalizacion =  document.getElementById("date2").value;
         var horaComienzo =  document.getElementById("time").value;
         var horaFinalizacion =  document.getElementById("time2").value;
+        alert("agregando")
         alert(nombre+"//"+zona+"//"+direccion+"//"+diaComienzo+"//"+diaFinalizacion+"//"+horaComienzo+"//"+horaFinalizacion)
         this.setState({ open: false });
     }
@@ -89,7 +90,7 @@ export default class AgregarEvento extends React.Component {
                         <Button onClick={this.handleClose} color="secondary">
                             Cancel
                          </Button>
-                        <Button onClick={this.AgregarTrabajo} color="primary">
+                        <Button onClick={this.handleAgregarEvento} color="primary">
                             Ok
                          </Button>
                     </DialogActions>
