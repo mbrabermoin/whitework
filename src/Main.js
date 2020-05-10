@@ -3,6 +3,7 @@ import ModoEmpleado from "./ModoEmpleado";
 import ModoEmpleador from "./ModoEmpleador";
 import PerfilEmpleado from "./PerfilEmpleado";
 import './App.css';
+import authApi from "./session/api"
 import { auth } from "./firebase";
 import db from "./index";
 
@@ -96,7 +97,7 @@ class Main extends React.Component {
                     <i className="fas fa-caret-up caret"></i>
                     <ul className='dropdown'>
                         <li onClick={this.abrirPerfil}>Mi Perfil</li>
-                        <li onClick={auth.signOut}>Cerrar Sesion</li>
+                        <li onClick={authApi.signOut}>Cerrar Sesión</li>
                     </ul>
                 </div>
                 {screen}
