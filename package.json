@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.2.1",
     "dotenv": "^8.2.0",
     "firebase": "^7.14.2",
+    "jquery": "^3.5.1",
     "node-env-file": "^0.1.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

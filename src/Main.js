@@ -3,7 +3,8 @@ import ModoEmpleado from "./ModoEmpleado";
 import ModoEmpleador from "./ModoEmpleador";
 import PerfilEmpleado from "./PerfilEmpleado";
 import './App.css';
-import auth from "./session/api";
+import { auth } from "./firebase";
+import db from "./index";
 
 let show = false;
 
@@ -21,10 +22,25 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            photoURL: this.props.photoURL,
-            displayName: this.props.displayName,
             modo: "empleado",
+            usuario: null
         }
+    }
+    componentDidMount() {
+        var user = auth.currentUser;
+        var docRef = db.collection("usuarios").doc(user.uid);
+        let component = this;
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+                component.setState({usuario: doc.data()});
+            } else {
+                alert("Ha ocurrido un error. Actualice la página.");
+            }
+        }).catch(function(error) {
+            console.log(error);
+            alert("Ha ocurrido un error. Actualice la página.");
+        });
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
@@ -46,15 +62,15 @@ class Main extends React.Component {
     }
 
     render() {
-        var fotoPerfil = "";
-        if (this.state.photoURL !== null) {
-            fotoPerfil = <img src={this.state.photoURL} alt="Avatar" className="avatar" />
-        } else {
-            fotoPerfil = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />
+
+        var fotoPerfil = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />;
+        if (this.state.usuario !== null && this.state.usuario.urlFoto !== null) {
+            fotoPerfil = <img src={this.state.usuario.urlFoto} alt="Avatar" className="avatar" />
         }
+        
         var screen = "";
         if (this.state.modo === "perfil") {
-            screen = <PerfilEmpleado />
+            screen = <PerfilEmpleado usuario={this.state.usuario}/>
         } else {
             if (this.state.modo === "empleado") {
                 screen = <ModoEmpleado/>
@@ -68,11 +84,11 @@ class Main extends React.Component {
                     <ul className="left-ui">
                         <li><img className='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
                         <li className='home'>CHANGAPP</li>
-                        <li id="empleado-li" onClick={this.abrirEmpleado} >Modo Empleado</li>
+                        <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Empleado</li>
                         <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
                     <ul className='right-ui'>
-                        <li className='points' id="profileTitle" onClick={this.abrirPerfil}>{this.state.displayName}</li>
+                        <li className='points' id="profileTitle" onClick={this.abrirPerfil}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
                         <div className='profile' onClick={userOptions}><div className='background'><i className="fas fa-user">{fotoPerfil}</i></div></div>
                         <li><i className="fas fa-bell bell"></i></li>
                     </ul>
@@ -80,7 +96,7 @@ class Main extends React.Component {
                 <div id='drop-container-id' className='drop-container'>
                     <i className="fas fa-caret-up caret"></i>
                     <ul className='dropdown'>
-                        <li onClick={this.abrirPerfil}>Editar Perfil</li>
+                        <li onClick={this.abrirPerfil}>Mi Perfil</li>
                         <li onClick={auth.signOut}>Cerrar Sesion</li>
                     </ul>
                 </div>

@@ -10,28 +10,31 @@ import locacion from "./logos/locacion.png";
 import BotonDarPuntuacion from "./components/DarPuntuacion";
 
 class PerfilEmpleado extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            usuario: props.usuario
+        }
+    }
+
     render() {
         return (
             <div className="wrapper1">
-
                 <div className="profile-card js-profile-card">
                     <div className="profile-card__img">
-                        <img src="https://res.cloudinary.com/muhammederdem/image/upload/v1537638518/Ba%C5%9Fl%C4%B1ks%C4%B1z-1.jpg" alt="profile card" />
+                        <img src={this.state.usuario.urlFoto} alt="profile card" />
                     </div>
-
                     <div className="profile-card__cnt js-profile-cnt">
-                        <div className="profile-card__name">Marcelo Perez</div>
+                        <div className="profile-card__name">{this.state.usuario.fullname}</div>
                         <div className="profile-card__txt">Guitarrista de <strong>Buenos Aires</strong></div>
                         <div className="profile-card-loc">
                             <span className="profile-card-loc__icon">
                                 <img width="60" height="60" alt="fb" src={locacion} />
                             </span>
-
                             <span className="profile-card-loc__txt">
                                 Istanbul, Turkey
-        </span>
+                            </span>
                         </div>
-
                         <div className="profile-card-inf">
                             <div className="profile-card-inf__item">
                                 <div className="profile-card-inf__title">15</div>
