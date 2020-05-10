@@ -1,7 +1,7 @@
 import React from 'react';
 import EventoTarjeta from "./components/EventoTarjeta";
 import AgregarEvento from "./components/AgregarEvento";
-
+import db from './index';
 
 class ModoEmpleado extends React.Component {
   constructor(props) {
@@ -9,8 +9,23 @@ class ModoEmpleado extends React.Component {
     this.state = {
       modo: "empleado",
       estadoDeEvento: "busqueda",
+      mailUser: this.props.mailUser,
+      eventos: [],
     }
   }
+  buscarEventos(estado) {
+    var filtro = db.collection("eventos").where("estado", "==", estado)
+    filtro.onSnapshot((snapShots) => {
+      this.setState({
+        eventos: snapShots.docs.map(doc => {
+          return { id: doc.id, data: doc.data() }
+        })
+      })
+    }, error => {
+      console.log(error)
+    });
+  }
+
   elegirEstadoPendiente = () => {
     if (this.state.modo === "empleado") {
       document.getElementById("busqueda").style.color = "#b2bbbd";
@@ -19,6 +34,7 @@ class ModoEmpleado extends React.Component {
     document.getElementById("enproceso").style.color = "#b2bbbd";
     document.getElementById("completados").style.color = "#b2bbbd";
     this.setState({ estadoDeEvento: "pendientes" });
+    this.buscarEventos("pendiente")
   }
   elegirEstadoEnProceso = () => {
     if (this.state.modo === "empleado") {
@@ -28,6 +44,7 @@ class ModoEmpleado extends React.Component {
     document.getElementById("enproceso").style.color = "black";
     document.getElementById("completados").style.color = "#b2bbbd";
     this.setState({ estadoDeEvento: "enproceso" });
+    this.buscarEventos("enproceso")
   }
   elegirEstadoCompletado = () => {
     if (this.state.modo === "empleado") {
@@ -37,6 +54,7 @@ class ModoEmpleado extends React.Component {
     document.getElementById("enproceso").style.color = "#b2bbbd";
     document.getElementById("completados").style.color = "black";
     this.setState({ estadoDeEvento: "completados" });
+    this.buscarEventos("completado")
   }
   elegirEstadoBusqueda = () => {
     document.getElementById("busqueda").style.color = "black";
@@ -44,20 +62,23 @@ class ModoEmpleado extends React.Component {
     document.getElementById("enproceso").style.color = "#b2bbbd";
     document.getElementById("completados").style.color = "#b2bbbd";
     this.setState({ estadoDeEvento: "busqueda" });
+    this.buscarEventos("busqueda")
   }
 
   render() {
-    var eventos = "";
-    if (this.state.estadoDeEvento === "completados") {
-      eventos = <div className="sinEventos">
+    var mail = this.state.mailUser
+    var contenedorEventos = "";
+    var eventos = this.state.eventos.filter(function(evento) {
+      return evento.data.dueño !== mail;
+    });
+    if (eventos.length === 0) {
+      contenedorEventos = <div className="sinEventos">
         No se han encontrado eventos.
     </div>
     } else {
-      eventos = <div className='library'>
-        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" privado="yes" tipoDueño="empresa" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Carlos Rodriguez" tiempo="3 horas" cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
-        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" privado="yes" tipoDueño="empresa" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Miguel Suarez" tiempo="4 dias" cantTrabajos="1" descripcion="Mudando mi empresa se nos complica..." />
-        <EventoTarjeta titulo="Mudanza Simple" zona="Quilmes" tipo="dia" tiempo="3 horas" tipoDueño="empresa" privado="yes" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Carlos Perez" cantTrabajos="3" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." />
-        <EventoTarjeta titulo="Mudanza Complicada" zona="Burzaco" tipo="semana" tipoDueño="empresa" tiempo="4 dias" privado="yes" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" dueñoEvento="Carlos Rodriguez" cantTrabajos="2" descripcion="Mudando mi empresa se nos complica..." />
+      contenedorEventos = <div className='library'>
+         {eventos.map(evento => (<EventoTarjeta key={evento.id} titulo={evento.data.nombre} zona="Quilmes" privado="no" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" tipo="dia" dueñoEvento="Miguel Suarez" tiempo={evento.data.duracion} cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." fechaEvento={evento.data.fecha}/>
+          ))}
       </div>
     }
     if (this.state.modo === "empleado") {
@@ -78,7 +99,7 @@ class ModoEmpleado extends React.Component {
           <div className='top'>
             <p className='ux'>Eventos Temporales</p>
           </div>
-          {eventos}
+          {contenedorEventos}
         </div>
       </main>
     );

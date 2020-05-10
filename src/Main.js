@@ -23,13 +23,14 @@ class Main extends React.Component {
         this.state = {
             photoURL: this.props.photoURL,
             displayName: this.props.displayName,
+            email: this.props.email,
             modo: "empleado",
         }
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
         document.getElementById("empleado-li").style.color = "#b2bbbd";
-        document.getElementById("profileTitle").style.color = "#b2bbbd";
+        document.getElementById("profileTitle").style.color = "#b2bbbd";        
         this.setState({ modo: "empleador" });
     }
     abrirEmpleado = () => {
@@ -43,8 +44,7 @@ class Main extends React.Component {
         document.getElementById("empleado-li").style.color = "#b2bbbd";
         document.getElementById("profileTitle").style.color = "#eeeeee";
         this.setState({ modo: "perfil" });
-    }
-
+    }      
     render() {
         var fotoPerfil = "";
         if (this.state.photoURL !== null) {
@@ -57,9 +57,9 @@ class Main extends React.Component {
             screen = <PerfilEmpleado />
         } else {
             if (this.state.modo === "empleado") {
-                screen = <ModoEmpleado/>
+                screen = <ModoEmpleado mailUser={this.state.email}/>
             } else {
-                screen = <ModoEmpleador/>
+                screen = <ModoEmpleador mailUser={this.state.email}/>
             }
         }
         return (

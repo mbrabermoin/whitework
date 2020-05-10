@@ -8,15 +8,15 @@ class ModoEmpleador extends React.Component {
     super(props);
     this.state = {
       eventos: [],
-      estadoDeEvento: "pendientes",
+      estadoDeEvento: "pendiente",
+      mailUser: this.props.mailUser,
     }
   }
-  buscarEventos() {
-    var filtro = db.collection("eventos")
+  buscarEventos(estado) {
+    var filtro = db.collection("eventos").where("estado", "==", estado)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {
-          console.log(doc.data())
           return { id: doc.id, data: doc.data() }
         })
       })
@@ -29,35 +29,38 @@ class ModoEmpleador extends React.Component {
       document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
       document.getElementById("completados-empleador").style.color = "#b2bbbd";
       document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Pendientes";
-      this.setState({ estadoDeEvento: "pendientes" });
-      this.buscarEventos()
+      this.setState({ estadoDeEvento: "pendiente" });      
+      this.buscarEventos("pendiente")
     }
     elegirEstadoEnProceso = () => {
       document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
       document.getElementById("enproceso-empleador").style.color = "black";
       document.getElementById("completados-empleador").style.color = "#b2bbbd";
-      document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Progreso";
+      document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
       this.setState({ estadoDeEvento: "enproceso" });
-      this.buscarEventos()
+      this.buscarEventos("enproceso")
     }
     elegirEstadoCompletado = () => {
       document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
       document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
       document.getElementById("completados-empleador").style.color = "black";
       document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Completados";
-      this.setState({ estadoDeEvento: "completados" });
-      this.buscarEventos()
+      this.setState({ estadoDeEvento: "completado" });
+      this.buscarEventos("completado")
     }
     render() {
-      const eventos = this.state.eventos;
-      var cotenedorEventos = "";
-      if (this.state.estadoDeEvento === "completados") {
-        cotenedorEventos = <div className="sinEventos">
+      var mail = this.state.mailUser
+      var eventos = this.state.eventos.filter(function(evento) {
+        return evento.data.dueño === mail;
+      });     
+      var contenedorEventos = "";
+      if (eventos.length === 0) {
+        contenedorEventos = <div className="sinEventos">
           No se han encontrado eventos.
     </div>
       } else {
-        cotenedorEventos = <div className='library'>
-          {eventos.map(evento => (<EventoTarjeta titulo={evento.data.nombre} zona="Quilmes" privado="no" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" tipo="dia" dueñoEvento="Miguel Suarez" tiempo={evento.data.duracion} cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." fechaEvento={evento.data.fecha}/>
+        contenedorEventos = <div className='library'>
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} titulo={evento.data.nombre} zona="Quilmes" privado="no" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" tipo="dia" dueñoEvento="Miguel Suarez" tiempo={evento.data.duracion} cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." fechaEvento={evento.data.fecha}/>
           ))}
         </div>
       }
@@ -73,7 +76,7 @@ class ModoEmpleador extends React.Component {
             <div className='top'>
               <p id="temporales-titulo" className='ux'>Eventos Temporales - Pendientes</p>
             </div>
-            {cotenedorEventos}
+            {contenedorEventos}
           </div>
         </main>
       );
