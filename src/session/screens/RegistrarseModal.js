@@ -66,7 +66,7 @@ function createMailUser() {
                                 alert(errorMessage)
                             })
                             .then(registeredUser => {
-                                db.collection("usuarios").doc(registeredUser.user.uid).set({
+                                db.collection("usuarios").doc(registeredUser.user.email).set({
                                   email: registeredUser.user.email
                               });
                             });

@@ -9,7 +9,7 @@ export default {
   }),*/
  
   signInGoogle: () => auth.signInWithPopup(providers.google).then(registeredUser => {
-    db.collection("usuarios").doc(registeredUser.user.uid).set({
+    db.collection("usuarios").doc(registeredUser.user.email).set({
       email: registeredUser.user.email,
       urlFoto: registeredUser.user.photoURL,
       telefono: registeredUser.user.phoneNumber,
@@ -17,7 +17,7 @@ export default {
   });
   }),
   signInFacebook: () => auth.signInWithPopup(providers.facebook).then(registeredUser => {
-    db.collection("usuarios").doc(registeredUser.user.uid).set({
+    db.collection("usuarios").doc(registeredUser.user.email).set({
       email: registeredUser.user.email
   });
   }),

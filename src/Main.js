@@ -28,7 +28,7 @@ class Main extends React.Component {
     }
     componentDidMount() {
         var user = auth.currentUser;
-        var docRef = db.collection("usuarios").doc(user.uid);
+        var docRef = db.collection("usuarios").doc(user.email);
         let component = this;
         docRef.get().then(function(doc) {
             if (doc.exists) {
