@@ -45,7 +45,7 @@ class Main extends React.Component {
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
         document.getElementById("empleado-li").style.color = "#b2bbbd";
-        document.getElementById("profileTitle").style.color = "#b2bbbd";
+        document.getElementById("profileTitle").style.color = "#b2bbbd";        
         this.setState({ modo: "empleador" });
     }
     abrirEmpleado = () => {
@@ -59,8 +59,7 @@ class Main extends React.Component {
         document.getElementById("empleado-li").style.color = "#b2bbbd";
         document.getElementById("profileTitle").style.color = "#eeeeee";
         this.setState({ modo: "perfil" });
-    }
-
+    }      
     render() {
 
         var fotoPerfil = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />;
@@ -73,9 +72,9 @@ class Main extends React.Component {
             screen = <PerfilEmpleado usuario={this.state.usuario}/>
         } else {
             if (this.state.modo === "empleado") {
-                screen = <ModoEmpleado/>
+                screen = <ModoEmpleado mailUser={this.state.email}/>
             } else {
-                screen = <ModoEmpleador/>
+                screen = <ModoEmpleador mailUser={this.state.email}/>
             }
         }
         return (
