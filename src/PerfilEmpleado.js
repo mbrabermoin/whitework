@@ -5,6 +5,7 @@ import twitter from "./logos/twitter.png";
 import instagram from "./logos/instagram.png";
 import linkedin from "./logos/linkedin.png";
 import locacion from "./logos/locacion.png";
+import telefono from "./logos/whatsapp.png";
 import BotonDarPuntuacion from "./components/DarPuntuacion";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -13,6 +14,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Modificar from './components/DB/Editar';
+import db from "./index";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -26,9 +30,29 @@ class PerfilEmpleado extends React.Component {
             openModalFacebook: false,
             openModalTwitter: false,
             openModalInstagram: false,
-            openModalLinkedIn: false,
+            openModalLinkedIn: false, 
+            openModalNombre: false, 
+            openModalTelefono: false,           
         }
+        this.guardarFacebook = this.guardarFacebook.bind(this)
+        this.guardarInstagram = this.guardarInstagram.bind(this)
+        this.guardarTwitter = this.guardarTwitter.bind(this)
+        this.guardarLinkedIn = this.guardarLinkedIn.bind(this)
+        this.guardarNombre = this.guardarNombre.bind(this)
+        this.guardarTelefono = this.guardarTelefono.bind(this)
     }
+    handleCerrarNombre = () => {
+        this.setState({ openModalNombre: false });
+    };
+    handleAbrirNombre = () => {
+        this.setState({ openModalNombre: true });
+    };
+    handleCerrarTelefono = () => {
+        this.setState({ openModalTelefono: false });
+    };
+    handleAbrirTelefono = () => {
+        this.setState({ openModalTelefono: true });
+    };
     handleCerrarFacebook = () => {
         this.setState({ openModalFacebook: false });
     };
@@ -53,6 +77,100 @@ class PerfilEmpleado extends React.Component {
     handleAbrirLinkedIn = () => {
         this.setState({ openModalLinkedIn: true });
     };
+    guardarNombre() {
+        const fullname = document.getElementById("fullname").value;
+        const email = this.state.usuario.email;
+        const photoURL = this.state.usuario.urlFoto;
+        const telefono = this.state.usuario.telefono;
+        const facebook = this.state.usuario.facebook;
+        const instagram = this.state.usuario.instagram;
+        const twitter = this.state.usuario.twitter;
+        const linkedin = this.state.usuario.linkedin;
+        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        this.refrescarUsuario();
+        this.setState({ openModalNombre: false });
+    }
+    guardarTelefono() {
+        const fullname = this.state.usuario.fullname;
+        const email = this.state.usuario.email;
+        const photoURL = this.state.usuario.urlFoto;
+        const telefono = document.getElementById("telefono").value;
+        const facebook = this.state.usuario.facebook;
+        const instagram = this.state.usuario.instagram;
+        const twitter = this.state.usuario.twitter;
+        const linkedin = this.state.usuario.linkedin;
+        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        this.refrescarUsuario();
+        this.setState({ openModalTelefono: false });
+    }
+    guardarFacebook() {
+        const fullname = this.state.usuario.fullname;
+        const email = this.state.usuario.email;
+        const photoURL = this.state.usuario.urlFoto;
+        const telefono = this.state.usuario.telefono;
+        const facebook = document.getElementById("facebookURL").value;
+        const instagram = this.state.usuario.instagram;
+        const twitter = this.state.usuario.twitter;
+        const linkedin = this.state.usuario.linkedin;
+        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        this.refrescarUsuario();
+        this.setState({ openModalFacebook: false });
+    }
+    
+    guardarInstagram(){
+        const fullname = this.state.usuario.fullname;
+        const email = this.state.usuario.email;
+        const photoURL = this.state.usuario.urlFoto;
+        const telefono = this.state.usuario.telefono;
+        const facebook = this.state.usuario.facebook;
+        const instagram = document.getElementById("instagramURL").value;
+        const twitter = this.state.usuario.twitter;
+        const linkedin = this.state.usuario.linkedin;
+        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        this.refrescarUsuario();
+        this.setState({ openModalInstagram: false });        
+    }
+    guardarTwitter(){
+        const fullname = this.state.usuario.fullname;
+        const email = this.state.usuario.email;
+        const photoURL = this.state.usuario.urlFoto;
+        const telefono = this.state.usuario.telefono;
+        const facebook = this.state.usuario.facebook;
+        const instagram = this.state.usuario.instagram;
+        const twitter = document.getElementById("twitterURL").value;
+        const linkedin = this.state.usuario.linkedin;
+        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        this.refrescarUsuario();
+        this.setState({ openModalTwitter: false });
+    }
+    guardarLinkedIn(){
+        const fullname = this.state.usuario.fullname;
+        const email = this.state.usuario.email;
+        const photoURL = this.state.usuario.urlFoto;
+        const telefono = this.state.usuario.telefono;
+        const facebook = this.state.usuario.facebook;
+        const instagram = this.state.usuario.instagram;
+        const twitter = this.state.usuario.twitter;
+        const linkedin = document.getElementById("linkedinURL").value;
+        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        this.refrescarUsuario();
+        this.setState({ openModalLinkedIn: false });
+    }
+    refrescarUsuario() {
+        var docRef = db.collection("usuarios").doc(this.state.usuario.email);
+        let component = this;
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                console.log("ACa Document data:", doc.data());
+                component.setState({usuario: doc.data()});
+            } else {
+                alert("Ha ocurrido un error. Actualice la página.");
+            }
+        }).catch(function(error) {
+            console.log(error);
+            alert("Ha ocurrido un error. Actualice la página.");
+        });
+    }
     render() {
         return (
             <div className="wrapper1">
@@ -61,7 +179,7 @@ class PerfilEmpleado extends React.Component {
                         <img src={this.state.usuario.urlFoto} alt="profile card" />
                     </div>
                     <div className="profile-card__cnt js-profile-cnt">
-                        <div className="profile-card__name">{this.state.usuario.fullname}</div>
+                        <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
                         <div className="profile-card__txt">Guitarrista de <strong>Buenos Aires</strong></div>
                         <div className="profile-card-loc">
                             <span className="profile-card-loc__icon">
@@ -69,6 +187,14 @@ class PerfilEmpleado extends React.Component {
                             </span>
                             <span className="profile-card-loc__txt">
                                 Istanbul, Turkey
+                            </span>
+                        </div>
+                        <div onClick={this.handleAbrirTelefono} className="profile-card-tel">
+                            <span className="profile-card-tel__icon">
+                                <img width="60" height="60" alt="fb" src={telefono} />
+                            </span>
+                            <span className="profile-card-tel__txt">
+                                {this.state.usuario.telefono}
                             </span>
                         </div>
                         <div className="profile-card-inf">
@@ -108,11 +234,6 @@ class PerfilEmpleado extends React.Component {
                                     <img width="80" height="80" alt="fb" src={linkedin} />
                                 </span>
                             </div>
-                            {/*<a href="https://www.whatsapp.com/" className="profile-card-social__item whatsapp">
-                                <span className="icon-font">
-                                    <img width="80" height="80" alt="fb" src={whatsapp} />
-                                </span>
-                            </a>*/}
                         </div>
                         <div className="profile-card-ctr">
                             <BotonDarPuntuacion />
@@ -163,13 +284,13 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Facebook:</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="nombre" autoFocus margin="dense" label="URL Facebook" type="facebook" fullWidth />
+                        <TextField id="facebookURL" autoFocus margin="dense" label="URL Facebook" defaultValue={this.state.usuario.facebook} type="facebook" fullWidth />
                        </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarFacebook} color="primary">
                             Cancel
                          </Button>
-                        <Button onClick={this.handleCerrarFacebook} color="primary">
+                        <Button onClick={this.guardarFacebook} color="primary">
                             Ok
                          </Button>
                     </DialogActions>
@@ -185,13 +306,13 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Twitter:</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="nombre" autoFocus margin="dense" label="URL Twitter" type="twitter" fullWidth />
+                        <TextField id="twitterURL" autoFocus margin="dense" label="URL Twitter" defaultValue={this.state.usuario.twitter} type="twitter" fullWidth />
                        </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarTwitter} color="primary">
                             Cancel
                          </Button>
-                        <Button onClick={this.handleCerrarTwitter} color="primary">
+                        <Button onClick={this.guardarTwitter} color="primary">
                             Ok
                          </Button>
                     </DialogActions>
@@ -207,13 +328,13 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Instagram:</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="nombre" autoFocus margin="dense" label="URL Instagram" type="instagram" fullWidth />
+                        <TextField id="instagramURL" autoFocus margin="dense" label="URL Instagram" defaultValue={this.state.usuario.instagram} type="instagram" fullWidth />
                        </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarInstagram} color="primary">
                             Cancel
                          </Button>
-                        <Button onClick={this.handleCerrarInstagram} color="primary">
+                        <Button onClick={this.guardarInstagram} color="primary">
                             Ok
                          </Button>
                     </DialogActions>
@@ -229,13 +350,57 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">LinkedIn:</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="nombre" autoFocus margin="dense" label="URL LinkedIn" type="LinkedIn" fullWidth />
+                        <TextField id="linkedinURL" autoFocus margin="dense" label="URL LinkedIn" defaultValue={this.state.usuario.linkedin} type="LinkedIn" fullWidth />
                        </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarLinkedIn} color="primary">
                             Cancel
                          </Button>
-                        <Button onClick={this.handleCerrarLinkedIn} color="primary">
+                        <Button onClick={this.guardarLinkedIn} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                {/*Nombre*/}
+                <Dialog
+                    open={this.state.openModalNombre}
+                    onClose={this.handleCerrarNombre}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Nombre:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="fullname" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.fullname} type="fullname" fullWidth />
+                       </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarNombre} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarNombre} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                 {/*Telefono*/}
+                 <Dialog
+                    open={this.state.openModalTelefono}
+                    onClose={this.handleCerrarTelefono}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Telefono:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="telefono" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
+                       </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarTelefono} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarTelefono} color="primary">
                             Ok
                          </Button>
                     </DialogActions>

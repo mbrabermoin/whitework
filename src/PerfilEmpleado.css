@@ -93,6 +93,9 @@ a:hover {
   color: #6944ff;
   margin-bottom: 15px;
 }
+.profile-card__name:hover{
+  cursor: pointer;
+}
 .profile-card__txt {
   font-size: 18px;
   font-weight: 500;
@@ -110,6 +113,21 @@ a:hover {
   font-weight: 600;
 }
 .profile-card-loc__icon {
+  display: inline-flex;
+  font-size: 27px;
+  margin-right: 10px;
+}
+.profile-card-tel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+.profile-card-tel:hover {
+  cursor: pointer;
+}
+.profile-card-tel__icon {
   display: inline-flex;
   font-size: 27px;
   margin-right: 10px;
