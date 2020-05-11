@@ -9,7 +9,7 @@ class ModoEmpleado extends React.Component {
     this.state = {
       modo: "empleado",
       estadoDeEvento: "busqueda",
-      mailUser: this.props.mailUser,
+      usuario: props.usuario,
       eventos: [],
     }
   }
@@ -66,11 +66,11 @@ class ModoEmpleado extends React.Component {
   }
 
   render() {
-    var mail = this.state.mailUser
-    var contenedorEventos = "";
+    var mail = "this.state.usuario.email";    
     var eventos = this.state.eventos.filter(function(evento) {
       return evento.data.dueño !== mail;
     });
+    var contenedorEventos = "";
     if (eventos.length === 0) {
       contenedorEventos = <div className="sinEventos">
         No se han encontrado eventos.

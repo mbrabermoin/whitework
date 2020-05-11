@@ -3,20 +3,56 @@ import './PerfilEmpleado.css';
 import facebook from "./logos/facebook.png";
 import twitter from "./logos/twitter.png";
 import instagram from "./logos/instagram.png";
-import gmail from "./logos/gmail.png";
 import linkedin from "./logos/linkedin.png";
-import whatsapp from "./logos/whatsapp.png";
 import locacion from "./logos/locacion.png";
 import BotonDarPuntuacion from "./components/DarPuntuacion";
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Slide from '@material-ui/core/Slide';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="down" ref={ref} {...props} />;
+});
 
 class PerfilEmpleado extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            usuario: props.usuario
+            usuario: props.usuario,
+            openModalFacebook: false,
+            openModalTwitter: false,
+            openModalInstagram: false,
+            openModalLinkedIn: false,
         }
     }
-
+    handleCerrarFacebook = () => {
+        this.setState({ openModalFacebook: false });
+    };
+    handleAbrirFacebook = () => {
+        this.setState({ openModalFacebook: true });
+    };
+    handleCerrarTwitter = () => {
+        this.setState({ openModalTwitter: false });
+    };
+    handleAbrirTwitter = () => {
+        this.setState({ openModalTwitter: true });
+    };
+    handleCerrarInstagram = () => {
+        this.setState({ openModalInstagram: false });
+    };
+    handleAbrirInstagram = () => {
+        this.setState({ openModalInstagram: true });
+    };
+    handleCerrarLinkedIn = () => {
+        this.setState({ openModalLinkedIn: false });
+    };
+    handleAbrirLinkedIn = () => {
+        this.setState({ openModalLinkedIn: true });
+    };
     render() {
         return (
             <div className="wrapper1">
@@ -50,42 +86,34 @@ class PerfilEmpleado extends React.Component {
                             </div>
                         </div>
 
-                        <div className="profile-card-social">
-                            <a href="https://facebook.com/" className="profile-card-social__item facebook">
+                        <div className="profile-card-social" >
+                            <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={facebook} />
                                 </span>
-                            </a>
+                            </div>
 
-                            <a href="https://twitter.com/" className="profile-card-social__item twitter">
+                            <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={twitter} />
                                 </span>
-                            </a>
-
-                            <a href="https://www.instagram.com/" className="profile-card-social__item instagram">
+                            </div>
+                            <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={instagram} />
                                 </span>
-                            </a>
-                            <a href="https://www.gmail.com/" className="profile-card-social__item gmail">
-                                <span className="icon-font">
-                                    <img width="80" height="80" alt="fb" src={gmail} />
-                                </span>
-                            </a>
-                            <a href="https://www.linkedin.com/" className="profile-card-social__item linkedin">
+                            </div>
+                            <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={linkedin} />
                                 </span>
-                            </a>
-                            <a href="https://www.whatsapp.com/" className="profile-card-social__item whatsapp">
+                            </div>
+                            {/*<a href="https://www.whatsapp.com/" className="profile-card-social__item whatsapp">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={whatsapp} />
                                 </span>
-                            </a>
-
+                            </a>*/}
                         </div>
-
                         <div className="profile-card-ctr">
                             <BotonDarPuntuacion />
                         </div>
@@ -124,6 +152,94 @@ class PerfilEmpleado extends React.Component {
                         </div>
                     </div>
                 </div>
+                {/*Facebook*/}
+                <Dialog
+                    open={this.state.openModalFacebook}
+                    onClose={this.handleCerrarFacebook}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Facebook:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="nombre" autoFocus margin="dense" label="URL Facebook" type="facebook" fullWidth />
+                       </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarFacebook} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.handleCerrarFacebook} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                {/*Twitter*/}
+                <Dialog
+                    open={this.state.openModalTwitter}
+                    onClose={this.handleCerrarTwitter}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Twitter:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="nombre" autoFocus margin="dense" label="URL Twitter" type="twitter" fullWidth />
+                       </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarTwitter} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.handleCerrarTwitter} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                {/*Instagram*/}
+                <Dialog
+                    open={this.state.openModalInstagram}
+                    onClose={this.handleCerrarInstagram}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Instagram:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="nombre" autoFocus margin="dense" label="URL Instagram" type="instagram" fullWidth />
+                       </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarInstagram} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.handleCerrarInstagram} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                {/*LinkedIn*/}
+                <Dialog
+                    open={this.state.openModalLinkedIn}
+                    onClose={this.handleCerrarLinkedIn}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">LinkedIn:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="nombre" autoFocus margin="dense" label="URL LinkedIn" type="LinkedIn" fullWidth />
+                       </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarLinkedIn} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.handleCerrarLinkedIn} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
             </div>);
     }
 }

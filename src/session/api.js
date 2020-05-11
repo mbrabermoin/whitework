@@ -13,12 +13,21 @@ export default {
       email: registeredUser.user.email,
       urlFoto: registeredUser.user.photoURL,
       telefono: registeredUser.user.phoneNumber,
-      fullname: registeredUser.user.displayName
+      fullname: registeredUser.user.displayName,
+      facebook: "",
+      instagram: "",
+      linkedin: "",
   });
   }),
   signInFacebook: () => auth.signInWithPopup(providers.facebook).then(registeredUser => {
     db.collection("usuarios").doc(registeredUser.user.email).set({
-      email: registeredUser.user.email
+      email: registeredUser.user.email,
+      urlFoto: registeredUser.user.photoURL,
+      telefono: registeredUser.user.phoneNumber,
+      fullname: registeredUser.user.displayName,
+      facebook: "",
+      instagram: "",
+      linkedin: "",
   });
   }),
   signInTwitter: () => auth.signInWithPopup(providers.twitter),

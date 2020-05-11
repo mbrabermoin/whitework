@@ -9,7 +9,7 @@ class ModoEmpleador extends React.Component {
     this.state = {
       eventos: [],
       estadoDeEvento: "pendiente",
-      mailUser: this.props.mailUser,
+      usuario: props.usuario,
     }
   }
   buscarEventos(estado) {
@@ -49,7 +49,7 @@ class ModoEmpleador extends React.Component {
       this.buscarEventos("completado")
     }
     render() {
-      var mail = this.state.mailUser
+      var mail = this.state.usuario.email;
       var eventos = this.state.eventos.filter(function(evento) {
         return evento.data.dueño === mail;
       });     
