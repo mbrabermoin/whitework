@@ -161,7 +161,6 @@ class PerfilEmpleado extends React.Component {
         let component = this;
         docRef.get().then(function(doc) {
             if (doc.exists) {
-                console.log("ACa Document data:", doc.data());
                 component.setState({usuario: doc.data()});
             } else {
                 alert("Ha ocurrido un error. Actualice la página.");
@@ -172,6 +171,12 @@ class PerfilEmpleado extends React.Component {
         });
     }
     render() {
+        var Numerotelefono = "";
+        if(this.state.usuario.telefono === "" || this.state.usuario.telefono === null){
+            Numerotelefono = "Ingresar Telefono"
+        }else{
+            Numerotelefono = this.state.usuario.telefono
+        }
         return (
             <div className="wrapper1">
                 <div className="profile-card js-profile-card">
@@ -194,7 +199,7 @@ class PerfilEmpleado extends React.Component {
                                 <img width="60" height="60" alt="fb" src={telefono} />
                             </span>
                             <span className="profile-card-tel__txt">
-                                {this.state.usuario.telefono}
+                                {Numerotelefono}
                             </span>
                         </div>
                         <div className="profile-card-inf">
