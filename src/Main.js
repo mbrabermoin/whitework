@@ -28,54 +28,60 @@ class Main extends React.Component {
         }
     }
     componentDidMount() {
-        var user = auth.currentUser;
-        var docRef = db.collection("usuarios").doc(user.email);
-        let component = this;
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                console.log("Document data:", doc.data());
-                component.setState({usuario: doc.data()});
-            } else {
+        setTimeout(() => {
+            var user = auth.currentUser;
+            var docRef = db.collection("usuarios").doc(user.email);
+            let component = this;
+            docRef.get().then(function (doc) {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
+                    component.setState({ usuario: doc.data() });
+                } else {
+                    alert("Ha ocurrido un error. Actualice la página.");
+                }
+            }).catch(function (error) {
+                console.log(error);
                 alert("Ha ocurrido un error. Actualice la página.");
-            }
-        }).catch(function(error) {
-            console.log(error);
-            alert("Ha ocurrido un error. Actualice la página.");
-        });
+            });
+        }, 1000);
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
         document.getElementById("empleado-li").style.color = "#b2bbbd";
-        document.getElementById("profileTitle").style.color = "#b2bbbd";        
+        document.getElementById("profileTitle").style.color = "#b2bbbd";
+        document.getElementById("drop-container-id").style.display = "none";
         this.setState({ modo: "empleador" });
     }
     abrirEmpleado = () => {
         document.getElementById("empleador-li").style.color = "#b2bbbd";
         document.getElementById("empleado-li").style.color = "#eeeeee";
         document.getElementById("profileTitle").style.color = "#b2bbbd";
+        document.getElementById("drop-container-id").style.display = "none";
         this.setState({ modo: "empleado" });
     }
     abrirPerfil = () => {
         document.getElementById("empleador-li").style.color = "#b2bbbd";
         document.getElementById("empleado-li").style.color = "#b2bbbd";
         document.getElementById("profileTitle").style.color = "#eeeeee";
+        show = false;
+        document.getElementById("drop-container-id").style.display = "none";
         this.setState({ modo: "perfil" });
-    }      
+    }
     render() {
 
         var fotoPerfil = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />;
         if (this.state.usuario !== null && this.state.usuario.urlFoto !== null) {
             fotoPerfil = <img src={this.state.usuario.urlFoto} alt="Avatar" className="avatar" />
         }
-        
+
         var screen = "";
         if (this.state.modo === "perfil") {
-            screen = <PerfilEmpleado usuario={this.state.usuario}/>
+            screen = <PerfilEmpleado usuario={this.state.usuario} />
         } else {
             if (this.state.modo === "empleado") {
-                screen = <ModoEmpleado usuario={this.state.usuario}/>
+                screen = <ModoEmpleado usuario={this.state.usuario} />
             } else {
-                screen = <ModoEmpleador usuario={this.state.usuario}/>
+                screen = <ModoEmpleador usuario={this.state.usuario} />
             }
         }
         return (

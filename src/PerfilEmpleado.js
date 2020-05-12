@@ -4,8 +4,9 @@ import facebook from "./logos/facebook.png";
 import twitter from "./logos/twitter.png";
 import instagram from "./logos/instagram.png";
 import linkedin from "./logos/linkedin.png";
-import locacion from "./logos/locacion.png";
+//import locacion from "./logos/locacion.png";
 import telefono from "./logos/whatsapp.png";
+import email from "./logos/email.png";
 import BotonDarPuntuacion from "./components/DarPuntuacion";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -30,9 +31,9 @@ class PerfilEmpleado extends React.Component {
             openModalFacebook: false,
             openModalTwitter: false,
             openModalInstagram: false,
-            openModalLinkedIn: false, 
-            openModalNombre: false, 
-            openModalTelefono: false,           
+            openModalLinkedIn: false,
+            openModalNombre: false,
+            openModalTelefono: false,
         }
         this.guardarFacebook = this.guardarFacebook.bind(this)
         this.guardarInstagram = this.guardarInstagram.bind(this)
@@ -116,8 +117,8 @@ class PerfilEmpleado extends React.Component {
         this.refrescarUsuario();
         this.setState({ openModalFacebook: false });
     }
-    
-    guardarInstagram(){
+
+    guardarInstagram() {
         const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
         const photoURL = this.state.usuario.urlFoto;
@@ -128,9 +129,9 @@ class PerfilEmpleado extends React.Component {
         const linkedin = this.state.usuario.linkedin;
         Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
         this.refrescarUsuario();
-        this.setState({ openModalInstagram: false });        
+        this.setState({ openModalInstagram: false });
     }
-    guardarTwitter(){
+    guardarTwitter() {
         const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
         const photoURL = this.state.usuario.urlFoto;
@@ -143,7 +144,7 @@ class PerfilEmpleado extends React.Component {
         this.refrescarUsuario();
         this.setState({ openModalTwitter: false });
     }
-    guardarLinkedIn(){
+    guardarLinkedIn() {
         const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
         const photoURL = this.state.usuario.urlFoto;
@@ -159,22 +160,22 @@ class PerfilEmpleado extends React.Component {
     refrescarUsuario() {
         var docRef = db.collection("usuarios").doc(this.state.usuario.email);
         let component = this;
-        docRef.get().then(function(doc) {
+        docRef.get().then(function (doc) {
             if (doc.exists) {
-                component.setState({usuario: doc.data()});
+                component.setState({ usuario: doc.data() });
             } else {
                 alert("Ha ocurrido un error. Actualice la página.");
             }
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log(error);
             alert("Ha ocurrido un error. Actualice la página.");
         });
     }
     render() {
         var Numerotelefono = "";
-        if(this.state.usuario.telefono === "" || this.state.usuario.telefono === null){
+        if (this.state.usuario.telefono === "" || this.state.usuario.telefono === null) {
             Numerotelefono = "Ingresar Telefono"
-        }else{
+        } else {
             Numerotelefono = this.state.usuario.telefono
         }
         return (
@@ -186,19 +187,27 @@ class PerfilEmpleado extends React.Component {
                     <div className="profile-card__cnt js-profile-cnt">
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
                         <div className="profile-card__txt">Guitarrista de <strong>Buenos Aires</strong></div>
-                        <div className="profile-card-loc">
+                        {/*<div className="profile-card-loc">
                             <span className="profile-card-loc__icon">
                                 <img width="60" height="60" alt="fb" src={locacion} />
                             </span>
                             <span className="profile-card-loc__txt">
                                 Istanbul, Turkey
                             </span>
-                        </div>
-                        <div onClick={this.handleAbrirTelefono} className="profile-card-tel">
-                            <span className="profile-card-tel__icon">
-                                <img width="60" height="60" alt="fb" src={telefono} />
+                         </div>*/}
+                        <div className="profile-card-email">
+                            <span className="profile-card-email__icon">
+                                <img width="60" height="60" alt="fb" src={email} />
                             </span>
-                            <span className="profile-card-tel__txt">
+                            <span className="profile-card-email__txt">
+                                {this.state.usuario.email}
+                            </span>
+                        </div>
+                        <div className="profile-card-tel">
+                            <span className="profile-card-tel__icon">
+                                <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
+                            </span>
+                            <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
                                 {Numerotelefono}
                             </span>
                         </div>
@@ -208,12 +217,8 @@ class PerfilEmpleado extends React.Component {
                                 <div className="profile-card-inf__txt">Changas realizadas</div>
                             </div>
                             <div className="profile-card-inf__item">
-                                <div className="profile-card-inf__title">9</div>
-                                <div className="profile-card-inf__txt">Positivos</div>
-                            </div>
-                            <div className="profile-card-inf__item">
-                                <div className="profile-card-inf__title">6</div>
-                                <div className="profile-card-inf__txt">Negativos</div>
+                                <div className="profile-card-inf__title">8.5/10</div>
+                                <div className="profile-card-inf__txt">Puntuación</div>
                             </div>
                         </div>
 
@@ -290,7 +295,7 @@ class PerfilEmpleado extends React.Component {
                     <DialogTitle id="confirmation-dialog-title">Facebook:</DialogTitle>
                     <DialogContent dividers>
                         <TextField id="facebookURL" autoFocus margin="dense" label="URL Facebook" defaultValue={this.state.usuario.facebook} type="facebook" fullWidth />
-                       </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarFacebook} color="primary">
                             Cancel
@@ -312,7 +317,7 @@ class PerfilEmpleado extends React.Component {
                     <DialogTitle id="confirmation-dialog-title">Twitter:</DialogTitle>
                     <DialogContent dividers>
                         <TextField id="twitterURL" autoFocus margin="dense" label="URL Twitter" defaultValue={this.state.usuario.twitter} type="twitter" fullWidth />
-                       </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarTwitter} color="primary">
                             Cancel
@@ -334,7 +339,7 @@ class PerfilEmpleado extends React.Component {
                     <DialogTitle id="confirmation-dialog-title">Instagram:</DialogTitle>
                     <DialogContent dividers>
                         <TextField id="instagramURL" autoFocus margin="dense" label="URL Instagram" defaultValue={this.state.usuario.instagram} type="instagram" fullWidth />
-                       </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarInstagram} color="primary">
                             Cancel
@@ -356,7 +361,7 @@ class PerfilEmpleado extends React.Component {
                     <DialogTitle id="confirmation-dialog-title">LinkedIn:</DialogTitle>
                     <DialogContent dividers>
                         <TextField id="linkedinURL" autoFocus margin="dense" label="URL LinkedIn" defaultValue={this.state.usuario.linkedin} type="LinkedIn" fullWidth />
-                       </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarLinkedIn} color="primary">
                             Cancel
@@ -378,7 +383,7 @@ class PerfilEmpleado extends React.Component {
                     <DialogTitle id="confirmation-dialog-title">Nombre:</DialogTitle>
                     <DialogContent dividers>
                         <TextField id="fullname" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.fullname} type="fullname" fullWidth />
-                       </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarNombre} color="primary">
                             Cancel
@@ -388,8 +393,8 @@ class PerfilEmpleado extends React.Component {
                          </Button>
                     </DialogActions>
                 </Dialog>
-                 {/*Telefono*/}
-                 <Dialog
+                {/*Telefono*/}
+                <Dialog
                     open={this.state.openModalTelefono}
                     onClose={this.handleCerrarTelefono}
                     TransitionComponent={Transition}
@@ -400,7 +405,7 @@ class PerfilEmpleado extends React.Component {
                     <DialogTitle id="confirmation-dialog-title">Telefono:</DialogTitle>
                     <DialogContent dividers>
                         <TextField id="telefono" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
-                       </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarTelefono} color="primary">
                             Cancel

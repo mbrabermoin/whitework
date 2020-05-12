@@ -70,7 +70,7 @@ class ModoEmpleador extends React.Component {
             <span onClick={this.elegirEstadoPendiente} id="pendientes-empleador">Pendientes</span>
             <span onClick={this.elegirEstadoEnProceso} id="enproceso-empleador">En Proceso</span>
             <span onClick={this.elegirEstadoCompletado} id="completados-empleador">Completado</span>
-            <div className="push-right"><AgregarEvento /></div>
+            <div className="push-right"><AgregarEvento usuario={this.state.usuario}/></div>
           </div>
           <div className='track'>
             <div className='top'>

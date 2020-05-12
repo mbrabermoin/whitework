@@ -124,10 +124,25 @@ a:hover {
   font-size: 18px;
   font-weight: 600;
 }
-.profile-card-tel:hover {
+.profile-card-tel__icon:hover {
+  cursor: pointer;
+}
+.profile-card-tel__txt:hover {
   cursor: pointer;
 }
 .profile-card-tel__icon {
+  display: inline-flex;
+  font-size: 27px;
+  margin-right: 10px;
+}
+.profile-card-email {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+.profile-card-email__icon {
   display: inline-flex;
   font-size: 27px;
   margin-right: 10px;
