@@ -20,7 +20,7 @@ class Agregar extends React.Component {
         var seconds = dateNow.getSeconds();
         return year + month + day + hours + minutes + seconds;
     }
-    agregarEvento = (nombre, descripcion, mail_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza) => {
+    agregarEvento = (nombre, descripcion, mail_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza, cantidadTrabajos) => {
         var idHora = this.obtenerId();
         db.collection("eventos").doc("E" + idHora + "" + mail_dueño_evento).set({
             titulo: nombre,
@@ -30,6 +30,8 @@ class Agregar extends React.Component {
             direccion: direccion,
             datetimeComienzo: datetimeComienzo,
             datetimeFinaliza: datetimeFinaliza,
+            estado: "pendiente",
+            cantidadTrabajos: cantidadTrabajos,
         }).then(() => {
             console.log("Evento Creado")            
         }).catch(() => {
@@ -38,7 +40,7 @@ class Agregar extends React.Component {
         })
         return ("E" + idHora + "" + mail_dueño_evento);
     }
-    agregarTrabajo = (nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, datefintrab, pago, periodo) => {
+    agregarTrabajo = (nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, datefintrab, pago, periodo, categoria) => {
         var idHora = this.obtenerId();
         db.collection("trabajos").doc("T" + idHora + "" + mail_dueño_evento).set({
             id_evento: nuevoEvento,
@@ -48,6 +50,10 @@ class Agregar extends React.Component {
             datetimeFinaliza: datefintrab,
             pago: pago,
             periodo: periodo,
+            estado: "pendiente",
+            mail_trabajador: "",
+            categoria: categoria,
+            requisitos: "",
         }).then(() => {
             console.log("Trabajo Creado")
         }).catch(() => {

@@ -51,7 +51,7 @@ class ModoEmpleador extends React.Component {
     render() {
       var mail = this.state.usuario.email;
       var eventos = this.state.eventos.filter(function(evento) {
-        return evento.data.dueño === mail;
+        return evento.data.mail_dueño_evento === mail;
       });     
       var contenedorEventos = "";
       if (eventos.length === 0) {
@@ -60,7 +60,7 @@ class ModoEmpleador extends React.Component {
     </div>
       } else {
         contenedorEventos = <div className='library'>
-          {eventos.map(evento => (<EventoTarjeta key={evento.id} titulo={evento.data.nombre} zona="Quilmes" privado="no" mailDueño="mail@mail.com.ar" telefonoDueño="15 4566 3456" tipoDueño="particular" tipo="dia" dueñoEvento="Miguel Suarez" tiempo={evento.data.duracion} cantTrabajos="2" descripcion="Me estoy mudando estoy necesitando gente que me ayude con las cajas..." fechaEvento={evento.data.fecha}/>
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} titulo={evento.data.titulo} zona={evento.data.zona} privado="no" mailDueño={evento.data.mail_dueño_evento} dueñoEvento="Miguel Suarez" tiempo={evento.data.duracion} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} fechaEvento={evento.data.fecha}/>
           ))}
         </div>
       }
