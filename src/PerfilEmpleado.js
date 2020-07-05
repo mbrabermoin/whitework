@@ -81,79 +81,43 @@ class PerfilEmpleado extends React.Component {
     guardarNombre() {
         const fullname = document.getElementById("fullname").value;
         const email = this.state.usuario.email;
-        const photoURL = this.state.usuario.urlFoto;
-        const telefono = this.state.usuario.telefono;
-        const facebook = this.state.usuario.facebook;
-        const instagram = this.state.usuario.instagram;
-        const twitter = this.state.usuario.twitter;
-        const linkedin = this.state.usuario.linkedin;
-        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        Modificar.modificarNombreUsuario(fullname, email);
         this.refrescarUsuario();
         this.setState({ openModalNombre: false });
     }
     guardarTelefono() {
-        const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
-        const photoURL = this.state.usuario.urlFoto;
         const telefono = document.getElementById("telefono").value;
-        const facebook = this.state.usuario.facebook;
-        const instagram = this.state.usuario.instagram;
-        const twitter = this.state.usuario.twitter;
-        const linkedin = this.state.usuario.linkedin;
-        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        Modificar.modificarTelefonoUsuario(telefono, email);
         this.refrescarUsuario();
         this.setState({ openModalTelefono: false });
     }
     guardarFacebook() {
-        const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
-        const photoURL = this.state.usuario.urlFoto;
-        const telefono = this.state.usuario.telefono;
         const facebook = document.getElementById("facebookURL").value;
-        const instagram = this.state.usuario.instagram;
-        const twitter = this.state.usuario.twitter;
-        const linkedin = this.state.usuario.linkedin;
-        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        Modificar.modificarFacebookUsuario(facebook, email);
         this.refrescarUsuario();
         this.setState({ openModalFacebook: false });
     }
 
     guardarInstagram() {
-        const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
-        const photoURL = this.state.usuario.urlFoto;
-        const telefono = this.state.usuario.telefono;
-        const facebook = this.state.usuario.facebook;
         const instagram = document.getElementById("instagramURL").value;
-        const twitter = this.state.usuario.twitter;
-        const linkedin = this.state.usuario.linkedin;
-        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        Modificar.modificarInstagramUsuario(instagram, email);
         this.refrescarUsuario();
         this.setState({ openModalInstagram: false });
     }
     guardarTwitter() {
-        const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
-        const photoURL = this.state.usuario.urlFoto;
-        const telefono = this.state.usuario.telefono;
-        const facebook = this.state.usuario.facebook;
-        const instagram = this.state.usuario.instagram;
         const twitter = document.getElementById("twitterURL").value;
-        const linkedin = this.state.usuario.linkedin;
-        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        Modificar.modificarTwitterUsuario(twitter, email);
         this.refrescarUsuario();
         this.setState({ openModalTwitter: false });
     }
     guardarLinkedIn() {
-        const fullname = this.state.usuario.fullname;
         const email = this.state.usuario.email;
-        const photoURL = this.state.usuario.urlFoto;
-        const telefono = this.state.usuario.telefono;
-        const facebook = this.state.usuario.facebook;
-        const instagram = this.state.usuario.instagram;
-        const twitter = this.state.usuario.twitter;
         const linkedin = document.getElementById("linkedinURL").value;
-        Modificar.modificarUsuario(fullname, email, photoURL, telefono, facebook, twitter, instagram, linkedin);
+        Modificar.modificarLinkedinUsuario(linkedin, email);
         this.refrescarUsuario();
         this.setState({ openModalLinkedIn: false });
     }
