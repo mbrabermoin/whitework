@@ -32,7 +32,7 @@ class ResetPassword extends React.Component {
                     <div className="ui-panel login-panel animated bounceInDown">
                         <header>
                             <div className="left logo">
-                                <a href="#logo"><span>Changapp</span></a>
+                                <a href="#logo"><span>WhiteWork</span></a>
                             </div>
                             <div className="right">
                                 <i onClick={this.props.volverLoginModal} className="fa fa-fw fa-window-close"></i>
