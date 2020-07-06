@@ -20,12 +20,14 @@ class Agregar extends React.Component {
         var seconds = dateNow.getSeconds();
         return year + month + day + hours + minutes + seconds;
     }
-    agregarEvento = (nombre, descripcion, mail_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza, cantidadTrabajos) => {
+    agregarEvento = (nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza, cantidadTrabajos) => {
         var idHora = this.obtenerId();
         db.collection("eventos").doc("E" + idHora + "" + mail_dueño_evento).set({
+            id_evento:"E" + idHora + "" + mail_dueño_evento,
             titulo: nombre,
             descripcion: descripcion,
             mail_dueño_evento: mail_dueño_evento,
+            nombre_dueño_evento: nombre_dueño_evento,
             zona: zona,
             direccion: direccion,
             datetimeComienzo: datetimeComienzo,
@@ -43,7 +45,8 @@ class Agregar extends React.Component {
     agregarTrabajo = (nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, datefintrab, pago, periodo, categoria) => {
         var idHora = this.obtenerId();
         db.collection("trabajos").doc("T" + idHora + "" + mail_dueño_evento).set({
-            id_evento: nuevoEvento,
+            id_trabajo:"T" + idHora + "" + mail_dueño_evento,
+            id_evento: nuevoEvento,            
             rol: rolT,
             descripcion: descripciontrab,
             datetimeComienzo: datecomienzotrab,

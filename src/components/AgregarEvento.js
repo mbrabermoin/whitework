@@ -90,10 +90,11 @@ export default class AgregarEvento extends React.Component {
                         } else {
                             const datetimeComienzo = document.getElementById("date").value + " " + document.getElementById("time").value;
                             const datetimeFinaliza = document.getElementById("date2").value + " " + document.getElementById("time2").value;
-                            const mail_dueño_evento = this.state.usuario.email;                            
+                            const mail_dueño_evento = this.state.usuario.email;  
+                            const nombre_dueño_evento = this.state.usuario.fullname;                            
                             const cantidadTrabajos = this.state.cantTrabajos;
                             // alert(nombre + "//" + zona + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
-                            const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza, cantidadTrabajos);
+                            const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza, cantidadTrabajos);
                             for (let t = 0; t < this.state.cantTrabajos; t++) {
                                 const rolT = this.state.arrayTrabajos[t].rol;
                                 const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;

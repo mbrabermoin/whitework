@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
 import TrabajoTarjeta from './TrabajoTarjeta';
+import db from '../index';
+import DueñoTarjeta from './DueñoTarjeta';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -17,6 +19,7 @@ class EventoTarjeta extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            modo:this.props.modo,
             openDetalle: false,
             openTrabajo: false,
             openPerfil: false,
@@ -24,16 +27,30 @@ class EventoTarjeta extends React.Component {
             tiempo: this.props.tiempo,
             zona: this.props.zona,
             privado: this.props.privado,
-            mail: this.props.mailDueño,
+            mailDueño: this.props.mailDueño,
+            nombreDueño: this.props.nombreDueño,
             telefono: this.props.telefonoDueño,
             descripcion: this.props.descripcion,
             direccion: this.props.direccion,
             cantTrabajos: this.props.cantTrabajos,
-            dueñoEvento: this.props.dueñoEvento,
             tipoDueño: this.props.tipoDueño,
+            eventoid: this.props.eventoid,
             horario: "00:00",
             fecha: "2002-10-10",
+            trabajos: [],
         }
+    }
+    buscarTrabajos(evento) {
+        var filtro = db.collection("trabajos").where("id_evento", "==", evento)
+        filtro.onSnapshot((snapShots) => {
+            this.setState({
+                trabajos: snapShots.docs.map(doc => {
+                    return { id: doc.id, data: doc.data() }
+                })
+            })
+        }, error => {
+            console.log(error)
+        });
     }
     handleCloseDetalle = () => {
         this.setState({ openDetalle: false });
@@ -46,6 +63,7 @@ class EventoTarjeta extends React.Component {
     }
     handleOpenTrabajos = () => {
         this.setState({ openTrabajo: true });
+        this.buscarTrabajos(this.state.eventoid);
     }
     handleClosePerfil = () => {
         this.setState({ openPerfil: false });
@@ -54,10 +72,18 @@ class EventoTarjeta extends React.Component {
         this.setState({ openPerfil: true });
     }
     render() {
-        var privacidad ="";
-        if(this.state.privado === "yes"){
-            privacidad=<div><h3>{this.state.mail}</h3>
-            <h3>{this.state.telefono}</h3></div>
+        var trabajos = this.state.trabajos;
+        var contenedorTrabajos = <div>
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.datetimeComienzo} datefintrab={trabajo.data.datetimeFinaliza} modo={this.state.modo}/>
+            ))}
+        </div>
+        var dueño = "";
+        if (this.state.modo === "empleado"){
+        dueño = <div>
+            <Button variant="outlined" size="large" onClick={this.handleOpenPerfil}>Organiza: {this.state.nombreDueño}</Button>
+        </div>
+        }else{
+            dueño = "";
         }
         return (
             <div>
@@ -98,10 +124,7 @@ class EventoTarjeta extends React.Component {
                                 <Button variant="outlined" size="large" onClick={this.handleOpenTrabajos}>{this.state.cantTrabajos} Trabajos</Button>
 
                             </div>
-                            <div>
-                                <Button variant="outlined" size="large" onClick={this.handleOpenPerfil}>Organiza: {this.state.dueñoEvento}</Button>
-
-                            </div>
+                            {dueño}
                         </Grid>
                     </DialogContent>
                     <DialogActions>
@@ -124,11 +147,7 @@ class EventoTarjeta extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Trabajos de {this.state.titulo}</DialogTitle>
                     <DialogContent dividers>
-                        <TrabajoTarjeta />
-                        <TrabajoTarjeta />
-                        <TrabajoTarjeta />
-                        <TrabajoTarjeta />
-                        <TrabajoTarjeta />
+                        {contenedorTrabajos}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseTrabajos} color="primary">
@@ -150,16 +169,7 @@ class EventoTarjeta extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Detalle del Propietario del evento</DialogTitle>
                     <DialogContent dividers>
-                        <div fullwidth class="card-trabajo">
-                            <img class="avatar-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="person1" />
-                            <div class="skewed bg-react"></div>
-                            <div class="content-trabajo">
-                                <div className="trabajo-postularse"><h1>{this.state.dueñoEvento}</h1>
-                                    {privacidad}
-                                    <p class="esp text-react">{this.state.tipoDueño}</p>
-                                </div>
-                            </div>
-                        </div>
+                        <DueñoTarjeta mailDueño={this.state.mailDueño}/>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClosePerfil} color="primary">
