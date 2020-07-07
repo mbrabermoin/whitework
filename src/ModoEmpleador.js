@@ -13,6 +13,9 @@ class ModoEmpleador extends React.Component {
       nombreUsuario: props.nombreUsuario,
     }
   }
+  componentDidMount() {
+      this.buscarEventos("pendiente");
+  }
   buscarEventos(estado) {
     var filtro = db.collection("eventos").where("estado", "==", estado)
     filtro.onSnapshot((snapShots) => {
@@ -28,6 +31,7 @@ class ModoEmpleador extends React.Component {
   }
     elegirEstadoPendiente = () => {
       document.getElementById("pendientes-empleador").style.color = "black";
+      document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
       document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
       document.getElementById("completados-empleador").style.color = "#b2bbbd";
       document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Pendientes";
@@ -36,6 +40,7 @@ class ModoEmpleador extends React.Component {
     }
     elegirEstadoEnProceso = () => {
       document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
+      document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
       document.getElementById("enproceso-empleador").style.color = "black";
       document.getElementById("completados-empleador").style.color = "#b2bbbd";
       document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
@@ -44,11 +49,21 @@ class ModoEmpleador extends React.Component {
     }
     elegirEstadoCompletado = () => {
       document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
+      document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
       document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
       document.getElementById("completados-empleador").style.color = "black";
       document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Completados";
       this.setState({ estadoDeEvento: "completado" });
       this.buscarEventos("completado")
+    }
+    elegirEstadoPostulaciones = () => {
+      document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
+      document.getElementById("postulaciones-empleador").style.color = "black";
+      document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
+      document.getElementById("completados-empleador").style.color = "#b2bbbd";
+      document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Postulaciones";
+      this.setState({ estadoDeEvento: "postulados" });
+      this.buscarEventos("postulados")
     }
     render() {
       var mail = this.state.usuario.email;
@@ -70,6 +85,7 @@ class ModoEmpleador extends React.Component {
         <main className='grid'>
           <div className='progress-bar'>
             <span onClick={this.elegirEstadoPendiente} id="pendientes-empleador">Pendientes</span>
+            <span onClick={this.elegirEstadoPostulaciones} id="postulaciones-empleador">Postulaciones</span>
             <span onClick={this.elegirEstadoEnProceso} id="enproceso-empleador">En Proceso</span>
             <span onClick={this.elegirEstadoCompletado} id="completados-empleador">Completado</span>
             <div className="push-right"><AgregarEvento usuario={this.state.usuario}/></div>

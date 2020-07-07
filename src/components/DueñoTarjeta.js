@@ -15,7 +15,6 @@ class DueñoTarjeta extends React.Component {
         }
     }
     componentDidMount() {
-        setTimeout(() => {
             var docRef = db.collection("usuarios").doc(this.state.mailDueño);
             let component = this;
             docRef.get().then(function (doc) {
@@ -29,7 +28,6 @@ class DueñoTarjeta extends React.Component {
                 console.log(error);
                 alert("Ha ocurrido un error. Actualice la página.");
             });
-        }, 1000);
     }
     render() {
         var nombre = "";

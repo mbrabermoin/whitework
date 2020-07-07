@@ -81,7 +81,7 @@ class Main extends React.Component {
             if (this.state.modo === "empleado") {
                 screen = <ModoEmpleado usuario={this.state.usuario}  />
             } else {
-                screen = <ModoEmpleador usuario={this.state.usuario}  />
+                screen = <ModoEmpleador usuario={this.state.usuario} />
             }
         }
         return (
