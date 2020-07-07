@@ -8,12 +8,61 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
 import Agregar from './DB/Agregar';
 import TrabajoTarjeta from './TrabajoTarjeta';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
+const periodos = [
+    {
+        value: 'Hora',
+        label: 'Hora',
+    },
+    {
+        value: 'Jornada',
+        label: 'Jornada',
+    },
+    {
+        value: 'Semana',
+        label: 'Semana',
+    },
+    {
+        value: 'Total',
+        label: 'Total',
+    },
+];
+const categorias = [
+    {
+        value: '',
+        label: '',
+    },
+    {
+        value: 'Diversion',
+        label: 'Diversion',
+    },
+    {
+        value: 'Electricidad',
+        label: 'Electricidad',
+    },
+    {
+        value: 'Plomeria',
+        label: 'Plomeria',
+    },
+    {
+        value: 'Gasista',
+        label: 'Gasista',
+    },
+    {
+        value: 'Seguridad',
+        label: 'Seguridad',
+    },
+    {
+        value: 'Otros',
+        label: 'Otros',
+    },
+];
 
 const dateNow = new Date();
 const year = dateNow.getFullYear();
@@ -44,6 +93,8 @@ export default class AgregarEvento extends React.Component {
             horaComienzo: "",
             horaFinalizacion: "",
             cantTrabajos: 0,
+            periodoDisplay: "Hora",
+            categoriaDisplay: "",
             arrayTrabajos: [],
         }
     }
@@ -67,6 +118,8 @@ export default class AgregarEvento extends React.Component {
     };
     handleOpenTrabajo = () => {
         this.setState({ openTrabajo: true });
+        this.setState({ periodoDisplay: "Hora" }); 
+        this.setState({ categoriaDisplay: "" }); 
     };
     handleAgregarEvento = () => {
         const nombre = document.getElementById("nombre").value;
@@ -88,23 +141,27 @@ export default class AgregarEvento extends React.Component {
                         if (this.state.cantTrabajos === 0) {
                             alert("Se necesita al menos un trabajo para crear el evento.")
                         } else {
-                            const datetimeComienzo = document.getElementById("date").value + " " + document.getElementById("time").value;
-                            const datetimeFinaliza = document.getElementById("date2").value + " " + document.getElementById("time2").value;
+                            const dateComienzo = document.getElementById("date").value;
+                            const timeComienzo = document.getElementById("time").value;
+                            const dateFinaliza = document.getElementById("date2").value;
+                            const timeFinaliza = document.getElementById("time2").value;
                             const mail_dueño_evento = this.state.usuario.email;  
                             const nombre_dueño_evento = this.state.usuario.fullname;                            
                             const cantidadTrabajos = this.state.cantTrabajos;
                             // alert(nombre + "//" + zona + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
-                            const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, zona, direccion, datetimeComienzo, datetimeFinaliza, cantidadTrabajos);
+                            const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, zona, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
                             for (let t = 0; t < this.state.cantTrabajos; t++) {
                                 const rolT = this.state.arrayTrabajos[t].rol;
                                 const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
                                 const datecomienzotrab = this.state.arrayTrabajos[t].datecomienzotrab;
                                 const datefintrab = this.state.arrayTrabajos[t].datefintrab;
+                                const timecomienzotrab = this.state.arrayTrabajos[t].timecomienzotrab;
+                                const timefintrab = this.state.arrayTrabajos[t].timefintrab;
                                 const pago = this.state.arrayTrabajos[t].pago;
                                 const periodo = this.state.arrayTrabajos[t].periodo;
                                 const categoria = this.state.arrayTrabajos[t].categoria;
                                 setTimeout(function () {
-                                    Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, datefintrab, pago, periodo, categoria);
+                                    Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, timecomienzotrab, datefintrab, timefintrab, pago, periodo, categoria);
                                 }, t * 1000);
                             }
                             this.setState({ openEvento: false });
@@ -130,14 +187,16 @@ export default class AgregarEvento extends React.Component {
                 if (pago.trim() === "") {
                     alert("Pago es Requerido.")
                 } else {
-                    const periodo = document.getElementById("periodo").value;
+                    const periodo = this.state.periodoDisplay;
                     if (periodo.trim() === "") {
                         alert("Periodo es Requerido.")
                     } else {
-                        const categoria = document.getElementById("categoria").value;
-                        const datecomienzotrab = document.getElementById("date-comienzo-trab").value + " " + document.getElementById("time-comienzo-trab").value;
-                        const datefintrab = document.getElementById("date-fin-trab").value + " " + document.getElementById("time-fin-trab").value;
-                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, datecomienzotrab: datecomienzotrab, datefintrab: datefintrab, categoria:categoria };
+                        const categoria = this.state.categoriaDisplay;
+                        const datecomienzotrab = document.getElementById("date-comienzo-trab").value;
+                        const datefintrab = document.getElementById("date-fin-trab").value;
+                        const timecomienzotrab = document.getElementById("time-comienzo-trab").value;
+                        const timefintrab = document.getElementById("time-fin-trab").value;
+                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, datecomienzotrab: datecomienzotrab, timecomienzotrab: timecomienzotrab, datefintrab: datefintrab, timefintrab: timefintrab, categoria:categoria };
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -149,12 +208,18 @@ export default class AgregarEvento extends React.Component {
 
     }
 
+    handleCambiarPeriodo = name => event => {
+        this.setState({ periodoDisplay: event.target.value });        
+    }
+    handleCambiarCategoria = name => event => {
+        this.setState({ categoriaDisplay: event.target.value });        
+    }
 
     render() {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map(evento => (<TrabajoTarjeta rol={evento.rol} descripcion={evento.descripciontrab} pago={evento.pago} periodo={evento.periodo} datecomienzotrab={evento.datecomienzotrab} datefintrab={evento.datefintrab} modo="empleador" />
+                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} categoria={trabajo.categoria} modo="empleador" />
                 ))}
             </div>
         } else {
@@ -242,15 +307,17 @@ export default class AgregarEvento extends React.Component {
                     <DialogContent dividers>
                         <TextField id="rol" required autoFocus margin="dense" label="Rol del trabajador" type="rol" fullWidth />
                         <TextField id="descripcion-trab" required multiline rows="2" margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
-                        <TextField id="pago" required margin="dense" label="Pago" type="number" />
-                        <TextField id="periodo" required margin="dense" label="Periodo" type="number" />
-                        <TextField id="categoria" required margin="dense" label="Categoria" type="categoria" fullWidth />
-                       
-                        <br />
-                        <TextField id="date-comienzo-trab" required label="Comienzo:" type="date" defaultValue={materialDateInput} />
+                        <TextField id="pago" required margin="dense" label="Pago" type="number" fullWidth/>
+                        <TextField id="periodo" select required margin="dense" value={this.state.periodoDisplay} onChange={this.handleCambiarPeriodo('periodoDisplay')}  label="Periodo de Pago" fullWidth>
+                            {periodos.map(option => (<MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>))}
+                        </TextField>
+                        <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} onChange={this.handleCambiarCategoria('categoriaDisplay')}  label="Categoria" fullWidth>
+                            {categorias.map(option => (<MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>))}
+                        </TextField>
+                        <TextField id="date-comienzo-trab" required label="Comienzo" type="date" defaultValue={materialDateInput} />
                         <TextField id="time-comienzo-trab" required type="time" defaultValue="00:00" label=" " />
                         <br />
-                        <TextField id="date-fin-trab" label="Terminación:" type="date" defaultValue={materialDateInput} />
+                        <TextField id="date-fin-trab" label="Terminación" type="date" defaultValue={materialDateInput} />
                         <TextField id="time-fin-trab" type="time" defaultValue="00:00" label=" " />
                     </DialogContent>
                     <DialogActions>

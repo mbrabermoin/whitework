@@ -24,19 +24,18 @@ class EventoTarjeta extends React.Component {
             openTrabajo: false,
             openPerfil: false,
             titulo: this.props.titulo,
-            tiempo: this.props.tiempo,
             zona: this.props.zona,
             privado: this.props.privado,
             mailDueño: this.props.mailDueño,
             nombreDueño: this.props.nombreDueño,
-            telefono: this.props.telefonoDueño,
             descripcion: this.props.descripcion,
             direccion: this.props.direccion,
             cantTrabajos: this.props.cantTrabajos,
-            tipoDueño: this.props.tipoDueño,
             eventoid: this.props.eventoid,
-            horario: "00:00",
-            fecha: "2002-10-10",
+            datecomienzo: this.props.datecomienzo,
+            datefin: this.props.datefin,
+            timecomienzo: this.props.timecomienzo,
+            timefin: this.props.timefin,
             trabajos: [],
         }
     }
@@ -72,9 +71,11 @@ class EventoTarjeta extends React.Component {
         this.setState({ openPerfil: true });
     }
     render() {
+        var fechas = this.state.datecomienzo + " - " + this.state.timecomienzo;
+        var horarios = this.state.datefin + " - " + this.state.timefin;
         var trabajos = this.state.trabajos;
         var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.datetimeComienzo} datefintrab={trabajo.data.datetimeFinaliza} modo={this.state.modo}/>
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} modo={this.state.modo}/>
             ))}
         </div>
         var dueño = "";
@@ -112,8 +113,9 @@ class EventoTarjeta extends React.Component {
                             {this.state.titulo}
                         </DialogContentText>
                         <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
-                        <TextField id="dias" margin="dense" disabled label="Día/s" type="date" value={this.state.fecha} fullWidth />
-                        <TextField id="horario" margin="dense" disabled label="Horario" type="time" value={this.state.horario} fullWidth />
+                        <TextField id="comienza" margin="dense" disabled label="Comienza" type="" value={fechas} fullWidth />
+                        <TextField id="finaliza" margin="dense" disabled label="Finaliza" type="" value={horarios} fullWidth />
+                        <TextField id="zona" margin="dense" disabled label="Zona" type="zona" value={this.state.zona} fullWidth />
                         <TextField id="direccion" margin="dense" disabled label="Dirección" type="direccion" value={this.state.direccion} fullWidth />
                         <Grid container
                             direction="row"
