@@ -26,6 +26,7 @@ class EventoTarjeta extends React.Component {
             openTrabajo: false,
             openPerfil: false,
             openEliminarEvento: false,
+            estadoEvento: this.props.estado,
             titulo: this.props.titulo,
             zona: this.props.zona,
             privado: this.props.privado,
@@ -102,7 +103,7 @@ class EventoTarjeta extends React.Component {
             dueño = "";
         }
         var botonEliminarEvento = "";
-        if (this.state.modo === "empleador"){
+        if (this.state.modo === "empleador" && this.state.estadoEvento === "pendiente"){
             botonEliminarEvento = 
             <button className='eliminar-btn' onClick={this.handleOpenEliminarEvento}>Eliminar</button>
         }else{
@@ -110,7 +111,7 @@ class EventoTarjeta extends React.Component {
         }
         var trabajos = this.state.trabajos;
         var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} usuario={this.state.usuario} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} modo={this.state.modo}/>
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} modo={this.state.modo}/>
             ))}
         </div>
         
@@ -160,10 +161,7 @@ class EventoTarjeta extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseDetalle} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.handleOk} color="primary">
-                            Ok
+                            CERRAR
                          </Button>
                     </DialogActions>
                 </Dialog>
@@ -182,10 +180,7 @@ class EventoTarjeta extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseTrabajos} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.handleCloseTrabajos} color="primary">
-                            Ok
+                            CERRAR
                          </Button>
                     </DialogActions>
                 </Dialog>
@@ -204,10 +199,7 @@ class EventoTarjeta extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClosePerfil} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.handleClosePerfil} color="primary">
-                            Ok
+                            CERRAR
                          </Button>
                     </DialogActions>
                 </Dialog>
@@ -216,7 +208,6 @@ class EventoTarjeta extends React.Component {
                     open={this.state.openEliminarEvento}
                     onClose={this.handleCloseEliminarEvento}
                     TransitionComponent={Transition}
-                    fullWidth={true}
                     maxWidth={'md'}
                     aria-labelledby="form-dialog-title"
                 >

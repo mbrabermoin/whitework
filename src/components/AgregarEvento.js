@@ -219,7 +219,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} categoria={trabajo.categoria} modo="empleador" />
+                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} estadoEvento="pendiente" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} categoria={trabajo.categoria} modo="empleador" />
                 ))}
             </div>
         } else {
@@ -265,10 +265,10 @@ export default class AgregarEvento extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseEvento} color="secondary">
-                            Cancel
+                            CERRAR
                          </Button>
                         <Button onClick={this.handleAgregarEvento} color="primary">
-                            Ok
+                            AGREGAR EVENTO
                          </Button>
                     </DialogActions>
                 </Dialog>
@@ -292,7 +292,7 @@ export default class AgregarEvento extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseLista} color="primary">
-                            Ok
+                            VOLVER
                          </Button>
                     </DialogActions>
                 </Dialog>
@@ -322,10 +322,10 @@ export default class AgregarEvento extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseTrabajo} color="secondary">
-                            Cancel
+                            VOLVER
                          </Button>
                         <Button onClick={this.handleAgregarTrabajo} color="primary">
-                            Ok
+                            AGREGAR
                          </Button>
                     </DialogActions>
                 </Dialog>
