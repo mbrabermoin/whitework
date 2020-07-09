@@ -2,6 +2,7 @@ import React from 'react';
 import db from '../../index';
 
 class Editar extends React.Component {
+  //Usuarios
   modificarNombreUsuario = (fullname, email)=> {
     db.collection("usuarios").doc(email).update({
       fullname: fullname,
@@ -56,5 +57,35 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  //Eventos
+  cambiarEstadoEvento = (evento, estado)=> {
+    db.collection("eventos").doc(evento).update({
+      estado: estado,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }    
+  restarTrabajo = (evento, cantTrabajos)=> {
+    db.collection("eventos").doc(evento).update({
+      cantidadTrabajos: cantTrabajos- 1,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  } 
+  //Trabajos
+  cambiarEstadoTrabajo = (trabajo, estado)=> {
+    db.collection("trabajos").doc(trabajo).update({
+      estado: estado,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }   
+  
 }
 export default new Editar();

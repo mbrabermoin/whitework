@@ -67,5 +67,17 @@ class Agregar extends React.Component {
             console.log("error")
         })
     }
+    agregarPostulacion = (mail_postulante, id_trabajo) => {
+        var idHora = this.obtenerId();
+        db.collection("postulaciones").doc("P" + idHora + "" + mail_postulante).set({
+            id_postulacion:"P" + idHora + "" + mail_postulante,
+            id_trabajo: id_trabajo,
+            mail_postulante:mail_postulante,            
+        }).then(() => {
+            console.log("Trabajo Creado")
+        }).catch(() => {
+            console.log("error")
+        })
+    }
 }
 export default new Agregar();

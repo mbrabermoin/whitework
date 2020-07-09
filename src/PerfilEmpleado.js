@@ -368,7 +368,7 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Telefono:</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="telefono" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
+                        <TextField id="telefono" autoFocus margin="dense" label="Telefono" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCerrarTelefono} color="primary">

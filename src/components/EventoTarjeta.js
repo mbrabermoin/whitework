@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import TrabajoTarjeta from './TrabajoTarjeta';
 import db from '../index';
 import DueñoTarjeta from './DueñoTarjeta';
+import Eliminar from './DB/Eliminar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -20,9 +21,11 @@ class EventoTarjeta extends React.Component {
         super(props);
         this.state = {
             modo:this.props.modo,
+            usuario: this.props.usuario,
             openDetalle: false,
             openTrabajo: false,
             openPerfil: false,
+            openEliminarEvento: false,
             titulo: this.props.titulo,
             zona: this.props.zona,
             privado: this.props.privado,
@@ -60,7 +63,7 @@ class EventoTarjeta extends React.Component {
     handleCloseTrabajos = () => {
         this.setState({ openTrabajo: false });
     }
-    handleOpenTrabajos = () => {
+    handleOpenTrabajos = () => {        
         this.setState({ openTrabajo: true });
         this.buscarTrabajos(this.state.eventoid);
     }
@@ -70,14 +73,26 @@ class EventoTarjeta extends React.Component {
     handleOpenPerfil = () => {
         this.setState({ openPerfil: true });
     }
+    handleCloseEliminarEvento = () => {
+        this.setState({ openEliminarEvento: false });
+    }
+    handleOpenEliminarEvento = () => {
+        this.setState({ openEliminarEvento: true });
+    }
+    eliminarEvento = () => { 
+        Eliminar.eliminarEvento(this.state.eventoid);
+        var filtro = db.collection("trabajos").where("id_evento", "==", this.state.eventoid)
+        filtro.onSnapshot((snapShots) => {
+            snapShots.docs.map(doc => {
+                return Eliminar.eliminarTrabajo(doc.id);
+                })
+        }, error => {
+            console.log(error)
+        });
+    }
     render() {
         var fechas = this.state.datecomienzo + " - " + this.state.timecomienzo;
         var horarios = this.state.datefin + " - " + this.state.timefin;
-        var trabajos = this.state.trabajos;
-        var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} modo={this.state.modo}/>
-            ))}
-        </div>
         var dueño = "";
         if (this.state.modo === "empleado"){
         dueño = <div>
@@ -86,6 +101,19 @@ class EventoTarjeta extends React.Component {
         }else{
             dueño = "";
         }
+        var botonEliminarEvento = "";
+        if (this.state.modo === "empleador"){
+            botonEliminarEvento = 
+            <button className='eliminar-btn' onClick={this.handleOpenEliminarEvento}>Eliminar</button>
+        }else{
+            botonEliminarEvento = "";
+        }
+        var trabajos = this.state.trabajos;
+        var contenedorTrabajos = <div>
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} usuario={this.state.usuario} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} modo={this.state.modo}/>
+            ))}
+        </div>
+        
         return (
             <div>
                 <div className='card'>
@@ -97,6 +125,7 @@ class EventoTarjeta extends React.Component {
                         <h3 className='job-name'>{this.state.zona}</h3>
                         <p className='desc'>{this.state.descripcion}</p>
                         <button className='resume-btn' onClick={this.handleOpenDetalle}>Ver Detalle</button>
+                        {botonEliminarEvento}
                     </div>
                 </div>
                 <Dialog
@@ -179,6 +208,28 @@ class EventoTarjeta extends React.Component {
                          </Button>
                         <Button onClick={this.handleClosePerfil} color="primary">
                             Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                {/*Consultar si desea eliminar evento*/ }
+                <Dialog
+                    open={this.state.openEliminarEvento}
+                    onClose={this.handleCloseEliminarEvento}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Eliminar</DialogTitle>
+                    <DialogContent dividers>
+                        ¿Desea eliminar el evento {this.state.titulo} definitivamente?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseEliminarEvento} color="primary">
+                            No
+                         </Button>
+                        <Button onClick={this.eliminarEvento} color="primary">
+                            Si
                          </Button>
                     </DialogActions>
                 </Dialog>
