@@ -61,7 +61,7 @@ class TrabajoTarjeta extends React.Component {
         var mail = this.state.usuario.email;
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
-        Agregar.agregarPostulacion(mail, trabajo);
+        Agregar.agregarPostulacion(mail, trabajo, evento);
         Editar.cambiarEstadoEvento(evento, "postulado");
         Editar.cambiarEstadoTrabajo(trabajo, "postulado");
     }
