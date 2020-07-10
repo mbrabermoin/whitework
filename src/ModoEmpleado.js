@@ -43,7 +43,6 @@ class ModoEmpleado extends React.Component {
   }
   buscarPostulaciones() {
     var post=[]
-    var events=[]
     var mailUsuario = this.state.usuario.email;
     db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
     .then(function(querySnapshot) {
@@ -54,19 +53,16 @@ class ModoEmpleado extends React.Component {
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
-    db.collection("eventos").get()
-    .then(function(querySnapshot) {      
-        querySnapshot.forEach(function(doc) {
-          const found = post.find(element => element === doc.data().id_evento);
-          if(found === doc.data().id_evento){
-            events.push(doc.data());
-          }            
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
+    var filtro = db.collection("eventos");
+    filtro.onSnapshot((snapShots) => {
+      this.setState({
+        eventos: snapShots.docs.map(doc => {
+          return { id: doc.id, data: doc.data() }
+        })
+      })
+    }, error => {
+      console.log(error)
     });    
-    this.setState({ eventos: events });
   }
 
   elegirEstadoPendiente = () => {
@@ -122,17 +118,20 @@ class ModoEmpleado extends React.Component {
         <button id="filter_button" onClick={this.filtrarBusqueda} className="filter-button">Filtrar</button>
       </div>
     }
+    var mail = "";
     var contenedorEventos = "";
     if (this.state.usuario !== null) {
-      var eventos = this.state.eventos;
-      console.log(eventos)
+      mail = this.state.usuario.email;
+      var eventos = this.state.eventos.filter(function (evento) {
+        return evento.data.mail_dueño_evento !== mail;
+      });
       if (eventos.length === 0) {
         contenedorEventos = <div className="sinEventos">
           No se han encontrado eventos.
       </div>
       } else {
         contenedorEventos = <div className='library'>
-          {eventos.forEach(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} zona={evento.data.zona} direccion={evento.data.direccion} modo="empleado" />
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} zona={evento.data.zona} direccion={evento.data.direccion} modo="empleado" />
           ))}
         </div>
       }
