@@ -5,12 +5,17 @@ import twitter from "../logos/twitter.png";
 import instagram from "../logos/instagram.png";
 import linkedin from "../logos/linkedin.png";
 import db from '../index';
+import editar from './DB/Editar';
+import eliminar from './DB/Eliminar';
 
 class PostuladoTarjeta extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             mailPostulado: this.props.mailPostulado,
+            trabajo: this.props.trabajo,
+            postulacion: this.props.postulacion,
+            evento: this.props.evento,
             usuario: null,
         }
     }
@@ -29,6 +34,34 @@ class PostuladoTarjeta extends React.Component {
             alert("Ha ocurrido un error. Actualice la página.");
         });
     }
+    eliminarPostulacionesPorTrabajo(trabajo) {
+        db.collection("postulaciones").where("id_trabajo", "==", trabajo).get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            eliminar.eliminarPostulacion(doc.data().id_postulacion)
+          });
+        })
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
+        });
+    }  
+
+    aceptarPostulante = () => {
+        var mail = this.state.usuario.email;
+        var trabajo = this.state.trabajo;
+        var evento = this.state.evento;
+        this.eliminarPostulacionesPorTrabajo(trabajo)
+        editar.cambiarEstadoEvento(evento, "postulado")
+        editar.asignarTrabajador(mail, trabajo)
+    }
+    rechazarPostulante = () => {
+        var evento = this.state.evento;
+        var trabajo = this.state.trabajo;
+        var postulacion = this.state.postulacion;
+        eliminar.eliminarPostulacion(postulacion)
+        editar.cambiarEstadoTrabajo(trabajo, "pendiente")
+        editar.cambiarEstadoEvento(evento, "pendiente")
+    }
     render() {
         var nombre = "";
         var mail = "";
@@ -43,7 +76,7 @@ class PostuladoTarjeta extends React.Component {
             mail = this.state.usuario.email;
             photoUrl = this.state.usuario.urlFoto;
             if (this.state.usuario.telefono !== null && this.state.usuario.telefono !== "") {
-            telefono = "Telefono: " + this.state.usuario.telefono;
+                telefono = "Telefono: " + this.state.usuario.telefono;
             }
             if (this.state.usuario.facebook !== "") {
                 facebookpanel = <div className="profile-card-social__dueño">
@@ -89,8 +122,8 @@ class PostuladoTarjeta extends React.Component {
                 <div class="skewed bg-react"></div>
                 <div class="content-dueño">
                     <div>
-                        <button className='eliminartrabajo-btn'>Rechazar</button>
-                        <button className='editar-btn'>Aceptar</button>
+                        <button className='eliminartrabajo-btn' onClick={this.rechazarPostulante}>Rechazar</button>
+                        <button className='aceptar-btn' onClick={this.aceptarPostulante}>Aceptar</button>
                     </div>
                     <div className="redes-sociales">
                         {facebookpanel}

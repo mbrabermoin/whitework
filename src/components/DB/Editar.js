@@ -86,6 +86,15 @@ class Editar extends React.Component {
       console.log("error")
     })
   }   
-  
+  asignarTrabajador = (mailTrabajador, trabajo)=> {
+    db.collection("trabajos").doc(trabajo).update({
+      mail_trabajador: mailTrabajador,
+      estado: "asignado",
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }   
 }
 export default new Editar();

@@ -69,6 +69,35 @@ export default class ModoEmpleado extends React.Component {
         this.setState({eventos: events })
     }, 1000);
   }
+  buscarAsignados(){
+    var trab = [];
+    var events = [];
+    var mailUsuario = this.state.usuario.email;
+    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {         
+          trab.push(doc.data().id_evento);
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+    db.collection("eventos").get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const found = trab.find(element => element === doc.data().id_evento);
+          if (found === doc.data().id_evento) {  
+             return events.push({ id: doc.id, data: doc.data() });
+          }
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+     setTimeout(() => {
+        this.setState({eventos: events })
+    }, 1000);
+  }
   elegirEstadoPendiente = () => {
     this.setState({eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
@@ -87,7 +116,7 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("completados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
     this.setState({ estadoDeEvento: "enproceso" });
-    this.buscarEventos("enproceso")
+    this.buscarAsignados()
   }
   elegirEstadoCompletado = () => {
     this.setState({eventos: [] })

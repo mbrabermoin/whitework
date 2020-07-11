@@ -112,6 +112,41 @@
     background-color: #eee; 
     color: red;
   }
+  .aceptar-btn {
+    margin-top: 10px;
+    color: #eee;
+    font-size: 15px;
+    outline: none;
+    cursor: pointer;
+    height: 40px;
+    width: 100px;
+    background-color:  #3659a2;
+    border-radius: 5px;
+    float:right;
+  }
+  .aceptar-btn:hover {
+    cursor: pointer;
+    background-color: #eee; 
+    color: #3659a2;
+  }
+  .rechazar-btn {
+    margin-top: 10px;
+    margin-left: 10px;
+    color: #eee;
+    font-size: 15px;
+    outline: none;
+    cursor: pointer;
+    height: 40px;
+    width: 100px;
+    background-color:  red;
+    border-radius: 5px;
+    float:right;
+  }
+  .rechazar-btn:hover {
+    cursor: pointer;
+    background-color: #eee; 
+    color: red;
+  }
   .esp {
     font-size: 1.05rem;
       margin: 0;

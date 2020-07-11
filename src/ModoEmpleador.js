@@ -70,6 +70,7 @@ class ModoEmpleador extends React.Component {
         return evento.data.mail_dueño_evento === mail;
       });   
       var contenedorEventos = "";
+      console.log(eventos)
       if (eventos.length === 0) {
         contenedorEventos = <div className="sinEventos">
           No se han encontrado eventos.

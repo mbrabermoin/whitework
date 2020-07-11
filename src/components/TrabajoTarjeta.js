@@ -93,7 +93,7 @@ class TrabajoTarjeta extends React.Component {
         }
         var postulados = this.state.postulados;
         var contenedorPostulados = <div>
-            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} mailPostulado={postulado.data.mail_postulante}/>))}
+            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion}/>))}
         </div>
         return (
             <div>

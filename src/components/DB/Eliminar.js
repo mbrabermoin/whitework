@@ -18,6 +18,15 @@ class Eliminar extends React.Component {
             console.error("Error eliminando evento: ", error);
         });
     }
+     //Postulacion
+     eliminarPostulacion = (postulacion) => {
+        db.collection("postulaciones").doc(postulacion).delete().then(function () {
+            console.log("Postulacion eliminada");
+        }).catch(function (error) {
+            console.error("Error eliminando evento: ", error);
+        });
+    }
+    
 
 }
 export default new Eliminar();
