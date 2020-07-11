@@ -3,14 +3,13 @@ import EventoTarjeta from "./components/EventoTarjeta";
 import { auth } from "./firebase";
 import db from './index';
 
-class ModoEmpleado extends React.Component {
+export default class ModoEmpleado extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       estadoDeEvento: "busqueda",
       usuario: null,
       eventos: [],
-      postulaciones: [],
     }
   }
   componentDidMount() {
@@ -41,40 +40,47 @@ class ModoEmpleado extends React.Component {
       console.log(error)
     });
   }
-  buscarPostulaciones() {
-    var post=[]
+  buscarPostulaciones(){
+    var post = [];
+    var events = [];
     var mailUsuario = this.state.usuario.email;
     db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            post.push(doc.data().id_evento);
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {         
+          post.push(doc.data().id_evento);
         });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
-    var filtro = db.collection("eventos");
-    filtro.onSnapshot((snapShots) => {
-      this.setState({
-        eventos: snapShots.docs.map(doc => {
-          return { id: doc.id, data: doc.data() }
-        })
       })
-    }, error => {
-      console.log(error)
-    });    
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+    db.collection("eventos").get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const found = post.find(element => element === doc.data().id_evento);
+          if (found === doc.data().id_evento) {  
+             return events.push({ id: doc.id, data: doc.data() });
+          }
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+     setTimeout(() => {
+        this.setState({eventos: events })
+    }, 1000);
   }
-
   elegirEstadoPendiente = () => {
+    this.setState({eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "black";
     document.getElementById("enproceso").style.color = "#b2bbbd";
     document.getElementById("completados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Postulaciones";
     this.setState({ estadoDeEvento: "postulaciones" });
-    this.buscarPostulaciones()   
+    this.buscarPostulaciones()
   }
   elegirEstadoEnProceso = () => {
+    this.setState({eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("enproceso").style.color = "black";
@@ -84,6 +90,7 @@ class ModoEmpleado extends React.Component {
     this.buscarEventos("enproceso")
   }
   elegirEstadoCompletado = () => {
+    this.setState({eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("enproceso").style.color = "#b2bbbd";
@@ -93,6 +100,7 @@ class ModoEmpleado extends React.Component {
     this.buscarEventos("completado")
   }
   elegirEstadoBusqueda = () => {
+    this.setState({eventos: [] })
     document.getElementById("busqueda").style.color = "black";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("enproceso").style.color = "#b2bbbd";
@@ -122,9 +130,9 @@ class ModoEmpleado extends React.Component {
     var contenedorEventos = "";
     if (this.state.usuario !== null) {
       mail = this.state.usuario.email;
-      var eventos = this.state.eventos.filter(function (evento) {
+      var eventos = this.state.eventos.filter(function(evento) {
         return evento.data.mail_dueño_evento !== mail;
-      });
+      });  
       if (eventos.length === 0) {
         contenedorEventos = <div className="sinEventos">
           No se han encontrado eventos.
@@ -155,5 +163,3 @@ class ModoEmpleado extends React.Component {
     );
   }
 }
-
-export default ModoEmpleado;

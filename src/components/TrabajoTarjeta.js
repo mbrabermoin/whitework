@@ -97,16 +97,16 @@ class TrabajoTarjeta extends React.Component {
         </div>
         return (
             <div>
-                <div fullwidth class="card-trabajo">
-                    <img class="avatar-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
-                    <div class="skewed bg-react"></div>
-                    <div class="content-trabajo">
+                <div fullwidth className="card-trabajo">
+                    <img className="avatar-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                    <div className="skewed bg-react"></div>
+                    <div className="content-trabajo">
                         <div className="trabajo-postularse"><h1>{this.state.rol}{categoria}</h1>
                             {botones}
                         </div>
                         <h3>{this.props.descripcion}</h3>
                         <h3>Comienza: {this.state.datecomienzotrab} - {this.state.timecomienzotrab}   Finaliza: {this.state.datefintrab} - {this.state.timefintrab}</h3>
-                        <p class="esp text-react">{this.state.pago}$ por {this.state.periodo}</p>
+                        <p className="esp text-react">{this.state.pago}$ por {this.state.periodo}</p>
                     </div>
                 </div>
                 <Dialog
