@@ -36,6 +36,8 @@ class Agregar extends React.Component {
             timeFinaliza: timeFinaliza,
             estado: "pendiente",
             cantidadTrabajos: cantidadTrabajos,
+            cantPostulados: 0,
+            cantAsignados: 0,
         }).then(() => {
             console.log("Evento Creado")            
         }).catch(() => {
@@ -61,6 +63,7 @@ class Agregar extends React.Component {
             mail_trabajador: "",
             categoria: categoria,
             requisitos: "",
+            cantPostulados: 0,
         }).then(() => {
             console.log("Trabajo Creado")
         }).catch(() => {

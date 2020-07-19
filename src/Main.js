@@ -6,7 +6,11 @@ import './App.css';
 import authApi from "./session/api"
 import { auth } from "./firebase";
 import db from "./index";
-
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
 let show = false;
 
 // show/hide dropdown menu
@@ -24,7 +28,8 @@ class Main extends React.Component {
         super(props);
         this.state = {
             modo: "empleado",
-            usuario: null
+            usuario: null,
+            openCortina: true,
         }
     }
     componentDidMount() {
@@ -43,7 +48,9 @@ class Main extends React.Component {
                 console.log(error);
                 alert("Ha ocurrido un error. Actualice la página.");
             });
-        }, 1000);
+            this.setState({ openCortina: false });
+        }
+        , 1000);
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
@@ -107,6 +114,12 @@ class Main extends React.Component {
                     </ul>
                 </div>
                 {screen}
+                <Dialog
+      open={this.state.openCortina}
+      TransitionComponent={Transition}
+      aria-labelledby="form-dialog-title"
+  >  
+  </Dialog>
             </div>);
     }
 }

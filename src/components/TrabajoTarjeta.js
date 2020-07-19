@@ -35,21 +35,24 @@ class TrabajoTarjeta extends React.Component {
             datefintrab: this.props.datefintrab,
             timefintrab: this.props.timefintrab,
             usuario: this.props.usuario,
+            cantPost: this.props.cantPost,
+            cantPostEvento: this.props.cantPostEvento,
+            cantAsignados: this.props.cantAsignados,
         }
     }
     buscarPostulados(trabajo) {
         var filtro = db.collection("postulaciones").where("id_trabajo", "==", trabajo)
         filtro.onSnapshot((snapShots) => {
-          this.setState({
-            postulados: snapShots.docs.map(doc => {
-              console.log(doc.data())
-              return { id: doc.id, data: doc.data() }
+            this.setState({
+                postulados: snapShots.docs.map(doc => {
+                    console.log(doc.data())
+                    return { id: doc.id, data: doc.data() }
+                })
             })
-          })
         }, error => {
-          console.log(error)
+            console.log(error)
         });
-      }
+    }
     eliminarTrabajo = () => {
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
@@ -61,9 +64,12 @@ class TrabajoTarjeta extends React.Component {
         var mail = this.state.usuario.email;
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
+        var cantPost = this.state.cantPost + 1;
+        var cantPostEvento = this.state.cantPostEvento + 1;
         Agregar.agregarPostulacion(mail, trabajo, evento);
-        Editar.cambiarEstadoEvento(evento, "postulado");
-        Editar.cambiarEstadoTrabajo(trabajo, "postulado");
+        //Editar.cambiarEstadoEvento(evento, "postulado");
+        Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
+        Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
     }
     handleClosePostulados = () => {
         this.setState({ openPostulados: false });
@@ -79,7 +85,13 @@ class TrabajoTarjeta extends React.Component {
         }
         var botones = "";
         if (this.state.modo === "empleado") {
+            if (this.state.estadoEvento === "pendiente") {
             botones = <button className='postularse-btn' onClick={this.postularse}>Postularse</button>
+            }else{
+                if (this.state.estadoEvento === "postulado") {
+                botones = ""  
+                }
+            }
         } else {
             if (this.state.estadoEvento === "pendiente") {
                 botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
@@ -87,13 +99,15 @@ class TrabajoTarjeta extends React.Component {
                 </div>
             } else {
                 if (this.state.estadoEvento === "postulado") {
+                    if (this.state.cantPost > 0) {
                     botones = <button className='editar-btn' onClick={this.handleOpenPostulados}>Ver Postulantes</button>
+                    }
                 }
             }
         }
         var postulados = this.state.postulados;
         var contenedorPostulados = <div>
-            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion}/>))}
+            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion} cantPost={this.state.cantPost} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} />))}
         </div>
         return (
             <div>
@@ -129,7 +143,7 @@ class TrabajoTarjeta extends React.Component {
                 </Dialog>
             </div>
         );
-        }
     }
+}
 
-    export default TrabajoTarjeta;
+export default TrabajoTarjeta;

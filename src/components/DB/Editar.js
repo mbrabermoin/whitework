@@ -76,10 +76,61 @@ class Editar extends React.Component {
       console.log("error")
     })
   } 
+  agregarPostulacionEvento = (evento, cantPostEvento, estado)=> {
+    db.collection("eventos").doc(evento).update({
+      cantPostulados: cantPostEvento,
+      estado: estado,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  asignarTrabajadorAEvento = (evento, estado, cantPostEvento, cantAsignados)=> {
+    db.collection("eventos").doc(evento).update({
+      estado: estado,
+      cantPostulados: cantPostEvento,
+      cantAsignados: cantAsignados,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }    
+  rechazarTrabajadorAEvento = (evento, estado, cantPostEvento)=> {
+    db.collection("eventos").doc(evento).update({
+      estado: estado,
+      cantPostulados: cantPostEvento,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }    
   //Trabajos
+  agregarPostulacionTrabajo = (trabajo, estado, cantPost)=> {
+    db.collection("trabajos").doc(trabajo).update({
+      estado: estado,
+      cantPostulados: cantPost,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }  
   cambiarEstadoTrabajo = (trabajo, estado)=> {
     db.collection("trabajos").doc(trabajo).update({
       estado: estado,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  } 
+  rechazarTrabajo = (trabajo, estado, cantPost)=> {
+    db.collection("trabajos").doc(trabajo).update({
+      estado: estado,
+      cantPostulados: cantPost,
     }).then(() => {
       console.log("Modificado")
     }).catch(() => {
@@ -90,6 +141,7 @@ class Editar extends React.Component {
     db.collection("trabajos").doc(trabajo).update({
       mail_trabajador: mailTrabajador,
       estado: "asignado",
+      cantPostulados: 0,
     }).then(() => {
       console.log("Modificado")
     }).catch(() => {

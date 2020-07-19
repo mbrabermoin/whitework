@@ -16,6 +16,8 @@ class PostuladoTarjeta extends React.Component {
             trabajo: this.props.trabajo,
             postulacion: this.props.postulacion,
             evento: this.props.evento,
+            cantPostTrabajo: this.props.cantPost,
+            cantPostEvento: this.props.cantPostEvento,
             usuario: null,
         }
     }
@@ -36,31 +38,50 @@ class PostuladoTarjeta extends React.Component {
     }
     eliminarPostulacionesPorTrabajo(trabajo) {
         db.collection("postulaciones").where("id_trabajo", "==", trabajo).get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            eliminar.eliminarPostulacion(doc.data().id_postulacion)
-          });
-        })
-        .catch(function (error) {
-          console.log("Error getting documents: ", error);
-        });
-    }  
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    eliminar.eliminarPostulacion(doc.data().id_postulacion)
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+    }
 
     aceptarPostulante = () => {
         var mail = this.state.usuario.email;
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
+        var cantPostTrabajo = this.state.cantPostTrabajo;
+        var cantPostEvento = this.state.cantPostEvento;
+        var nuevaCantPostEvento = cantPostEvento - cantPostTrabajo; 
+        var nuevaCantAsignados = this.state.cantAsignados - 1;
         this.eliminarPostulacionesPorTrabajo(trabajo)
-        editar.cambiarEstadoEvento(evento, "postulado")
         editar.asignarTrabajador(mail, trabajo)
+        if (nuevaCantPostEvento === 0) {
+        editar.asignarTrabajadorAEvento(evento, "pendiente", nuevaCantPostEvento, nuevaCantAsignados); 
+        }else{
+            editar.asignarTrabajadorAEvento(evento, "postulado", nuevaCantPostEvento, nuevaCantAsignados);   
+        }
     }
     rechazarPostulante = () => {
         var evento = this.state.evento;
         var trabajo = this.state.trabajo;
         var postulacion = this.state.postulacion;
+        var cantPostTrabajo = this.state.cantPostTrabajo - 1;
+        var cantPostEvento = this.state.cantPostEvento - 1;
         eliminar.eliminarPostulacion(postulacion)
-        editar.cambiarEstadoTrabajo(trabajo, "pendiente")
-        editar.cambiarEstadoEvento(evento, "pendiente")
+        if (cantPostTrabajo === 0) {
+            editar.rechazarTrabajo(trabajo, "pendiente", cantPostTrabajo)
+            if (cantPostEvento === 0) {
+                editar.rechazarTrabajadorAEvento(evento, "pendiente", cantPostEvento);
+                }else{
+                    editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
+                }
+        } else {
+            editar.rechazarTrabajo(trabajo, "postulado", cantPostTrabajo)
+            editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
+        }
     }
     render() {
         var nombre = "";
