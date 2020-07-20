@@ -53,6 +53,57 @@ class ModoEmpleador extends React.Component {
       this.setState({ openCortina: false });
   }, 1000);
   }
+  buscarEnProceso(estado) {
+    var today = new Date();
+    var mes = "";
+    if((today.getMonth()+1).toString().length===2){
+      mes = (today.getMonth()+1)
+    }else{
+      mes = 0+""+(today.getMonth()+1)
+    }
+    var dia = "";
+    if(today.getDate().toString().length===2){
+      dia = today.getDate()
+    }else{
+      dia = 0+""+today.getDate()
+    }
+    var segundos = "";
+    if(today.getSeconds().toString().length===2){
+      segundos = today.getSeconds()
+    }else{
+      segundos = 0+""+today.getSeconds()
+    }
+    var minutos = "";
+    if(today.getMinutes().toString().length===2){
+      minutos = today.getMinutes()
+    }else{
+      minutos = 0+""+today.getMinutes()
+    }
+    var hora = "";
+    if(today.getHours().toString().length===2){
+      hora = today.getHours()
+    }else{
+      hora = 0+""+today.getHours()
+    }
+    var date = today.getFullYear()+""+mes+""+dia;
+    var time = hora+""+minutos+""+segundos;
+    var dateTime = date+time;
+    alert(dateTime)
+    var filtro = db.collection("eventos").where("estado", "==", estado)
+    filtro.onSnapshot((snapShots) => {
+      this.setState({
+        eventos: snapShots.docs.map(doc => {
+          return { id: doc.id, data: doc.data() }
+        })
+      })
+    }, error => {
+      console.log(error)
+    });
+    setTimeout(() => {
+      this.setState({ openCortina: false });
+  }, 1000);
+  
+  }
   elegirEstadoPendiente = () => {
     this.setState({ openCortina: true });
     document.getElementById("pendientes-empleador").style.color = "black";
@@ -103,7 +154,7 @@ class ModoEmpleador extends React.Component {
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";    
     this.setState({ staffcompleto: false });
     this.setState({ estadoDeEvento: "enproceso" });
-    this.buscarEventos("enproceso")
+    this.buscarEnProceso("enproceso")
   }
   elegirEstadoCompletados = () => {
     this.setState({ openCortina: true });

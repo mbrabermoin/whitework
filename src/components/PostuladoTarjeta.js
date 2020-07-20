@@ -18,6 +18,7 @@ class PostuladoTarjeta extends React.Component {
             evento: this.props.evento,
             cantPostTrabajo: this.props.cantPost,
             cantPostEvento: this.props.cantPostEvento,
+            cantAsignados: this.props.cantAsignados,
             usuario: null,
         }
     }
@@ -55,7 +56,7 @@ class PostuladoTarjeta extends React.Component {
         var cantPostTrabajo = this.state.cantPostTrabajo;
         var cantPostEvento = this.state.cantPostEvento;
         var nuevaCantPostEvento = cantPostEvento - cantPostTrabajo; 
-        var nuevaCantAsignados = this.state.cantAsignados - 1;
+        var nuevaCantAsignados = this.state.cantAsignados + 1;
         this.eliminarPostulacionesPorTrabajo(trabajo)
         editar.asignarTrabajador(mail, trabajo)
         if (nuevaCantPostEvento === 0) {
