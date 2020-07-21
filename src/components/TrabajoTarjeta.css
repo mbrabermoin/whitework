@@ -60,6 +60,17 @@
     box-sizing: border-box;
     width: 40rem;
   }
+  .asignado-btn {
+    margin-top: 10px;
+    color: grey;
+    font-size: 15px;
+    outline: none;
+    height: 40px;
+    width: 100px;
+    background-color:  #eee;
+    border-radius: 5px;
+    float:right;
+  }
   .postularse-btn {
     margin-top: 10px;
     color: #eee;

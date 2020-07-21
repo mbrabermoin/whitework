@@ -49,6 +49,45 @@ export default class ModoEmpleado extends React.Component {
       this.setState({ openCortina: false });
   }, 1000);
   }
+  busquedaAbierta(){
+    var post = [];
+    var events = [];
+    var mailUsuario = this.state.usuario.email;
+    db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {         
+          post.push(doc.data().id_evento);
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+      db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {         
+          post.push(doc.data().id_evento);
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+    db.collection("eventos").get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const found = post.find(element => element === doc.data().id_evento);
+          if (found !== doc.data().id_evento) {  
+             return events.push({ id: doc.id, data: doc.data() });
+          }
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+     setTimeout(() => {
+        this.setState({eventos: events })
+        this.setState({ openCortina: false });
+    }, 1000);
+  }
   buscarPostulaciones(){
     var post = [];
     var events = [];
@@ -119,7 +158,7 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Busqueda";
     this.setState({ estadoDeEvento: "pendiente" });
-    this.buscarEventos("pendiente")
+    this.busquedaAbierta("pendiente")
   }
   elegirEstadoPendiente = () => {
     this.setState({ openCortina: true });
@@ -189,7 +228,7 @@ export default class ModoEmpleado extends React.Component {
  
   filtrarBusqueda = () => {
     this.setState({ openCortina: true });
-    this.buscarEventos("pendiente")
+    this.busquedaAbierta("pendiente")
   }
 
   render() {

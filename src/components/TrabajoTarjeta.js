@@ -20,6 +20,7 @@ class TrabajoTarjeta extends React.Component {
         this.state = {
             openPostulados: false,
             postulados: [],
+            asignado: this.props.asignado,
             modo: this.props.modo,
             rol: this.props.rol,
             evento: this.props.evento,
@@ -86,7 +87,11 @@ class TrabajoTarjeta extends React.Component {
         var botones = "";
         if (this.state.modo === "empleado") {
             if (this.state.estadoEvento === "pendiente") {
-            botones = <button className='postularse-btn' onClick={this.postularse}>Postularse</button>
+                if(this.state.asignado === ""){
+                    botones = <button className='postularse-btn' onClick={this.postularse}>Postularse</button>
+                }else{
+                    botones = <button disable className='asignado-btn' onClick="">Asignado</button>
+                }
             }else{
                 if (this.state.estadoEvento === "postulado") {
                 botones = ""  
