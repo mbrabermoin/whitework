@@ -140,14 +140,14 @@ export default class AgregarEvento extends React.Component {
                     } else {
                         if (this.state.cantTrabajos === 0) {
                             alert("Se necesita al menos un trabajo para crear el evento.")
-                        } else {
+                        } else {                            
+                            const mail_dueño_evento = this.state.usuario.email;  
+                            const nombre_dueño_evento = this.state.usuario.fullname;                            
+                            const cantidadTrabajos = this.state.cantTrabajos;
                             const dateComienzo = document.getElementById("date").value;
                             const timeComienzo = document.getElementById("time").value;
                             const dateFinaliza = document.getElementById("date2").value;
                             const timeFinaliza = document.getElementById("time2").value;
-                            const mail_dueño_evento = this.state.usuario.email;  
-                            const nombre_dueño_evento = this.state.usuario.fullname;                            
-                            const cantidadTrabajos = this.state.cantTrabajos;
                             // alert(nombre + "//" + zona + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
                             const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, zona, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
                             for (let t = 0; t < this.state.cantTrabajos; t++) {

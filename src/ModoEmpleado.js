@@ -31,8 +31,8 @@ export default class ModoEmpleado extends React.Component {
     }).catch(function (error) {
       console.log(error);
       alert("Ha ocurrido un error. Actualice la página.");
-    }); 
-    this.setState({ openCortina: false });       
+    });
+    this.setState({ openCortina: false });
   }
   buscarEventos(estado) {
     var filtro = db.collection("eventos").where("estado", "==", estado)
@@ -47,24 +47,24 @@ export default class ModoEmpleado extends React.Component {
     });
     setTimeout(() => {
       this.setState({ openCortina: false });
-  }, 1000);
+    }, 1000);
   }
-  busquedaAbierta(){
+  busquedaAbierta() {
     var post = [];
     var events = [];
     var mailUsuario = this.state.usuario.email;
     db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
       .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {         
+        querySnapshot.forEach(function (doc) {
           post.push(doc.data().id_evento);
         });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-      db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
+    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
       .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {         
+        querySnapshot.forEach(function (doc) {
           post.push(doc.data().id_evento);
         });
       })
@@ -75,26 +75,26 @@ export default class ModoEmpleado extends React.Component {
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           const found = post.find(element => element === doc.data().id_evento);
-          if (found !== doc.data().id_evento) {  
-             return events.push({ id: doc.id, data: doc.data() });
+          if (found !== doc.data().id_evento) {
+            return events.push({ id: doc.id, data: doc.data() });
           }
         });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-     setTimeout(() => {
-        this.setState({eventos: events })
-        this.setState({ openCortina: false });
+    setTimeout(() => {
+      this.setState({ eventos: events })
+      this.setState({ openCortina: false });
     }, 1000);
   }
-  buscarPostulaciones(){
+  buscarPostulaciones() {
     var post = [];
     var events = [];
     var mailUsuario = this.state.usuario.email;
     db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
       .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {         
+        querySnapshot.forEach(function (doc) {
           post.push(doc.data().id_evento);
         });
       })
@@ -105,26 +105,26 @@ export default class ModoEmpleado extends React.Component {
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           const found = post.find(element => element === doc.data().id_evento);
-          if (found === doc.data().id_evento) {  
-             return events.push({ id: doc.id, data: doc.data() });
+          if (found === doc.data().id_evento) {
+            return events.push({ id: doc.id, data: doc.data() });
           }
         });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-     setTimeout(() => {
-        this.setState({eventos: events })
-        this.setState({ openCortina: false });
+    setTimeout(() => {
+      this.setState({ eventos: events })
+      this.setState({ openCortina: false });
     }, 1000);
   }
-  buscarAsignados(){
+  buscarAsignados() {
     var trab = [];
     var events = [];
     var mailUsuario = this.state.usuario.email;
     db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
       .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {         
+        querySnapshot.forEach(function (doc) {
           trab.push(doc.data().id_evento);
         });
       })
@@ -135,21 +135,21 @@ export default class ModoEmpleado extends React.Component {
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           const found = trab.find(element => element === doc.data().id_evento);
-          if (found === doc.data().id_evento) {  
-             return events.push({ id: doc.id, data: doc.data() });
+          if (found === doc.data().id_evento) {
+            return events.push({ id: doc.id, data: doc.data() });
           }
         });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-     setTimeout(() => {
-        this.setState({eventos: events })
-        this.setState({ openCortina: false });
+    setTimeout(() => {
+      this.setState({ eventos: events })
+      this.setState({ openCortina: false });
     }, 1000);
   }
   elegirEstadoBusqueda = () => {
-    this.setState({eventos: [] })
+    this.setState({ eventos: [] })
     document.getElementById("busqueda").style.color = "black";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("aceptados").style.color = "#b2bbbd";
@@ -160,9 +160,9 @@ export default class ModoEmpleado extends React.Component {
     this.setState({ estadoDeEvento: "pendiente" });
     this.busquedaAbierta("pendiente")
   }
-  elegirEstadoPendiente = () => {
+  elegirEstadoPostulaciones = () => {
     this.setState({ openCortina: true });
-    this.setState({eventos: [] })
+    this.setState({ eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "black";
     document.getElementById("aceptados").style.color = "#b2bbbd";
@@ -175,7 +175,7 @@ export default class ModoEmpleado extends React.Component {
   }
   elegirEstadoAceptado = () => {
     this.setState({ openCortina: true });
-    this.setState({eventos: [] })
+    this.setState({ eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("aceptados").style.color = "black";
@@ -188,7 +188,7 @@ export default class ModoEmpleado extends React.Component {
   }
   elegirEstadoEnProceso = () => {
     this.setState({ openCortina: true });
-    this.setState({eventos: [] })
+    this.setState({ eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("aceptados").style.color = "#b2bbbd";
@@ -197,11 +197,11 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
     this.setState({ estadoDeEvento: "enproceso" });
-    this.buscarEventos("enproceso")
+    this.buscarAsignados();
   }
   elegirEstadoCompletado = () => {
     this.setState({ openCortina: true });
-    this.setState({eventos: [] })
+    this.setState({ eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("aceptados").style.color = "#b2bbbd";
@@ -209,12 +209,12 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("completados").style.color = "black";
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Completados";
-    this.setState({ estadoDeEvento: "completados" });
-    this.buscarEventos("completado")
+    this.setState({ estadoDeEvento: "completado" });
+    this.buscarAsignados();
   }
   elegirEstadoPuntuados = () => {
     this.setState({ openCortina: true });
-    this.setState({eventos: [] })
+    this.setState({ eventos: [] })
     document.getElementById("busqueda").style.color = "#b2bbbd";
     document.getElementById("postulaciones").style.color = "#b2bbbd";
     document.getElementById("aceptados").style.color = "#b2bbbd";
@@ -222,16 +222,44 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("completados").style.color = "#b2bbbd";
     document.getElementById("puntuados").style.color = "black";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
-    this.setState({ estadoDeEvento: "enproceso" });
-    this.buscarEventos("enproceso")
+    this.setState({ estadoDeEvento: "puntuado" });
+    this.buscarAsignados();
   }
- 
+
   filtrarBusqueda = () => {
     this.setState({ openCortina: true });
     this.busquedaAbierta("pendiente")
   }
 
   render() {
+    var today = new Date();
+    var mes = "";
+    if ((today.getMonth() + 1).toString().length === 2) {
+      mes = (today.getMonth() + 1)
+    } else {
+      mes = 0 + "" + (today.getMonth() + 1)
+    }
+    var dia = "";
+    if (today.getDate().toString().length === 2) {
+      dia = today.getDate()
+    } else {
+      dia = 0 + "" + today.getDate()
+    }
+    var minutos = "";
+    if (today.getMinutes().toString().length === 2) {
+      minutos = today.getMinutes()
+    } else {
+      minutos = 0 + "" + today.getMinutes()
+    }
+    var hora = "";
+    if (today.getHours().toString().length === 2) {
+      hora = today.getHours()
+    } else {
+      hora = 0 + "" + today.getHours()
+    }
+    var date = today.getFullYear() + "" + mes + "" + dia;
+    var time = hora + "" + minutos;
+    var dateTime = date + time;
     var filtros = "";
     if (this.state.estadoDeEvento === "pendiente") {
       filtros = <div className="filters-container">
@@ -248,9 +276,37 @@ export default class ModoEmpleado extends React.Component {
     var contenedorEventos = "";
     if (this.state.usuario !== null) {
       mail = this.state.usuario.email;
-      var eventos = this.state.eventos.filter(function(evento) {
-        return evento.data.mail_dueño_evento !== mail;
-      });  
+      var eventos = "";
+      if (this.state.estadoDeEvento === "pendiente" || this.state.estadoDeEvento === "postulaciones") {
+        eventos = this.state.eventos.filter(function (evento) {
+          return evento.data.mail_dueño_evento !== mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+        });
+      } else {
+        if (this.state.estadoDeEvento === "aceptados") {
+          eventos = this.state.eventos.filter(function (evento) {
+            return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+          });
+        } else {
+          if (this.state.estadoDeEvento === "enproceso") {
+            eventos = this.state.eventos.filter(function (evento) {
+              return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) < dateTime &&
+                evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) > dateTime;;
+            });
+          } else {
+            if (this.state.estadoDeEvento === "completado") {
+              eventos = this.state.eventos.filter(function (evento) {
+                return evento.data.mail_dueño_evento !== mail && evento.data.estado !== "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+              });
+            } else {
+              if (this.state.estadoDeEvento === "puntuado") {
+                eventos = this.state.eventos.filter(function (evento) {
+                  return evento.data.mail_dueño_evento !== mail && evento.data.estado === "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                });
+              }
+            }
+          }
+        }
+      }
       if (eventos.length === 0) {
         contenedorEventos = <div className="sinEventos">
           No se han encontrado eventos.
@@ -264,30 +320,30 @@ export default class ModoEmpleado extends React.Component {
     }
     return (
       <div>
-      <main className='grid'>
-        <div className='progress-bar'>
-          <span onClick={this.elegirEstadoBusqueda} className="estados" id="busqueda">Busqueda</span>
-          <span onClick={this.elegirEstadoPendiente} className="estados" id="postulaciones">Postulaciones</span>
-          <span onClick={this.elegirEstadoAceptado} className="estados" id="aceptados">Aceptados</span>
-          <span onClick={this.elegirEstadoEnProceso} className="estados" id="enproceso">En Proceso</span>
-          <span onClick={this.elegirEstadoCompletado} className="estados" id="completados">Completados</span>
-          <span onClick={this.elegirEstadoPuntuados} className="estados" id="puntuados">Puntuados</span>
-        </div>
-        <div className='track'>
-          <div className='top'>
-            <p id="temporales-titulo" className='ux'>Eventos Temporales - Busqueda</p>
+        <main className='grid'>
+          <div className='progress-bar'>
+            <span onClick={this.elegirEstadoBusqueda} className="estados" id="busqueda">Busqueda</span>
+            <span onClick={this.elegirEstadoPostulaciones} className="estados" id="postulaciones">Postulaciones</span>
+            <span onClick={this.elegirEstadoAceptado} className="estados" id="aceptados">Aceptados</span>
+            <span onClick={this.elegirEstadoEnProceso} className="estados" id="enproceso">En Proceso</span>
+            <span onClick={this.elegirEstadoCompletado} className="estados" id="completados">Completados</span>
+            <span onClick={this.elegirEstadoPuntuados} className="estados" id="puntuados">Puntuados</span>
           </div>
-          {filtros}
-          {contenedorEventos}
-        </div>
-      </main>
-      <Dialog
-      open={this.state.openCortina}
-      TransitionComponent={Transition}
-      aria-labelledby="form-dialog-title"
-  >  
-  </Dialog>
-  </div>
+          <div className='track'>
+            <div className='top'>
+              <p id="temporales-titulo" className='ux'>Eventos Temporales - Busqueda</p>
+            </div>
+            {filtros}
+            {contenedorEventos}
+          </div>
+        </main>
+        <Dialog
+          open={this.state.openCortina}
+          TransitionComponent={Transition}
+          aria-labelledby="form-dialog-title"
+        >
+        </Dialog>
+      </div>
     );
   }
 }

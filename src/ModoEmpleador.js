@@ -36,7 +36,7 @@ class ModoEmpleador extends React.Component {
     });
     setTimeout(() => {
       this.setState({ openCortina: false });
-  }, 1000);
+    }, 1000);
   }
   buscarStaffCompletos(estado) {
     var filtro = db.collection("eventos").where("estado", "==", estado)
@@ -51,45 +51,11 @@ class ModoEmpleador extends React.Component {
     });
     setTimeout(() => {
       this.setState({ openCortina: false });
-  }, 1000);
+    }, 1000);
   }
-  buscarEnProceso(estado) {
-    var today = new Date();
-    var mes = "";
-    if((today.getMonth()+1).toString().length===2){
-      mes = (today.getMonth()+1)
-    }else{
-      mes = 0+""+(today.getMonth()+1)
-    }
-    var dia = "";
-    if(today.getDate().toString().length===2){
-      dia = today.getDate()
-    }else{
-      dia = 0+""+today.getDate()
-    }
-    var segundos = "";
-    if(today.getSeconds().toString().length===2){
-      segundos = today.getSeconds()
-    }else{
-      segundos = 0+""+today.getSeconds()
-    }
-    var minutos = "";
-    if(today.getMinutes().toString().length===2){
-      minutos = today.getMinutes()
-    }else{
-      minutos = 0+""+today.getMinutes()
-    }
-    var hora = "";
-    if(today.getHours().toString().length===2){
-      hora = today.getHours()
-    }else{
-      hora = 0+""+today.getHours()
-    }
-    var date = today.getFullYear()+""+mes+""+dia;
-    var time = hora+""+minutos+""+segundos;
-    var dateTime = date+time;
-    alert(dateTime)
-    var filtro = db.collection("eventos").where("estado", "==", estado)
+  buscarEnProceso() {
+    var mail = this.state.usuario.email;
+    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {
@@ -101,8 +67,25 @@ class ModoEmpleador extends React.Component {
     });
     setTimeout(() => {
       this.setState({ openCortina: false });
-  }, 1000);
-  
+    }, 1000);
+
+  }
+  buscarCompletado() {
+    var mail = this.state.usuario.email;
+    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail)
+    filtro.onSnapshot((snapShots) => {
+      this.setState({
+        eventos: snapShots.docs.map(doc => {
+          return { id: doc.id, data: doc.data() }
+        })
+      })
+    }, error => {
+      console.log(error)
+    });
+    setTimeout(() => {
+      this.setState({ openCortina: false });
+    }, 1000);
+
   }
   elegirEstadoPendiente = () => {
     this.setState({ openCortina: true });
@@ -110,10 +93,10 @@ class ModoEmpleador extends React.Component {
     document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
     document.getElementById("staff-completo-empleador").style.color = "#b2bbbd";
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
-    document.getElementById("completados-empleador").style.color = "#b2bbbd";    
+    document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Pendientes";
-    this.setState({ estadoDeEvento: "pendiente" });    
+    this.setState({ estadoDeEvento: "pendiente" });
     this.setState({ staffcompleto: false });
     this.buscarEventos("pendiente")
   }
@@ -123,7 +106,7 @@ class ModoEmpleador extends React.Component {
     document.getElementById("postulaciones-empleador").style.color = "black";
     document.getElementById("staff-completo-empleador").style.color = "#b2bbbd";
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
-    document.getElementById("completados-empleador").style.color = "#b2bbbd";    
+    document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Postulaciones";
     this.setState({ estadoDeEvento: "postulado" });
@@ -136,9 +119,9 @@ class ModoEmpleador extends React.Component {
     document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
     document.getElementById("staff-completo-empleador").style.color = "black";
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
-    document.getElementById("completados-empleador").style.color = "#b2bbbd";    
+    document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
-    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Staff Completo";    
+    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Staff Completo";
     this.setState({ staffcompleto: true });
     this.setState({ estadoDeEvento: "postulado" });
     this.buscarStaffCompletos("postulado")
@@ -149,12 +132,12 @@ class ModoEmpleador extends React.Component {
     document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
     document.getElementById("staff-completo-empleador").style.color = "#b2bbbd";
     document.getElementById("enproceso-empleador").style.color = "black";
-    document.getElementById("completados-empleador").style.color = "#b2bbbd";    
+    document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
-    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";    
+    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
     this.setState({ staffcompleto: false });
     this.setState({ estadoDeEvento: "enproceso" });
-    this.buscarEnProceso("enproceso")
+    this.buscarEnProceso()
   }
   elegirEstadoCompletados = () => {
     this.setState({ openCortina: true });
@@ -162,12 +145,12 @@ class ModoEmpleador extends React.Component {
     document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
     document.getElementById("staff-completo-empleador").style.color = "#b2bbbd";
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
-    document.getElementById("completados-empleador").style.color = "black";    
+    document.getElementById("completados-empleador").style.color = "black";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Completados";
     this.setState({ staffcompleto: false });
     this.setState({ estadoDeEvento: "completado" });
-    this.buscarEventos("completado")
+    this.buscarCompletado()
   }
   elegirEstadoPuntuados = () => {
     this.setState({ openCortina: true });
@@ -175,26 +158,81 @@ class ModoEmpleador extends React.Component {
     document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
     document.getElementById("staff-completo-empleador").style.color = "#b2bbbd";
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
-    document.getElementById("completados-empleador").style.color = "#b2bbbd";    
+    document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "black";
-    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
+    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";    
+    this.setState({ estadoDeEvento: "puntuado" });
     this.setState({ staffcompleto: false });
-    this.setState({ estadoDeEvento: "completado" });
-    this.buscarEventos("completado")
+    this.buscarEventos("puntuado")
   }
-  
+
   render() {
+    var today = new Date();
+    var mes = "";
+    if ((today.getMonth() + 1).toString().length === 2) {
+      mes = (today.getMonth() + 1)
+    } else {
+      mes = 0 + "" + (today.getMonth() + 1)
+    }
+    var dia = "";
+    if (today.getDate().toString().length === 2) {
+      dia = today.getDate()
+    } else {
+      dia = 0 + "" + today.getDate()
+    }
+    var minutos = "";
+    if (today.getMinutes().toString().length === 2) {
+      minutos = today.getMinutes()
+    } else {
+      minutos = 0 + "" + today.getMinutes()
+    }
+    var hora = "";
+    if (today.getHours().toString().length === 2) {
+      hora = today.getHours()
+    } else {
+      hora = 0 + "" + today.getHours()
+    }
+    var date = today.getFullYear() + "" + mes + "" + dia;
+    var time = hora + "" + minutos;
+    var dateTime = date + time;
     var mail = this.state.usuario.email;
     var eventos = "";
-    if(this.state.staffcompleto === false){
+    if (this.state.staffcompleto === false) {
+      if (this.state.estadoDeEvento === "pendiente") {
+        eventos = this.state.eventos.filter(function (evento) {
+          return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+        });
+      } else {
+        if (this.state.estadoDeEvento === "postulado") {
+          eventos = this.state.eventos.filter(function (evento) {
+            return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+          });
+        } else {
+          if (this.state.estadoDeEvento === "enproceso") {
+            eventos = this.state.eventos.filter(function (evento) {
+              return evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) < dateTime &&
+                evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) > dateTime;
+            });
+          } else {
+            if (this.state.estadoDeEvento === "completado") {
+              eventos = this.state.eventos.filter(function (evento) {
+                return evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
+              });
+            } else {
+              if (this.state.estadoDeEvento === "puntuado") {
+                eventos = this.state.eventos.filter(function (evento) {
+                  return evento.data.mail_dueño_evento === mail;
+                });
+              }
+            }
+          }
+        }
+      }
+    } else {
       eventos = this.state.eventos.filter(function (evento) {
-        return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados < evento.data.cantidadTrabajos;;
+        return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados === evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
       });
-    }else{
-      eventos = this.state.eventos.filter(function (evento) {
-        return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados === evento.data.cantidadTrabajos;
-      });
-    }    
+    }
     var contenedorEventos = "";
     console.log(eventos)
     if (eventos.length === 0) {
