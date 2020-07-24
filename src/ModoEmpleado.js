@@ -7,6 +7,19 @@ import Slide from '@material-ui/core/Slide';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
+const dateNow = new Date();
+const year = dateNow.getFullYear();
+const monthWithOffset = dateNow.getUTCMonth() + 1;
+var day = dateNow.getUTCDate().toString();
+// Setting current Month number from current Date object
+var month = monthWithOffset.toString();
+if (monthWithOffset.toString().length < 2) {
+    month = "0" + month
+}
+if (day.length < 2) {
+    day = "0" + day
+}
+const materialDateInput = year + "-" + month + "-" + day;
 export default class ModoEmpleado extends React.Component {
   constructor(props) {
     super(props);
@@ -122,7 +135,37 @@ export default class ModoEmpleado extends React.Component {
     var trab = [];
     var events = [];
     var mailUsuario = this.state.usuario.email;
-    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
+    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).where("puntuadoEmpleado", "==", "N").get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          trab.push(doc.data().id_evento);
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+    db.collection("eventos").get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const found = trab.find(element => element === doc.data().id_evento);
+          if (found === doc.data().id_evento) {
+            return events.push({ id: doc.id, data: doc.data() });
+          }
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+    setTimeout(() => {
+      this.setState({ eventos: events })
+      this.setState({ openCortina: false });
+    }, 1000);
+  }
+  buscarPuntuados() {
+    var trab = [];
+    var events = [];
+    var mailUsuario = this.state.usuario.email;
+    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).where("puntuadoEmpleado", "==", "Y").get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           trab.push(doc.data().id_evento);
@@ -158,7 +201,6 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Busqueda";
     this.setState({ estadoDeEvento: "pendiente" });
-    this.busquedaAbierta("pendiente")
   }
   elegirEstadoPostulaciones = () => {
     this.setState({ openCortina: true });
@@ -170,7 +212,7 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("completados").style.color = "#b2bbbd";
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Postulaciones";
-    this.setState({ estadoDeEvento: "postulaciones" });
+    this.setState({ estadoDeEvento: "postulado" });
     this.buscarPostulaciones()
   }
   elegirEstadoAceptado = () => {
@@ -183,7 +225,7 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("completados").style.color = "#b2bbbd";
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Aceptados";
-    this.setState({ estadoDeEvento: "aceptados" });
+    this.setState({ estadoDeEvento: "aceptado" });
     this.buscarAsignados()
   }
   elegirEstadoEnProceso = () => {
@@ -223,12 +265,18 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("puntuados").style.color = "black";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
     this.setState({ estadoDeEvento: "puntuado" });
-    this.buscarAsignados();
+    this.buscarPuntuados();
   }
 
   filtrarBusqueda = () => {
     this.setState({ openCortina: true });
-    this.busquedaAbierta("pendiente")
+    var fromDate = document.getElementById("desde").value;
+    var toDate = document.getElementById("hasta").value;
+    var dueño = document.getElementById("dueño").value;
+    fromDate = fromDate.substr(0,4)+""+fromDate.substr(5,2)+""+fromDate.substr(8,2)
+    toDate = toDate.substr(0,4)+""+toDate.substr(5,2)+""+toDate.substr(8,2)
+    console.log(fromDate+"/"+toDate+"/"+dueño)
+    this.busquedaAbierta()
   }
 
   render() {
@@ -264,9 +312,9 @@ export default class ModoEmpleado extends React.Component {
     if (this.state.estadoDeEvento === "pendiente") {
       filtros = <div className="filters-container">
         <label>Desde: </label>
-        <input id="desde" type="date" text="desde" className="filtro-busqueda" />
+        <input id="desde" type="date" text="desde" defaultValue={materialDateInput} className="filtro-busqueda" />
         <label>Hasta: </label>
-        <input id="hasta" type="date" text="hasta" className="filtro-busqueda" />
+        <input id="hasta" type="date" text="hasta" defaultValue={materialDateInput} className="filtro-busqueda" />
         <label>Dueño: </label>
         <input id="dueño" type="" text="Dueño" className="filtro-busqueda" />
         <button id="filter_button" onClick={this.filtrarBusqueda} className="filter-button">Filtrar</button>
@@ -277,12 +325,12 @@ export default class ModoEmpleado extends React.Component {
     if (this.state.usuario !== null) {
       mail = this.state.usuario.email;
       var eventos = "";
-      if (this.state.estadoDeEvento === "pendiente" || this.state.estadoDeEvento === "postulaciones") {
+      if (this.state.estadoDeEvento === "pendiente" || this.state.estadoDeEvento === "postulado") {
         eventos = this.state.eventos.filter(function (evento) {
           return evento.data.mail_dueño_evento !== mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
         });
       } else {
-        if (this.state.estadoDeEvento === "aceptados") {
+        if (this.state.estadoDeEvento === "aceptado") {
           eventos = this.state.eventos.filter(function (evento) {
             return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
           });
@@ -300,7 +348,7 @@ export default class ModoEmpleado extends React.Component {
             } else {
               if (this.state.estadoDeEvento === "puntuado") {
                 eventos = this.state.eventos.filter(function (evento) {
-                  return evento.data.mail_dueño_evento !== mail && evento.data.estado === "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                  return evento.data.mail_dueño_evento !== mail && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
                 });
               }
             }

@@ -64,6 +64,8 @@ class Agregar extends React.Component {
             categoria: categoria,
             requisitos: "",
             cantPostulados: 0,
+            puntuadoEmpleado: "N",
+            puntuadoEmpleador: "N",
         }).then(() => {
             console.log("Trabajo Creado")
         }).catch(() => {
@@ -78,7 +80,24 @@ class Agregar extends React.Component {
             id_evento: id_evento,
             mail_postulante:mail_postulante,            
         }).then(() => {
-            console.log("Trabajo Creado")
+            console.log("Postulación Creada")
+        }).catch(() => {
+            console.log("error")
+        })
+    }
+    agregarComentario = (mail_comentador,nombre_comentador,foto, mail_comentado, comentario, puntaje, tipo) => {
+        var idHora = this.obtenerId();
+        db.collection("comentarios").doc("C" + idHora + "" + mail_comentador).set({
+            id_comentario:"C" + idHora + "" + mail_comentador,
+            comentador: mail_comentador,
+            nombreComentador: nombre_comentador,
+            foto: foto,
+            comentado: mail_comentado,
+            comentario:comentario,
+            puntaje:puntaje,
+            tipo:tipo,            
+        }).then(() => {
+            console.log("Comentario Creado")
         }).catch(() => {
             console.log("error")
         })

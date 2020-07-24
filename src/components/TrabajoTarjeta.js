@@ -10,6 +10,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import PostuladoTarjeta from './PostuladoTarjeta';
+import TextField from '@material-ui/core/TextField';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import db from '../index';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -19,6 +21,7 @@ class TrabajoTarjeta extends React.Component {
         super(props);
         this.state = {
             openPostulados: false,
+            openPuntuacion: false,
             postulados: [],
             asignado: this.props.asignado,
             modo: this.props.modo,
@@ -39,6 +42,7 @@ class TrabajoTarjeta extends React.Component {
             cantPost: this.props.cantPost,
             cantPostEvento: this.props.cantPostEvento,
             cantAsignados: this.props.cantAsignados,
+            usuarioAsignado: null,
         }
     }
     buscarPostulados(trabajo) {
@@ -79,6 +83,51 @@ class TrabajoTarjeta extends React.Component {
         this.buscarPostulados(this.state.trabajo);
         this.setState({ openPostulados: true });
     }
+    handleClosePuntuacion = () => {
+        this.setState({ openPuntuacion: false });
+    }
+    handleOpenPuntuacion = () => {
+        var docRef = db.collection("usuarios").doc(this.state.asignado);
+        let component = this;
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                console.log("Dueño:", doc.data());
+                component.setState({ usuarioAsignado: doc.data() });
+            } else {
+                alert("Ha ocurrido un error. Actualice la página.");
+            }
+        }).catch(function (error) {
+            console.log(error);
+            alert("Ha ocurrido un error. Actualice la página.");
+        });
+        this.setState({ openPuntuacion: true });
+    }
+    puntuarEmpleado = () => {
+        var opinion = document.getElementById("nombre").value;
+        var puntuacion = -1;
+        for (var i = 0; i < document.getElementsByName('estrellas').length; i++) {
+            if (document.getElementsByName('estrellas')[i].checked === true) {
+                puntuacion = document.getElementsByName('estrellas')[i].value;
+                break;
+            }
+        }
+        if (opinion === "") {
+            alert("Debe ingresar un comentario.");
+        } else {
+            if (puntuacion === -1) {
+                alert("Debe puntuar para dejar su comentario.")
+            } else {
+                var mail_comentado = this.state.asignado;
+                var mail_comentador = this.state.usuario.email;
+                var nombre_comentador = this.state.usuario.fullname;
+                var foto = this.state.usuario.urlFoto;
+                //alert(mail_comentador+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/TaE")
+                Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "CaE");
+                alert("Comentario Agregado.")
+                this.setState({ openPuntuacion: false });
+            }
+        }
+    }
     render() {
         var categoria = "";
         if (this.state.categoria !== "") {
@@ -87,14 +136,34 @@ class TrabajoTarjeta extends React.Component {
         var botones = "";
         if (this.state.modo === "empleado") {
             if (this.state.estadoEvento === "pendiente") {
-                if(this.state.asignado === ""){
+                if (this.state.asignado === "") {
                     botones = <button className='postularse-btn' onClick={this.postularse}>Postularse</button>
-                }else{
+                } else {
                     botones = <button disable className='asignado-btn' onClick="">Asignado</button>
                 }
-            }else{
-                if (this.state.estadoEvento === "postulado") {
-                botones = ""  
+            } else {
+                if (this.state.asignado === this.state.usuario.email) {
+                    if (this.state.estadoEvento === "postulado") {
+                        botones = <button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Rechazar</button>
+                    } else {
+                        if (this.state.estadoEvento === "aceptado") {
+                            botones = <button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Rechazar</button>
+                        } else {
+                            if (this.state.estadoEvento === "enproceso") {
+                                botones = ""
+                            } else {
+                                if (this.state.estadoEvento === "completado") {
+                                    botones = <button className='postularse-btn'>Valorar</button>
+                                } else {
+                                    if (this.state.estadoEvento === "puntuado") {
+                                        botones = <button disable className='asignado-btn' onClick="">Puntuado</button>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    botones = ""
                 }
             }
         } else {
@@ -105,7 +174,31 @@ class TrabajoTarjeta extends React.Component {
             } else {
                 if (this.state.estadoEvento === "postulado") {
                     if (this.state.cantPost > 0) {
-                    botones = <button className='editar-btn' onClick={this.handleOpenPostulados}>Ver Postulantes</button>
+                        botones = <button className='editar-btn' onClick={this.handleOpenPostulados}>Ver Postulantes</button>
+                    }
+                } else {
+                    if (this.state.estadoEvento === "staffCompleto") {
+                        botones = <button className='eliminartrabajo-btn' onClick="">Rechazar</button>
+                    } else {
+                        if (this.state.estadoEvento === "enproceso") {
+                            botones = ""
+                        } else {
+                            if (this.state.estadoEvento === "completado") {
+                                if (this.state.asignado !== "") {
+                                    botones = <button className='editar-btn' onClick={this.handleOpenPuntuacion}>Puntuar</button>
+                                } else {
+                                    botones = "";
+                                }
+                            }else{
+                                if (this.state.estadoEvento === "puntuado") {
+                                    if (this.state.asignado !== "") {
+                                        botones = <button disable className='asignado-btn' onClick="">Puntuado</button>
+                                    } else {
+                                        botones = "";
+                                    }
+                                }  
+                            }
+                        }
                     }
                 }
             }
@@ -114,6 +207,14 @@ class TrabajoTarjeta extends React.Component {
         var contenedorPostulados = <div>
             {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion} cantPost={this.state.cantPost} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} />))}
         </div>
+        var nombreAsignado = "";
+        var photoAsignado = "";
+        if (this.state.usuarioAsignado !== null) {
+            nombreAsignado = this.state.usuarioAsignado.fullname;
+            photoAsignado = <div className="AsignadoFoto">
+                <img src={this.state.usuarioAsignado.urlFoto} alt="profile card" />
+            </div>
+        }
         return (
             <div>
                 <div fullwidth className="card-trabajo">
@@ -144,6 +245,56 @@ class TrabajoTarjeta extends React.Component {
                         <Button onClick={this.handleClosePostulados} color="primary">
                             CERRAR
                  </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openPuntuacion}
+                    onClose={this.handleClosePuntuacion}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">{nombreAsignado}</DialogTitle>
+                    <DialogContent dividers>
+
+                        {photoAsignado}
+                        <DialogContentText>
+                            ¿Como calificarias su trabajo?
+                    </DialogContentText>
+                        <TextField id="nombre" autoFocus multiline="true" rows="6" margin="dense" label="Opinión" type="opinion" fullWidth />
+                        <form>
+                            <p className="clasificacion-stars">
+                                <input id="radio1" type="radio" name="estrellas" value="10" />
+                                <label for="radio1">★</label>
+                                <input id="radio2" type="radio" name="estrellas" value="9" />
+                                <label for="radio2">★</label>
+                                <input id="radio3" type="radio" name="estrellas" value="8" />
+                                <label for="radio3">★</label>
+                                <input id="radio4" type="radio" name="estrellas" value="7" />
+                                <label for="radio4">★</label>
+                                <input id="radio5" type="radio" name="estrellas" value="6" />
+                                <label for="radio5">★</label>
+                                <input id="radio6" type="radio" name="estrellas" value="5" />
+                                <label for="radio6">★</label>
+                                <input id="radio7" type="radio" name="estrellas" value="4" />
+                                <label for="radio7">★</label>
+                                <input id="radio8" type="radio" name="estrellas" value="3" />
+                                <label for="radio8">★</label>
+                                <input id="radio9" type="radio" name="estrellas" value="2" />
+                                <label for="radio9">★</label>
+                                <input id="radio10" type="radio" name="estrellas" value="1" />
+                                <label for="radio10">★</label>
+                            </p>
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button autoFocus onClick={this.handleClosePuntuacion} color="primary">
+                            CANCELAR
+                         </Button>
+                        <Button onClick={this.puntuarEmpleado} color="primary">
+                            COMENTAR
+                         </Button>
                     </DialogActions>
                 </Dialog>
             </div>

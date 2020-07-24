@@ -123,7 +123,7 @@ class ModoEmpleador extends React.Component {
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Staff Completo";
     this.setState({ staffcompleto: true });
-    this.setState({ estadoDeEvento: "postulado" });
+    this.setState({ estadoDeEvento: "staffCompleto" });
     this.buscarStaffCompletos("postulado")
   }
   elegirEstadoEnProceso = () => {
@@ -160,7 +160,7 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "black";
-    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";    
+    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
     this.setState({ estadoDeEvento: "puntuado" });
     this.setState({ staffcompleto: false });
     this.buscarEventos("puntuado")
@@ -216,7 +216,7 @@ class ModoEmpleador extends React.Component {
           } else {
             if (this.state.estadoDeEvento === "completado") {
               eventos = this.state.eventos.filter(function (evento) {
-                return evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
+                return  evento.data.estado !== "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
               });
             } else {
               if (this.state.estadoDeEvento === "puntuado") {
