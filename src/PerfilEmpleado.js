@@ -86,11 +86,13 @@ class PerfilEmpleado extends React.Component {
                 puntajeEmpleado = 0;
             } else {
                 puntajeEmpleado = puntajeEmpleado / cantidadPuntajes;
+                puntajeEmpleado = puntajeEmpleado.toFixed(2);
             }
             if (puntajeEmpleador === 0) {
                 puntajeEmpleador = 0;
             } else {
                 puntajeEmpleador = puntajeEmpleador / cantidadPuntajesEmpleador;
+                puntajeEmpleador = puntajeEmpleador.toFixed(2);
             }
             this.setState({ comentariosEmpleado: comments })
             this.setState({ cantidadTrabajosRealizados: cantidadPuntajes })

@@ -8,13 +8,17 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 import Agregar from './DB/Agregar';
 import TrabajoTarjeta from './TrabajoTarjeta';
+import * as provinciasjson from './JSONs/Provincias.json';
+import * as ciudadesjson from './JSONs/Ciudades.json';
+import { MenuItem } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
+const provincias = provinciasjson.default.states;
+const ciudades = ciudadesjson.default.cities;
 const periodos = [
     {
         value: 'Hora',
@@ -86,7 +90,8 @@ export default class AgregarEvento extends React.Component {
             openTrabajo: false,
             usuario: props.usuario,
             nombre: "",
-            zona: "",
+            provincia: "",
+            ciudad: "",
             direccion: "",
             diaComienzo: "",
             diaFinalizacion: "",
@@ -95,10 +100,12 @@ export default class AgregarEvento extends React.Component {
             cantTrabajos: 0,
             periodoDisplay: "Hora",
             categoriaDisplay: "",
+            provinciaDisplay: "",
+            ciudadDisplay: "",
+            ciudades: [],
             arrayTrabajos: [],
         }
     }
-
     handleCloseEvento = () => {
         this.setState({ openEvento: false });
         this.setState({ cantTrabajos: 0 });
@@ -118,8 +125,8 @@ export default class AgregarEvento extends React.Component {
     };
     handleOpenTrabajo = () => {
         this.setState({ openTrabajo: true });
-        this.setState({ periodoDisplay: "Hora" }); 
-        this.setState({ categoriaDisplay: "" }); 
+        this.setState({ periodoDisplay: "Hora" });
+        this.setState({ categoriaDisplay: "" });
     };
     handleAgregarEvento = () => {
         const nombre = document.getElementById("nombre").value;
@@ -130,43 +137,48 @@ export default class AgregarEvento extends React.Component {
             if (descripcion.trim() === "") {
                 alert("Descripción es necesaria.")
             } else {
-                const zona = document.getElementById("zona").value;
-                if (zona.trim() === "") {
-                    alert("Zona es necesaria.")
+                const provincia = this.state.provincia;
+                if (provincia.trim() === "") {
+                    alert("Provincia es necesaria.")
                 } else {
-                    const direccion = document.getElementById("direccion").value;
-                    if (direccion.trim() === "") {
-                        alert("Dirección es necesaria.")
+                    const ciudad = this.state.ciudad;
+                    if (ciudad.trim() === "") {
+                        alert("Ciudad es necesaria.")
                     } else {
-                        if (this.state.cantTrabajos === 0) {
-                            alert("Se necesita al menos un trabajo para crear el evento.")
-                        } else {                            
-                            const mail_dueño_evento = this.state.usuario.email;  
-                            const nombre_dueño_evento = this.state.usuario.fullname;                            
-                            const cantidadTrabajos = this.state.cantTrabajos;
-                            const dateComienzo = document.getElementById("date").value;
-                            const timeComienzo = document.getElementById("time").value;
-                            const dateFinaliza = document.getElementById("date2").value;
-                            const timeFinaliza = document.getElementById("time2").value;
-                            // alert(nombre + "//" + zona + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
-                            const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, zona, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
-                            for (let t = 0; t < this.state.cantTrabajos; t++) {
-                                const rolT = this.state.arrayTrabajos[t].rol;
-                                const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
-                                const datecomienzotrab = this.state.arrayTrabajos[t].datecomienzotrab;
-                                const datefintrab = this.state.arrayTrabajos[t].datefintrab;
-                                const timecomienzotrab = this.state.arrayTrabajos[t].timecomienzotrab;
-                                const timefintrab = this.state.arrayTrabajos[t].timefintrab;
-                                const pago = this.state.arrayTrabajos[t].pago;
-                                const periodo = this.state.arrayTrabajos[t].periodo;
-                                const categoria = this.state.arrayTrabajos[t].categoria;
-                                setTimeout(function () {
-                                    Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, timecomienzotrab, datefintrab, timefintrab, pago, periodo, categoria);
-                                }, t * 1000);
+                        const direccion = document.getElementById("direccion").value;
+                        if (direccion.trim() === "") {
+                            alert("Dirección es necesaria.")
+                        } else {
+                            if (this.state.cantTrabajos === 0) {
+                                alert("Se necesita al menos un trabajo para crear el evento.")
+                            } else {
+                                const mail_dueño_evento = this.state.usuario.email;
+                                const nombre_dueño_evento = this.state.usuario.fullname;
+                                const cantidadTrabajos = this.state.cantTrabajos;
+                                const dateComienzo = document.getElementById("date").value;
+                                const timeComienzo = document.getElementById("time").value;
+                                const dateFinaliza = document.getElementById("date2").value;
+                                const timeFinaliza = document.getElementById("time2").value;
+                                // alert(nombre + "//" + provincia + "//"+ ciudad + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
+                                const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
+                                for (let t = 0; t < this.state.cantTrabajos; t++) {
+                                    const rolT = this.state.arrayTrabajos[t].rol;
+                                    const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
+                                    const datecomienzotrab = this.state.arrayTrabajos[t].datecomienzotrab;
+                                    const datefintrab = this.state.arrayTrabajos[t].datefintrab;
+                                    const timecomienzotrab = this.state.arrayTrabajos[t].timecomienzotrab;
+                                    const timefintrab = this.state.arrayTrabajos[t].timefintrab;
+                                    const pago = this.state.arrayTrabajos[t].pago;
+                                    const periodo = this.state.arrayTrabajos[t].periodo;
+                                    const categoria = this.state.arrayTrabajos[t].categoria;
+                                    setTimeout(function () {
+                                        Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, timecomienzotrab, datefintrab, timefintrab, pago, periodo, categoria);
+                                    }, t * 1000);
+                                }
+                                this.setState({ openEvento: false });
+                                this.setState({ cantTrabajos: 0 });
+                                this.setState({ arrayTrabajos: [] });
                             }
-                            this.setState({ openEvento: false });
-                            this.setState({ cantTrabajos: 0 });
-                            this.setState({ arrayTrabajos: [] });
                         }
                     }
                 }
@@ -196,7 +208,7 @@ export default class AgregarEvento extends React.Component {
                         const datefintrab = document.getElementById("date-fin-trab").value;
                         const timecomienzotrab = document.getElementById("time-comienzo-trab").value;
                         const timefintrab = document.getElementById("time-fin-trab").value;
-                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, datecomienzotrab: datecomienzotrab, timecomienzotrab: timecomienzotrab, datefintrab: datefintrab, timefintrab: timefintrab, categoria:categoria };
+                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, datecomienzotrab: datecomienzotrab, timecomienzotrab: timecomienzotrab, datefintrab: datefintrab, timefintrab: timefintrab, categoria: categoria };
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -209,13 +221,35 @@ export default class AgregarEvento extends React.Component {
     }
 
     handleCambiarPeriodo = name => event => {
-        this.setState({ periodoDisplay: event.target.value });        
+        this.setState({ periodoDisplay: event.target.value });
     }
     handleCambiarCategoria = name => event => {
-        this.setState({ categoriaDisplay: event.target.value });        
-    }
+        this.setState({ categoriaDisplay: event.target.value });
 
+    }
+    handleCambiarProvincia = name => event => {
+        this.setState({ provinciaDisplay: event.target.value });
+        var provincia = provincias.filter(provincia => provincia.id === event.target.value);
+        this.setState({ provincia: provincia[0].name });
+        var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value);
+        this.setState({ ciudades: cities });
+    }
+    handleCambiarCiudad = name => event => {
+        this.setState({ ciudadDisplay: event.target.value });
+        var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());        
+        this.setState({ ciudad: ciudad[0].name })
+    }
     render() {
+        var ciudadesMostrar = ""
+        if (this.state.provinciaDisplay === "") {
+            ciudadesMostrar = <TextField id="ciudad2" disabled required  SelectProps={{ native: true, }} onChange="" label="Ciudad" fullWidth>
+
+            </TextField>
+        } else {
+            ciudadesMostrar = <TextField id="ciudad" select required SelectProps={{ native: true, }} value={this.state.ciudadDisplay} onChange={this.handleCambiarCiudad('ciudadDisplay')} label="Ciudad" fullWidth>
+                {this.state.ciudades.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+            </TextField>
+        }
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
@@ -245,7 +279,10 @@ export default class AgregarEvento extends React.Component {
                     </DialogContentText>
                         <TextField id="nombre" required autoFocus margin="dense" label="Nombre del evento" type="evento" fullWidth />
                         <TextField id="descripcion" required multiline rows="2" margin="dense" label="Descripcion" type="evento" fullWidth />
-                        <TextField id="zona" required margin="dense" label="Zona" type="zona" fullWidth />
+                        <TextField id="provincia" select required value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" fullWidth>
+                            {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
+                        </TextField>
+                        {ciudadesMostrar}
                         <TextField id="direccion" required margin="dense" label="Dirección" type="direccion" fullWidth />
                         <TextField id="date" required label="Comienzo:" type="date" defaultValue={materialDateInput} />
                         <TextField id="time" required type="time" defaultValue="00:00" label=" " />
@@ -307,12 +344,12 @@ export default class AgregarEvento extends React.Component {
                     <DialogContent dividers>
                         <TextField id="rol" required autoFocus margin="dense" label="Rol del trabajador" type="rol" fullWidth />
                         <TextField id="descripcion-trab" required multiline rows="2" margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
-                        <TextField id="pago" required margin="dense" label="Pago" type="number" fullWidth/>
-                        <TextField id="periodo" select required margin="dense" value={this.state.periodoDisplay} onChange={this.handleCambiarPeriodo('periodoDisplay')}  label="Periodo de Pago" fullWidth>
-                            {periodos.map(option => (<MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>))}
+                        <TextField id="pago" required margin="dense" label="Pago" type="number" fullWidth />
+                        <TextField id="periodo" select required margin="dense" value={this.state.periodoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo de Pago" fullWidth>
+                            {periodos.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
-                        <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} onChange={this.handleCambiarCategoria('categoriaDisplay')}  label="Categoria" fullWidth>
-                            {categorias.map(option => (<MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>))}
+                        <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarCategoria('categoriaDisplay')} label="Categoria" fullWidth>
+                            {categorias.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
                         <TextField id="date-comienzo-trab" required label="Comienzo" type="date" defaultValue={materialDateInput} />
                         <TextField id="time-comienzo-trab" required type="time" defaultValue="00:00" label=" " />

@@ -4,9 +4,15 @@ import { auth } from "./firebase";
 import db from './index';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
+import TextField from '@material-ui/core/TextField';
+import * as provinciasjson from './components/JSONs/Provincias.json';
+import * as ciudadesjson from './components/JSONs/Ciudades.json';
+import { MenuItem } from '@material-ui/core';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
+const provincias = provinciasjson.default.states;
+const ciudades = ciudadesjson.default.cities;
 const dateNow = new Date();
 const year = dateNow.getFullYear();
 const monthWithOffset = dateNow.getUTCMonth() + 1;
@@ -14,10 +20,10 @@ var day = dateNow.getUTCDate().toString();
 // Setting current Month number from current Date object
 var month = monthWithOffset.toString();
 if (monthWithOffset.toString().length < 2) {
-    month = "0" + month
+  month = "0" + month
 }
 if (day.length < 2) {
-    day = "0" + day
+  day = "0" + day
 }
 const materialDateInput = year + "-" + month + "-" + day;
 export default class ModoEmpleado extends React.Component {
@@ -28,6 +34,12 @@ export default class ModoEmpleado extends React.Component {
       usuario: null,
       eventos: [],
       openCortina: true,
+      provincia: "",
+      ciudad: "",
+      provinciaDisplay: "",
+      ciudadDisplay: "",
+      ciudades: [],
+      filtroActivo: false,
     }
   }
   componentDidMount() {
@@ -273,13 +285,47 @@ export default class ModoEmpleado extends React.Component {
     var fromDate = document.getElementById("desde").value;
     var toDate = document.getElementById("hasta").value;
     var dueño = document.getElementById("dueño").value;
-    fromDate = fromDate.substr(0,4)+""+fromDate.substr(5,2)+""+fromDate.substr(8,2)
-    toDate = toDate.substr(0,4)+""+toDate.substr(5,2)+""+toDate.substr(8,2)
-    console.log(fromDate+"/"+toDate+"/"+dueño)
+    var provincia = this.state.provincia;
+    var ciudad = this.state.ciudad;
+    fromDate = fromDate.substr(0, 4) + "" + fromDate.substr(5, 2) + "" + fromDate.substr(8, 2)
+    toDate = toDate.substr(0, 4) + "" + toDate.substr(5, 2) + "" + toDate.substr(8, 2)
+    alert(fromDate + "/" + toDate + "/" + dueño + "/" + provincia + "/" + ciudad)
     this.busquedaAbierta()
   }
+  buscarSinFiltro = () => {
+    this.setState({ openCortina: true });
+    this.busquedaAbierta()
+  }
+  openFiltro = () => {
+    this.setState({ filtroActivo: true });
+  }
+  cerrarFiltros = () => {
+    this.setState({ filtroActivo: false });
+  }
 
+  handleCambiarProvincia = name => event => {
+    this.setState({ provinciaDisplay: event.target.value });
+    var provincia = provincias.filter(provincia => provincia.id === event.target.value);
+    this.setState({ provincia: provincia[0].name });
+    var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value);
+    this.setState({ ciudades: cities });
+  }
+  handleCambiarCiudad = name => event => {
+    this.setState({ ciudadDisplay: event.target.value });
+    var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());
+    this.setState({ ciudad: ciudad[0].name })
+  }
   render() {
+    var ciudadesMostrar = ""
+    if (this.state.provinciaDisplay === "") {
+      ciudadesMostrar = <TextField id="ciudad2" disabled required SelectProps={{ native: true, }} onChange="" label="Ciudad" style={{ width: 200, }} >
+
+      </TextField>
+    } else {
+      ciudadesMostrar = <TextField id="ciudad" select required SelectProps={{ native: true }} value={this.state.ciudadDisplay} onChange={this.handleCambiarCiudad('ciudadDisplay')} label="Ciudad" style={{ width: 200, }} >
+        {this.state.ciudades.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+      </TextField>
+    }
     var today = new Date();
     var mes = "";
     if ((today.getMonth() + 1).toString().length === 2) {
@@ -310,15 +356,28 @@ export default class ModoEmpleado extends React.Component {
     var dateTime = date + time;
     var filtros = "";
     if (this.state.estadoDeEvento === "pendiente") {
-      filtros = <div className="filters-container">
-        <label>Desde: </label>
-        <input id="desde" type="date" text="desde" defaultValue={materialDateInput} className="filtro-busqueda" />
-        <label>Hasta: </label>
-        <input id="hasta" type="date" text="hasta" defaultValue={materialDateInput} className="filtro-busqueda" />
-        <label>Dueño: </label>
-        <input id="dueño" type="" text="Dueño" className="filtro-busqueda" />
-        <button id="filter_button" onClick={this.filtrarBusqueda} className="filter-button">Filtrar</button>
-      </div>
+      if (this.state.filtroActivo === true) {
+        filtros = <div className="filters-container">
+          <label>Desde: </label>
+          <input id="desde" type="date" text="desde" defaultValue={materialDateInput} className="filtro-busqueda" />
+          <label>Hasta: </label>
+          <input id="hasta" type="date" text="hasta" defaultValue={materialDateInput} className="filtro-busqueda" />
+          <label>Dueño: </label>
+          <input id="dueño" type="" text="Dueño" className="filtro-busqueda" />
+          <button id="filter_button" onClick={this.filtrarBusqueda} className="filter-button">Filtrar</button>
+          <button id="filter_button" onClick={this.cerrarFiltros} className="filter-button-cerrar"> cerrar Filtros</button>
+          <br></br>
+          <TextField id="provincia" select required value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" style={{ width: 200 }} >
+            {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
+          </TextField>
+          {ciudadesMostrar}
+        </div>
+      } else {
+        filtros = <div className="filters-container">
+          <button id="filter_button" onClick={this.openFiltro} className="filter-filter-button">Filtros</button>
+          <button id="filter_button" onClick={this.buscarSinFiltro} className="filter-button">Buscar</button>
+        </div>
+      }
     }
     var mail = "";
     var contenedorEventos = "";
@@ -361,7 +420,7 @@ export default class ModoEmpleado extends React.Component {
       </div>
       } else {
         contenedorEventos = <div className='library'>
-          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} zona={evento.data.zona} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantAsignados={evento.data.cantAsignados} modo="empleado" />
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantAsignados={evento.data.cantAsignados} modo="empleado" />
           ))}
         </div>
       }

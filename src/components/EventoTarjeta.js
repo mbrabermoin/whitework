@@ -28,7 +28,8 @@ class EventoTarjeta extends React.Component {
             openEliminarEvento: false,
             estadoEvento: this.props.estado,
             titulo: this.props.titulo,
-            zona: this.props.zona,
+            provincia: this.props.provincia,
+            ciudad: this.props.ciudad,
             privado: this.props.privado,
             mailDueño: this.props.mailDueño,
             nombreDueño: this.props.nombreDueño,
@@ -113,7 +114,7 @@ class EventoTarjeta extends React.Component {
         }
         var trabajos = this.state.trabajos;
         var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} modo={this.state.modo}/>
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} dueño={this.state.mailDueño} modo={this.state.modo}/>
             ))}
         </div>
         
@@ -125,7 +126,7 @@ class EventoTarjeta extends React.Component {
                     </div>
                     <div className='middle-library'>
                         <p className='type'>{this.state.tiempo}</p>
-                        <h3 className='job-name'>{this.state.zona}</h3>
+                        <h3 className='job-name'>{this.state.provincia} - {this.state.ciudad}</h3>
                         <p className='desc'>{this.state.descripcion}</p>
                         <button className='resume-btn' onClick={this.handleOpenDetalle}>Ver Detalle</button>
                         {botonEliminarEvento}
@@ -147,7 +148,8 @@ class EventoTarjeta extends React.Component {
                         <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
                         <TextField id="comienza" margin="dense" disabled label="Comienza" type="" value={fechas} fullWidth />
                         <TextField id="finaliza" margin="dense" disabled label="Finaliza" type="" value={horarios} fullWidth />
-                        <TextField id="zona" margin="dense" disabled label="Zona" type="zona" value={this.state.zona} fullWidth />
+                        <TextField id="provincia" margin="dense" disabled label="Provincia" type="provincia" value={this.state.provincia} fullWidth />
+                        <TextField id="ciudad" margin="dense" disabled label="Ciudad" type="ciudad" value={this.state.ciudad} fullWidth />
                         <TextField id="direccion" margin="dense" disabled label="Dirección" type="direccion" value={this.state.direccion} fullWidth />
                         <Grid container
                             direction="row"

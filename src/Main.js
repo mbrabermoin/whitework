@@ -100,7 +100,7 @@ class Main extends React.Component {
                         <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Empleado</li>
                         <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
-                    <ul className='right-ui'>
+                    <ul className='right-ui nombre-usuario'>
                         <li className='points' id="profileTitle" onClick={this.abrirPerfil}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
                         <div className='profile' onClick={userOptions}><div className='background'><i className="fas fa-user">{fotoPerfil}</i></div></div>
                         <li><i className="fas fa-bell bell"></i></li>

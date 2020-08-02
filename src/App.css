@@ -16,10 +16,12 @@ h2 {
 }
 
 ul {
-  display: flex;
   align-items: center;
   margin: 0;
   padding: 0;
+}
+.nombre-usuario{
+  display: flex;
 }
 
 .left-ui li, .right-ui li {
@@ -590,7 +592,7 @@ ul {
 }
 
 .filter-button {
-  width:6rem; 
+  width:8rem; 
   border-radius:20px; 
   height:2.5rem; 
   background-color:#003773; 
@@ -601,4 +603,26 @@ ul {
 }
 .filters-container{
   margin-bottom: 15px;
+}
+.filter-button-cerrar {
+  width:8rem; 
+  border-radius:20px; 
+  margin-left: 10px;
+  height:2.5rem;
+  background-color:#003773; 
+  border:none; 
+  color:white; 
+  font-size: 1rem; 
+  cursor:pointer;
+}
+.filter-filter-button {
+  width:8rem; 
+  border-radius:20px; 
+  margin-right: 10px;
+  height:2.5rem;
+  background-color:#003773; 
+  border:none; 
+  color:white; 
+  font-size: 1rem; 
+  cursor:pointer;
 }
