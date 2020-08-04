@@ -14,7 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const provincias = provinciasjson.default.states;
 const ciudades = ciudadesjson.default.cities;
 const dateNow = new Date();
-const year = dateNow.getFullYear();
+var year = dateNow.getFullYear();
 const monthWithOffset = dateNow.getUTCMonth() + 1;
 var day = dateNow.getUTCDate().toString();
 // Setting current Month number from current Date object
@@ -26,6 +26,16 @@ if (day.length < 2) {
   day = "0" + day
 }
 const materialDateInput = year + "-" + month + "-" + day;
+if (month < "12") {
+  month = parseInt(month) + 1;
+}else{
+  month = 1;
+  year = parseInt(year) + 1;
+}
+if (month.toString().length < 2) {
+  month = "0" + month
+}
+const fechaProximoMes = year + "-" + month + "-" + day;
 export default class ModoEmpleado extends React.Component {
   constructor(props) {
     super(props);
@@ -109,8 +119,13 @@ export default class ModoEmpleado extends React.Component {
         console.log("Error getting documents: ", error);
       });
     setTimeout(() => {
-      this.setState({ eventos: events })
-      this.setState({ openCortina: false });
+      if (this.state.filtroActivo) {
+
+        this.aplicarFiltros(events);
+      } else {
+        this.setState({ eventos: events })
+        this.setState({ openCortina: false });
+      }
     }, 1000);
   }
   buscarPostulaciones() {
@@ -280,19 +295,33 @@ export default class ModoEmpleado extends React.Component {
     this.buscarPuntuados();
   }
 
-  filtrarBusqueda = () => {
-    this.setState({ openCortina: true });
+  aplicarFiltros = (events) => {
     var fromDate = document.getElementById("desde").value;
     var toDate = document.getElementById("hasta").value;
     var dueño = document.getElementById("dueño").value;
     var provincia = this.state.provincia;
     var ciudad = this.state.ciudad;
+    var eventosFiltrados = events;
     fromDate = fromDate.substr(0, 4) + "" + fromDate.substr(5, 2) + "" + fromDate.substr(8, 2)
     toDate = toDate.substr(0, 4) + "" + toDate.substr(5, 2) + "" + toDate.substr(8, 2)
-    alert(fromDate + "/" + toDate + "/" + dueño + "/" + provincia + "/" + ciudad)
-    this.busquedaAbierta()
+    //alert(fromDate + "/" + toDate + "/" + dueño + "/" + provincia + "/" + ciudad)
+    eventosFiltrados = eventosFiltrados.filter(ev => ev.data.dateComienzo.substr(0, 4) + "" + ev.data.dateComienzo.substr(5, 2) + "" + ev.data.dateComienzo.substr(8, 2) + "" + ev.data.timeComienzo.substr(0, 2) + "" + ev.data.timeComienzo.substr(3, 2) > fromDate);
+    eventosFiltrados = eventosFiltrados.filter(ev => ev.data.dateComienzo.substr(0, 4) + "" + ev.data.dateComienzo.substr(5, 2) + "" + ev.data.dateComienzo.substr(8, 2) + "" + ev.data.timeComienzo.substr(0, 2) + "" + ev.data.timeComienzo.substr(3, 2) < toDate);
+     if (provincia.trim() !== "") {
+      eventosFiltrados = eventosFiltrados.filter(ev => ev.data.provincia === provincia);
+    }
+    if (ciudad.trim() !== "") {
+      eventosFiltrados = eventosFiltrados.filter(ev => ev.data.ciudad === ciudad);
+    }
+    if (dueño.trim() !== "") {
+      eventosFiltrados = eventosFiltrados.filter(ev => ev.data.nombre_dueño_evento.includes(dueño) );
+    }
+    setTimeout(() => {
+      this.setState({ eventos: eventosFiltrados })
+      this.setState({ openCortina: false });
+    }, 1000);
   }
-  buscarSinFiltro = () => {
+  iniciarBusqueda = () => {
     this.setState({ openCortina: true });
     this.busquedaAbierta()
   }
@@ -305,9 +334,10 @@ export default class ModoEmpleado extends React.Component {
 
   handleCambiarProvincia = name => event => {
     this.setState({ provinciaDisplay: event.target.value });
+    this.setState({ ciudad: "" });
     var provincia = provincias.filter(provincia => provincia.id === event.target.value);
     this.setState({ provincia: provincia[0].name });
-    var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value);
+    var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value || ciudad.id_state === 0);
     this.setState({ ciudades: cities });
   }
   handleCambiarCiudad = name => event => {
@@ -315,14 +345,22 @@ export default class ModoEmpleado extends React.Component {
     var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());
     this.setState({ ciudad: ciudad[0].name })
   }
+  limpiarFiltros = () => {
+    this.setState({ provinciaDisplay: "" });
+    this.setState({ ciudad: "" });
+    this.setState({ provincia: "" });    
+    document.getElementById("dueño").value = "";
+    document.getElementById("desde").value = materialDateInput;
+    document.getElementById("hasta").value = fechaProximoMes;
+  }
   render() {
     var ciudadesMostrar = ""
     if (this.state.provinciaDisplay === "") {
-      ciudadesMostrar = <TextField id="ciudad2" disabled required SelectProps={{ native: true, }} onChange="" label="Ciudad" style={{ width: 200, }} >
+      ciudadesMostrar = <TextField id="ciudad2" disabled SelectProps={{ native: true, }} onChange="" label="Ciudad" style={{ width: 400, }} >
 
       </TextField>
     } else {
-      ciudadesMostrar = <TextField id="ciudad" select required SelectProps={{ native: true }} value={this.state.ciudadDisplay} onChange={this.handleCambiarCiudad('ciudadDisplay')} label="Ciudad" style={{ width: 200, }} >
+      ciudadesMostrar = <TextField id="ciudad" select SelectProps={{ native: true }} value={this.state.ciudadDisplay} onChange={this.handleCambiarCiudad('ciudadDisplay')} label="Ciudad" style={{ width: 400, }} >
         {this.state.ciudades.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
       </TextField>
     }
@@ -361,21 +399,28 @@ export default class ModoEmpleado extends React.Component {
           <label>Desde: </label>
           <input id="desde" type="date" text="desde" defaultValue={materialDateInput} className="filtro-busqueda" />
           <label>Hasta: </label>
-          <input id="hasta" type="date" text="hasta" defaultValue={materialDateInput} className="filtro-busqueda" />
+          <input id="hasta" type="date" text="hasta" defaultValue={fechaProximoMes} className="filtro-busqueda" />
           <label>Dueño: </label>
           <input id="dueño" type="" text="Dueño" className="filtro-busqueda" />
-          <button id="filter_button" onClick={this.filtrarBusqueda} className="filter-button">Filtrar</button>
-          <button id="filter_button" onClick={this.cerrarFiltros} className="filter-button-cerrar"> cerrar Filtros</button>
-          <br></br>
-          <TextField id="provincia" select required value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" style={{ width: 200 }} >
-            {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
-          </TextField>
-          {ciudadesMostrar}
+         <br></br>
+          <div className="filtros-inline">
+            <div className="prov-filter">
+              <TextField id="provincia" select value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" style={{ width: 200, }} >
+                {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
+              </TextField>
+            </div>
+            {ciudadesMostrar}
+          </div>
+          <div id="filtros-activos-botones">
+          <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button-activos">Buscar</button>
+          <button id="filter_button" onClick={this.cerrarFiltros} className="filter-button-cerrar"> Cerrar Filtros</button>
+          <button id="filter_button" onClick={this.limpiarFiltros} className="filter-button-cerrar"> Limpiar Filtros</button>
+          </div>
         </div>
       } else {
         filtros = <div className="filters-container">
           <button id="filter_button" onClick={this.openFiltro} className="filter-filter-button">Filtros</button>
-          <button id="filter_button" onClick={this.buscarSinFiltro} className="filter-button">Buscar</button>
+          <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button">Buscar</button>
         </div>
       }
     }
@@ -384,31 +429,37 @@ export default class ModoEmpleado extends React.Component {
     if (this.state.usuario !== null) {
       mail = this.state.usuario.email;
       var eventos = "";
-      if (this.state.estadoDeEvento === "pendiente" || this.state.estadoDeEvento === "postulado") {
+      if (this.state.estadoDeEvento === "pendiente") {
         eventos = this.state.eventos.filter(function (evento) {
           return evento.data.mail_dueño_evento !== mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
         });
       } else {
-        if (this.state.estadoDeEvento === "aceptado") {
+        if (this.state.estadoDeEvento === "postulado") {
           eventos = this.state.eventos.filter(function (evento) {
-            return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+            return evento.data.mail_dueño_evento !== mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
           });
         } else {
-          if (this.state.estadoDeEvento === "enproceso") {
+          if (this.state.estadoDeEvento === "aceptado") {
             eventos = this.state.eventos.filter(function (evento) {
-              return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) < dateTime &&
-                evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) > dateTime;;
+              return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
             });
           } else {
-            if (this.state.estadoDeEvento === "completado") {
+            if (this.state.estadoDeEvento === "enproceso") {
               eventos = this.state.eventos.filter(function (evento) {
-                return evento.data.mail_dueño_evento !== mail && evento.data.estado !== "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                return evento.data.mail_dueño_evento !== mail && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) < dateTime &&
+                  evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) > dateTime;;
               });
             } else {
-              if (this.state.estadoDeEvento === "puntuado") {
+              if (this.state.estadoDeEvento === "completado") {
                 eventos = this.state.eventos.filter(function (evento) {
-                  return evento.data.mail_dueño_evento !== mail && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                  return evento.data.mail_dueño_evento !== mail && evento.data.estado !== "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
                 });
+              } else {
+                if (this.state.estadoDeEvento === "puntuado") {
+                  eventos = this.state.eventos.filter(function (evento) {
+                    return evento.data.mail_dueño_evento !== mail && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                  });
+                }
               }
             }
           }

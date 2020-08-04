@@ -1,6 +1,11 @@
 {
     "states": [
         {
+            "id": 0,
+            "id_country": 5,
+            "name": ""
+        },
+        {
             "id": 1818,
             "id_country": 5,
             "name": "Buenos Aires"

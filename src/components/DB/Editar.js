@@ -21,6 +21,24 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarOcupacionUsuario = (ocupacion, email)=> {
+    db.collection("usuarios").doc(email).update({
+      ocupacion: ocupacion,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  modificarUbicacionUsuario = (ubicacion, email)=> {
+    db.collection("usuarios").doc(email).update({
+      ubicacion: ubicacion,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   modificarFacebookUsuario = (facebook, email)=> {
     db.collection("usuarios").doc(email).update({
       facebook: facebook,
@@ -51,6 +69,15 @@ class Editar extends React.Component {
   modificarLinkedinUsuario = (linkedin, email)=> {
     db.collection("usuarios").doc(email).update({
       linkedin: linkedin,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  modificarEmpleadoActivo = (empleadoActivo, email)=> {
+    db.collection("usuarios").doc(email).update({
+      empleadoActivo: empleadoActivo,
     }).then(() => {
       console.log("Modificado")
     }).catch(() => {

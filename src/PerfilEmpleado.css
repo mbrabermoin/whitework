@@ -130,6 +130,15 @@ a:hover {
 .profile-card-tel__txt:hover {
   cursor: pointer;
 }
+.profile-card-loc__icon:hover {
+  cursor: pointer;
+}
+.profile-card-loc__txt:hover {
+  cursor: pointer;
+}
+.profile-card__txt:hover {
+  cursor: pointer;
+}
 .profile-card-tel__icon {
   display: inline-flex;
   font-size: 27px;

@@ -1,6 +1,11 @@
 {
     "cities": [
         {
+            "id" : 0,
+            "id_state" : 0,
+            "name" : ""
+        },
+        {
             "id" : 564751,
             "id_state" : 1838,
             "name" : "Aarón Castellanos"

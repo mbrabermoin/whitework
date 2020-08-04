@@ -4,7 +4,7 @@ import facebook from "./logos/facebook.png";
 import twitter from "./logos/twitter.png";
 import instagram from "./logos/instagram.png";
 import linkedin from "./logos/linkedin.png";
-//import locacion from "./logos/locacion.png";
+import locacion from "./logos/locacion.png";
 import telefono from "./logos/whatsapp.png";
 import email from "./logos/email.png";
 import Dialog from '@material-ui/core/Dialog';
@@ -15,7 +15,10 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Modificar from './components/DB/Editar';
-import db from "./index";
+import { auth } from "./firebase";
+import db from './index';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -33,6 +36,8 @@ class PerfilEmpleado extends React.Component {
             openModalLinkedIn: false,
             openModalNombre: false,
             openModalTelefono: false,
+            openModalUbicacion: false,
+            openModalOcupacion: false,
             openCortina: true,
             comentariosEmpleado: [],
             puntajeEmpleado: 0,
@@ -42,6 +47,7 @@ class PerfilEmpleado extends React.Component {
             cantidadTrabajosContratados: 0,
             openComentariosEmpleado: false,
             openComentariosEmpleador: false,
+            empleadoActivo: false,
         }
         this.guardarFacebook = this.guardarFacebook.bind(this)
         this.guardarInstagram = this.guardarInstagram.bind(this)
@@ -49,8 +55,25 @@ class PerfilEmpleado extends React.Component {
         this.guardarLinkedIn = this.guardarLinkedIn.bind(this)
         this.guardarNombre = this.guardarNombre.bind(this)
         this.guardarTelefono = this.guardarTelefono.bind(this)
+        this.guardarUbicacion = this.guardarUbicacion.bind(this)
+        this.guardarOcupacion = this.guardarOcupacion.bind(this)
     }
     componentDidMount() {
+        var user = auth.currentUser;
+        var docRef = db.collection("usuarios").doc(user.email);
+        let component = this;
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+                component.setState({ usuario: doc.data() });
+                component.setState({ empleadoActivo: doc.data().empleadoActivo })
+            } else {
+                alert("Ha ocurrido un error. Actualice la página.");
+            }
+        }).catch(function (error) {
+            console.log(error);
+            alert("Ha ocurrido un error. Actualice la página.");
+        });        
         var puntajeEmpleado = 0;
         var cantidadPuntajes = 0;
         var comments = [];
@@ -115,6 +138,18 @@ class PerfilEmpleado extends React.Component {
     handleAbrirTelefono = () => {
         this.setState({ openModalTelefono: true });
     };
+    handleCerrarUbicacion = () => {
+        this.setState({ openModalUbicacion: false });
+    };
+    handleAbrirUbicacion = () => {
+        this.setState({ openModalUbicacion: true });
+    };
+    handleCerrarOcupacion = () => {
+        this.setState({ openModalOcupacion: false });
+    };
+    handleAbrirOcupacion = () => {
+        this.setState({ openModalOcupacion: true });
+    };
     handleCerrarFacebook = () => {
         this.setState({ openModalFacebook: false });
     };
@@ -152,6 +187,7 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openComentariosEmpleador: true });
     };
     guardarNombre() {
+        this.setState({ openCortina: true });
         const fullname = document.getElementById("fullname").value;
         const email = this.state.usuario.email;
         Modificar.modificarNombreUsuario(fullname, email);
@@ -159,40 +195,82 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalNombre: false });
     }
     guardarTelefono() {
+        this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         const telefono = document.getElementById("telefono").value;
         Modificar.modificarTelefonoUsuario(telefono, email);
         this.refrescarUsuario();
         this.setState({ openModalTelefono: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
+    }
+    guardarOcupacion() {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        const ocupacion = document.getElementById("ocupacion").value;
+        Modificar.modificarOcupacionUsuario(ocupacion, email);
+        this.refrescarUsuario();
+        this.setState({ openModalOcupacion: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
+    }
+    guardarUbicacion() {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        const ubicacion = document.getElementById("ubicacion").value;
+        Modificar.modificarUbicacionUsuario(ubicacion, email);
+        this.refrescarUsuario();
+        this.setState({ openModalUbicacion: false });
+        setTimeout(() => {
+        this.setState({ openCortina: false });
+        }, 1000);
     }
     guardarFacebook() {
+        this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         const facebook = document.getElementById("facebookURL").value;
         Modificar.modificarFacebookUsuario(facebook, email);
         this.refrescarUsuario();
         this.setState({ openModalFacebook: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
     }
 
     guardarInstagram() {
+        this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         const instagram = document.getElementById("instagramURL").value;
         Modificar.modificarInstagramUsuario(instagram, email);
         this.refrescarUsuario();
         this.setState({ openModalInstagram: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
     }
     guardarTwitter() {
+        this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         const twitter = document.getElementById("twitterURL").value;
         Modificar.modificarTwitterUsuario(twitter, email);
         this.refrescarUsuario();
         this.setState({ openModalTwitter: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
     }
     guardarLinkedIn() {
+        this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         const linkedin = document.getElementById("linkedinURL").value;
         Modificar.modificarLinkedinUsuario(linkedin, email);
         this.refrescarUsuario();
         this.setState({ openModalLinkedIn: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
     }
     refrescarUsuario() {
         var docRef = db.collection("usuarios").doc(this.state.usuario.email);
@@ -208,12 +286,33 @@ class PerfilEmpleado extends React.Component {
             alert("Ha ocurrido un error. Actualice la página.");
         });
     }
+    handleChange = (event) => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        this.setState({ empleadoActivo: event.target.checked });
+        Modificar.modificarEmpleadoActivo(event.target.checked, email);
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            }, 1000);
+    };
     render() {
         var Numerotelefono = "";
         if (this.state.usuario.telefono === "" || this.state.usuario.telefono === null) {
             Numerotelefono = "Ingresar Telefono"
         } else {
             Numerotelefono = this.state.usuario.telefono
+        }
+        var Ubicacion = "";
+        if (this.state.usuario.ubicacion === "" || this.state.usuario.ubicacion === null) {
+            Ubicacion = "Ingresar Ubicación"
+        } else {
+            Ubicacion = this.state.usuario.ubicacion
+        }
+        var ocupacion = "";
+        if (this.state.usuario.ocupacion === "" || this.state.usuario.ocupacion === null) {
+            ocupacion = "Ingresar Ocupación"
+        } else {
+            ocupacion = this.state.usuario.ocupacion
         }
         var comentariosEmpleado = this.state.comentariosEmpleado;
         var ComentariosEmpleadoDisplay = <div className="content">
@@ -237,7 +336,7 @@ class PerfilEmpleado extends React.Component {
             {comentariosEmpleador.map(comentarioEmpleador => (
                 <article className="tweet">
                     <div className="tweet-side">
-                    <object className="avatar-comments" data={comentarioEmpleador.foto} type="image/png">
+                        <object className="avatar-comments" data={comentarioEmpleador.foto} type="image/png">
                             <img className="avatar-comments" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="1" />
                         </object>
                     </div>
@@ -251,20 +350,21 @@ class PerfilEmpleado extends React.Component {
         return (
             <div className="wrapper1">
                 <div className="profile-card js-profile-card">
-                    <div className="profile-card__img">                        
+                    <div className="profile-card__img">
                         <img src={this.state.usuario.urlFoto} alt="profile card" />
                     </div>
                     <div className="profile-card__cnt js-profile-cnt">
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
-                        <div className="profile-card__txt">Guitarrista de <strong>Buenos Aires</strong></div>
-                        {/*<div className="profile-card-loc">
+                        <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
+                        <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
+                        <div className="profile-card-loc">
                             <span className="profile-card-loc__icon">
-                                <img width="60" height="60" alt="fb" src={locacion} />
+                                <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
                             </span>
-                            <span className="profile-card-loc__txt">
-                                Istanbul, Turkey
+                            <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
+                                {Ubicacion}
                             </span>
-                         </div>*/}
+                         </div>
                         <div className="profile-card-email">
                             <span className="profile-card-email__icon">
                                 <img width="60" height="60" alt="fb" src={email} />
@@ -323,7 +423,7 @@ class PerfilEmpleado extends React.Component {
                                 </span>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 {/*Facebook*/}
@@ -459,6 +559,48 @@ class PerfilEmpleado extends React.Component {
                     </DialogActions>
                 </Dialog>
                 <Dialog
+                    open={this.state.openModalOcupacion}
+                    onClose={this.handleCerrarOcupacion}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Ocupación:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="ocupacion" autoFocus margin="dense" label="Ocupación" defaultValue={this.state.usuario.ocupacion} type="ocupacion" fullWidth />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarOcupacion} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarOcupacion} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openModalUbicacion}
+                    onClose={this.handleCerrarUbicacion}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Ubicación:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="ubicacion" autoFocus margin="dense" label="Ubicación" defaultValue={this.state.usuario.ubicacion} type="ubicacion" fullWidth />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarUbicacion} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarUbicacion} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
                     open={this.state.openCortina}
                     TransitionComponent={Transition}
                     aria-labelledby="form-dialog-title"
@@ -474,10 +616,10 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Comentarios de Empleadores:</DialogTitle>
                     <DialogContent dividers>
-                    <div className="comentarios-container">
+                        <div className="comentarios-container">
                             <div className="comments-list">
-                                    {ComentariosEmpleadoDisplay}
-                            </div>                            
+                                {ComentariosEmpleadoDisplay}
+                            </div>
                         </div>
                     </DialogContent>
                     <DialogActions>
@@ -496,10 +638,10 @@ class PerfilEmpleado extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Comentarios de Empleados:</DialogTitle>
                     <DialogContent dividers>
-                    <div className="comentarios-container">
+                        <div className="comentarios-container">
                             <div className="comments-list">
-                                    {ComentariosEmpleadorDisplay}
-                            </div>                            
+                                {ComentariosEmpleadorDisplay}
+                            </div>
                         </div>
                     </DialogContent>
                     <DialogActions>

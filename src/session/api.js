@@ -16,6 +16,10 @@ export default {
           instagram: "",
           linkedin: "",
           twitter: "",
+          empleadoActivo: false,
+          descripcion: "",
+          ocupacion: "",
+          ubicacion: "",
         });
       }
     });
@@ -33,6 +37,10 @@ export default {
           instagram: "",
           linkedin: "",
           twitter: "",
+          empleadoActivo: false,
+          descripcion: "",
+          ocupacion: "",
+          ubicacion: "",
         });
       }
     });
