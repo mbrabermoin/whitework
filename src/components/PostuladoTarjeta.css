@@ -30,7 +30,11 @@
     top: 50%;
     transform: translateY(-50%);
   }
-  
+  .foto-postulado:hover{
+    cursor: pointer;
+    margin-top: -30px;
+    transform: scale(1.1);
+  }
   
   
   .content-post {

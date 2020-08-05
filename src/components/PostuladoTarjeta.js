@@ -7,6 +7,17 @@ import linkedin from "../logos/linkedin.png";
 import db from '../index';
 import editar from './DB/Editar';
 import eliminar from './DB/Eliminar';
+import Slide from '@material-ui/core/Slide';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import EmpleadoDetalle from "./EmpleadoDetalle";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="down" ref={ref} {...props} />;
+});
 
 class PostuladoTarjeta extends React.Component {
     constructor(props) {
@@ -20,6 +31,7 @@ class PostuladoTarjeta extends React.Component {
             cantPostEvento: this.props.cantPostEvento,
             cantAsignados: this.props.cantAsignados,
             usuario: null,
+            openDetallePostulado: false,
         }
     }
     componentDidMount() {
@@ -48,21 +60,20 @@ class PostuladoTarjeta extends React.Component {
                 console.log("Error getting documents: ", error);
             });
     }
-
     aceptarPostulante = () => {
         var mail = this.state.usuario.email;
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
         var cantPostTrabajo = this.state.cantPostTrabajo;
         var cantPostEvento = this.state.cantPostEvento;
-        var nuevaCantPostEvento = cantPostEvento - cantPostTrabajo; 
+        var nuevaCantPostEvento = cantPostEvento - cantPostTrabajo;
         var nuevaCantAsignados = this.state.cantAsignados + 1;
         this.eliminarPostulacionesPorTrabajo(trabajo)
         editar.asignarTrabajador(mail, trabajo)
         if (nuevaCantPostEvento === 0) {
-        editar.asignarTrabajadorAEvento(evento, "pendiente", nuevaCantPostEvento, nuevaCantAsignados); 
-        }else{
-            editar.asignarTrabajadorAEvento(evento, "postulado", nuevaCantPostEvento, nuevaCantAsignados);   
+            editar.asignarTrabajadorAEvento(evento, "pendiente", nuevaCantPostEvento, nuevaCantAsignados);
+        } else {
+            editar.asignarTrabajadorAEvento(evento, "postulado", nuevaCantPostEvento, nuevaCantAsignados);
         }
     }
     rechazarPostulante = () => {
@@ -76,13 +87,19 @@ class PostuladoTarjeta extends React.Component {
             editar.rechazarTrabajo(trabajo, "pendiente", cantPostTrabajo)
             if (cantPostEvento === 0) {
                 editar.rechazarTrabajadorAEvento(evento, "pendiente", cantPostEvento);
-                }else{
-                    editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
-                }
+            } else {
+                editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
+            }
         } else {
             editar.rechazarTrabajo(trabajo, "postulado", cantPostTrabajo)
             editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
         }
+    }
+    handleCloseDetallePostulado = () => {
+        this.setState({ openDetallePostulado: false });
+    }
+    handleOpenDetallePostulado = () => {
+        this.setState({ openDetallePostulado: true });
     }
     render() {
         var nombre = "";
@@ -98,6 +115,12 @@ class PostuladoTarjeta extends React.Component {
             nombre = this.state.usuario.fullname;
             mail = this.state.usuario.email;
             photoUrl = this.state.usuario.urlFoto;
+            var foto = "";
+            if (this.state.usuario.urlFoto !== "") {
+                foto = <img class="avatar-trabajo foto-postulado" onClick={this.handleOpenDetallePostulado} src={photoUrl} alt="persona" />
+            } else {
+                foto = <img class="avatar-trabajo foto-postulado" onClick={this.handleOpenDetallePostulado} src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+            }
             if (this.state.usuario.telefono !== null && this.state.usuario.telefono !== "") {
                 telefono = "Telefono: " + this.state.usuario.telefono;
             }
@@ -144,7 +167,7 @@ class PostuladoTarjeta extends React.Component {
 
         return (
             <div fullwidth class="card-post">
-                <img class="avatar-trabajo" src={photoUrl} alt="persona" />
+                {foto}
                 <div class="skewed bg-react"></div>
                 <div class="content-post">
                     <div>
@@ -163,6 +186,24 @@ class PostuladoTarjeta extends React.Component {
 
                     <p class="esp text-react">{telefono}</p>
                 </div>
+                <Dialog
+                    open={this.state.openDetallePostulado}
+                    onClose={this.handleCloseDetallePostulado}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Postulado</DialogTitle>
+                    <DialogContent dividers>
+                        <EmpleadoDetalle usuario={this.state.usuario} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseDetallePostulado} color="primary">
+                            CERRAR
+                 </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
