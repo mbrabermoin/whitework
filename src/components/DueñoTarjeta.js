@@ -31,6 +31,7 @@ class DueñoTarjeta extends React.Component {
     }
     render() {
         var nombre = "";
+        var email = "";
         var descripcion = "";
         var photoUrl = "";
         var telefono = "";
@@ -40,9 +41,12 @@ class DueñoTarjeta extends React.Component {
         var twitterpanel = "";
         if (this.state.usuario !== null) {
             nombre = this.state.usuario.fullname;
-            descripcion = this.state.usuario.email;
+            email = this.state.usuario.email;
             photoUrl = this.state.usuario.urlFoto;
             telefono = this.state.usuario.telefono;
+            if (this.state.usuario.descripcionEmpleador !== null && this.state.usuario.descripcionEmpleador !== "") {
+                descripcion = this.state.usuario.descripcionEmpleador;
+            }
             if (this.state.usuario.facebook !== "") {
                 facebookpanel = <div className="profile-card-social__dueño">
                     <a target="_blank" rel="noopener noreferrer" href={this.state.usuario.facebook}>
@@ -93,9 +97,10 @@ class DueñoTarjeta extends React.Component {
                         {linkedinpanel}
                     </div>
                     <h1>{nombre}</h1>
-                    <h3>{descripcion}</h3>
-                    <h3>{descripcion}</h3>
-
+                    <h3>{email}</h3><br></br>
+                    <div class="desc-dueño">
+                    {descripcion}
+                    </div><br></br>
                     <p class="esp text-react">Telefono: {telefono}</p>
                 </div>
             </div>

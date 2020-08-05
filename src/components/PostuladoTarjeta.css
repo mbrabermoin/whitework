@@ -1,5 +1,5 @@
 
-.card-dueño {
+.card-post {
     height: 125px;
     background: #fff;
     position: relative;
@@ -33,18 +33,18 @@
   
   
   
-  .content-dueño {
+  .content-post {
     margin-top: 0.7rem;
     margin-left: 9rem;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
   
-  .content-dueño h1,
+  .content-post h1,
   h3 {
     font-weight: 100;
   }
   
-  .content-dueño h1 {
+  .content-post h1 {
     font-size: 1.10rem;
       margin: 0;
     padding: 0;
@@ -53,7 +53,7 @@
    
   }
   
-  .content-dueño h3 {
+  .content-post h3 {
     font-size: 1rem;
       margin: 0;
     padding: 0;
@@ -83,7 +83,7 @@
     width: 260px;
     float:right;
   }
-  .profile-card-social__dueño {
+  .profile-card-social__post {
     display: inline-flex;
     width: 15px;
     height: 15px;
@@ -97,6 +97,6 @@
     transition: all 0.3s;
     margin-left: 20px;
   }
-  .profile-card-social__dueño:hover {
+  .profile-card-social__post:hover {
     transform: scale(1.2);
   }

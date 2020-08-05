@@ -38,6 +38,8 @@ class PerfilEmpleado extends React.Component {
             openModalTelefono: false,
             openModalUbicacion: false,
             openModalOcupacion: false,
+            openModalDescripcionEmpleador: false,
+            openModalDescripcionEmpleado: false,
             openCortina: true,
             comentariosEmpleado: [],
             puntajeEmpleado: 0,
@@ -57,6 +59,8 @@ class PerfilEmpleado extends React.Component {
         this.guardarTelefono = this.guardarTelefono.bind(this)
         this.guardarUbicacion = this.guardarUbicacion.bind(this)
         this.guardarOcupacion = this.guardarOcupacion.bind(this)
+        this.guardarDescripcionEmpleador = this.guardarDescripcionEmpleador.bind(this)
+        this.guardarDescripcionEmpleado = this.guardarDescripcionEmpleado.bind(this)
     }
     componentDidMount() {
         var user = auth.currentUser;
@@ -150,6 +154,18 @@ class PerfilEmpleado extends React.Component {
     handleAbrirOcupacion = () => {
         this.setState({ openModalOcupacion: true });
     };
+    handleCerrarDescripcionEmpleador = () => {
+        this.setState({ openModalDescripcionEmpleador: false });
+    };
+    handleAbrirDescripcionEmpleador = () => {
+        this.setState({ openModalDescripcionEmpleador: true });
+    };
+    handleCerrarDescripcionEmpleado = () => {
+        this.setState({ openModalDescripcionEmpleado: false });
+    };
+    handleAbrirDescripcionEmpleado = () => {
+        this.setState({ openModalDescripcionEmpleado: true });
+    };
     handleCerrarFacebook = () => {
         this.setState({ openModalFacebook: false });
     };
@@ -227,6 +243,28 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openCortina: false });
         }, 1000);
     }
+    guardarDescripcionEmpleador() {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        const descripcionEmpleador = document.getElementById("descripcionEmpleador").value;
+        Modificar.modificarDescripcionEmpleadorUsuario(descripcionEmpleador, email);
+        this.refrescarUsuario();
+        this.setState({ openModalDescripcionEmpleador: false });
+        setTimeout(() => {
+        this.setState({ openCortina: false });
+        }, 1000);
+    }
+    guardarDescripcionEmpleado() {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        const descripcionEmpleado = document.getElementById("descripcionEmpleado").value;
+        Modificar.modificarDescripcionEmpleadoUsuario(descripcionEmpleado, email);
+        this.refrescarUsuario();
+        this.setState({ openModalDescripcionEmpleado: false });
+        setTimeout(() => {
+        this.setState({ openCortina: false });
+        }, 1000);
+    }
     guardarFacebook() {
         this.setState({ openCortina: true });
         const email = this.state.usuario.email;
@@ -296,6 +334,12 @@ class PerfilEmpleado extends React.Component {
             }, 1000);
     };
     render() {
+        var foto = "";
+        if(this.state.usuario.urlFoto !== ""){
+        foto = <img src={this.state.usuario.urlFoto} alt="profile card" />
+    }else{
+        foto = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="profile card" />
+    }
         var Numerotelefono = "";
         if (this.state.usuario.telefono === "" || this.state.usuario.telefono === null) {
             Numerotelefono = "Ingresar Telefono"
@@ -313,6 +357,18 @@ class PerfilEmpleado extends React.Component {
             ocupacion = "Ingresar Ocupación"
         } else {
             ocupacion = this.state.usuario.ocupacion
+        }
+        var descripcionEmpleador = "";
+        if (this.state.usuario.descripcionEmpleador === "" || this.state.usuario.descripcionEmpleador === null) {
+            descripcionEmpleador = "Ingresar Breve Descripción como Empleador"
+        } else {
+            descripcionEmpleador = "Descripción como empleador: " +this.state.usuario.descripcionEmpleador
+        }
+        var descripcionEmpleado = "";
+        if (this.state.usuario.descripcionEmpleado === "" || this.state.usuario.descripcionEmpleado === null) {
+            descripcionEmpleado = "Ingresar Breve Descripción como Empleado"
+        } else {
+            descripcionEmpleado = "Descripción como empleado: " + this.state.usuario.descripcionEmpleado
         }
         var comentariosEmpleado = this.state.comentariosEmpleado;
         var ComentariosEmpleadoDisplay = <div className="content">
@@ -351,7 +407,7 @@ class PerfilEmpleado extends React.Component {
             <div className="wrapper1">
                 <div className="profile-card js-profile-card">
                     <div className="profile-card__img">
-                        <img src={this.state.usuario.urlFoto} alt="profile card" />
+                        {foto}
                     </div>
                     <div className="profile-card__cnt js-profile-cnt">
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
@@ -422,6 +478,16 @@ class PerfilEmpleado extends React.Component {
                                     <img width="80" height="80" alt="fb" src={linkedin} />
                                 </span>
                             </div>
+                        </div>
+                        <div className="profile-card-desc">
+                            <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
+                                {descripcionEmpleado}
+                            </span>
+                        </div>
+                        <div className="profile-card-desc">
+                            <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
+                                {descripcionEmpleador}
+                            </span>
                         </div>
 
                     </div>
@@ -596,6 +662,54 @@ class PerfilEmpleado extends React.Component {
                             Cancel
                          </Button>
                         <Button onClick={this.guardarUbicacion} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openCortina}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
+                </Dialog>
+                <Dialog
+                    open={this.state.openModalDescripcionEmpleador}
+                    onClose={this.handleCerrarDescripcionEmpleador}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleador:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="descripcionEmpleador" autoFocus margin="dense" label="Descripción como empleador" defaultValue={this.state.usuario.descripcionEmpleador} type="descripcionEmpleador" fullWidth />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarDescripcionEmpleador} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarDescripcionEmpleador} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openModalDescripcionEmpleado}
+                    onClose={this.handleCerrarDescripcionEmpleado}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleado:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="descripcionEmpleado" autoFocus margin="dense" label="Descripción como empleado" defaultValue={this.state.usuario.descripcionEmpleado} type="descripcionEmpleado" fullWidth />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarDescripcionEmpleado} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarDescripcionEmpleado} color="primary">
                             Ok
                          </Button>
                     </DialogActions>

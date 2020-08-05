@@ -1,6 +1,6 @@
 
 .card-dueño {
-    height: 125px;
+    height: 200px;
     background: #fff;
     position: relative;
     overflow-x: hidden;
@@ -10,7 +10,9 @@
     margin-bottom: 10px;
     box-sizing: border-box;
   }
-  
+  .desc-dueño{
+    width: 500px;
+  }
   .skewed {
     position: absolute;
     width: 100px;

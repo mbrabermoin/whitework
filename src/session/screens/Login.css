@@ -29,7 +29,6 @@ body {
   
   .ui-panel {
     margin: 0 auto;
-    margin-top: 120px;
     width: 400px;
     height: auto;
     background-color: black;
@@ -38,6 +37,20 @@ body {
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
     position: absolute;
     margin-top: -130px;
+    margin-left: -181px;
+    top: 50%;
+    left: 50%;
+  }
+  .registrarse-panel {
+    margin: 0 auto;
+    width: 400px;
+    height: auto;
+    background-color: black;
+    color: white;
+    border: 1px solid #161616;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    margin-top: -200px;
     margin-left: -181px;
     top: 50%;
     left: 50%;

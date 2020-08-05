@@ -89,6 +89,7 @@ class PostuladoTarjeta extends React.Component {
         var mail = "";
         var photoUrl = "";
         var telefono = "";
+        //var descripcion = "";
         var linkedinpanel = "";
         var facebookpanel = "";
         var instagrampanel = "";
@@ -100,8 +101,11 @@ class PostuladoTarjeta extends React.Component {
             if (this.state.usuario.telefono !== null && this.state.usuario.telefono !== "") {
                 telefono = "Telefono: " + this.state.usuario.telefono;
             }
+            /*if (this.state.usuario.descripcionEmpleado !== null && this.state.usuario.descripcionEmpleado !== "") {
+                descripcion = this.state.usuario.descripcionEmpleado;
+            }*/
             if (this.state.usuario.facebook !== "") {
-                facebookpanel = <div className="profile-card-social__dueño">
+                facebookpanel = <div className="profile-card-social__post">
                     <a target="_blank" rel="noopener noreferrer" href={this.state.usuario.facebook}>
                         <span className="icon-font">
                             <img width="50" height="50" alt="fb" src={facebook} />
@@ -110,7 +114,7 @@ class PostuladoTarjeta extends React.Component {
                 </div>
             }
             if (this.state.usuario.instagram !== "") {
-                instagrampanel = <div className="profile-card-social__dueño">
+                instagrampanel = <div className="profile-card-social__post">
                     <a target="_blank" rel="noopener noreferrer" href={this.state.usuario.instagram}>
                         <span className="icon-font">
                             <img width="50" height="50" alt="fb" src={instagram} />
@@ -119,7 +123,7 @@ class PostuladoTarjeta extends React.Component {
                 </div>
             }
             if (this.state.usuario.twitter !== "") {
-                twitterpanel = <div className="profile-card-social__dueño">
+                twitterpanel = <div className="profile-card-social__post">
                     <a target="_blank" rel="noopener noreferrer" href={this.state.usuario.twitter}>
                         <span className="icon-font">
                             <img width="50" height="50" alt="fb" src={twitter} />
@@ -128,7 +132,7 @@ class PostuladoTarjeta extends React.Component {
                 </div>
             }
             if (this.state.usuario.linkedin !== "") {
-                linkedinpanel = <div className="profile-card-social__dueño">
+                linkedinpanel = <div className="profile-card-social__post">
                     <a target="_blank" rel="noopener noreferrer" href={this.state.usuario.linkedin}>
                         <span className="icon-font">
                             <img width="50" height="50" alt="fb" src={linkedin} />
@@ -139,10 +143,10 @@ class PostuladoTarjeta extends React.Component {
         }
 
         return (
-            <div fullwidth class="card-dueño">
+            <div fullwidth class="card-post">
                 <img class="avatar-trabajo" src={photoUrl} alt="persona" />
                 <div class="skewed bg-react"></div>
-                <div class="content-dueño">
+                <div class="content-post">
                     <div>
                         <button className='eliminartrabajo-btn' onClick={this.rechazarPostulante}>Rechazar</button>
                         <button className='aceptar-btn' onClick={this.aceptarPostulante}>Aceptar</button>
@@ -155,6 +159,7 @@ class PostuladoTarjeta extends React.Component {
                     </div>
                     <h1>{nombre}</h1>
                     <h3>{mail}</h3>
+                    {/*<h3>{descripcion}</h3>*/}
 
                     <p class="esp text-react">{telefono}</p>
                 </div>

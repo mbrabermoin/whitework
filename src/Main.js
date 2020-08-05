@@ -77,7 +77,7 @@ class Main extends React.Component {
     render() {
 
         var fotoPerfil = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />;
-        if (this.state.usuario !== null && this.state.usuario.urlFoto !== null) {
+        if (this.state.usuario !== null && this.state.usuario.urlFoto !== null && this.state.usuario.urlFoto !== "") {
             fotoPerfil = <img src={this.state.usuario.urlFoto} alt="Avatar" className="avatar" />
         }
 

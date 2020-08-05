@@ -126,7 +126,7 @@ export default class ModoEmpleado extends React.Component {
         this.setState({ eventos: events })
         this.setState({ openCortina: false });
       }
-    }, 1000);
+    }, 2000);
   }
   buscarPostulaciones() {
     var post = [];

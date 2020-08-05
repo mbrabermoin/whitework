@@ -39,6 +39,24 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarDescripcionEmpleadoUsuario = (descripcionEmpleado, email)=> {
+    db.collection("usuarios").doc(email).update({
+      descripcionEmpleado: descripcionEmpleado,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  modificarDescripcionEmpleadorUsuario = (descripcionEmpleador, email)=> {
+    db.collection("usuarios").doc(email).update({
+      descripcionEmpleador: descripcionEmpleador,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   modificarFacebookUsuario = (facebook, email)=> {
     db.collection("usuarios").doc(email).update({
       facebook: facebook,

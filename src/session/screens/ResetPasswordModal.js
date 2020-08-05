@@ -8,7 +8,7 @@ function resetPassword() {
     } else {
         if (email.search("@") && email.search(/\./) > 0) {
             auth.sendPasswordResetEmail(email).then(function (value) {
-                alert("Un mail con link se a enviado a " + email + " para restablecer contraseña. Presionar X para volver a ingresar su usuario.");
+                alert("Un mail con link se ha enviado a " + email + " para restablecer contraseña. Presionar X para volver a ingresar su usuario.");
             })
                 .catch(function (error) {
                     var errorMessage = error.message;

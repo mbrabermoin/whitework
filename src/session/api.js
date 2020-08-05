@@ -17,7 +17,8 @@ export default {
           linkedin: "",
           twitter: "",
           empleadoActivo: false,
-          descripcion: "",
+          descripcionEmpleado: "",
+          descripcionEmpleador: "",
           ocupacion: "",
           ubicacion: "",
         });
@@ -38,7 +39,8 @@ export default {
           linkedin: "",
           twitter: "",
           empleadoActivo: false,
-          descripcion: "",
+          descripcionEmpleado: "",
+          descripcionEmpleador: "",
           ocupacion: "",
           ubicacion: "",
         });
