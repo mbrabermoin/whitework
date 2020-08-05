@@ -33,6 +33,7 @@ class Main extends React.Component {
         }
     }
     componentDidMount() {
+        this.setState({ openCortina: true });
         setTimeout(() => {
             var user = auth.currentUser;
             var docRef = db.collection("usuarios").doc(user.email);
@@ -48,9 +49,11 @@ class Main extends React.Component {
                 console.log(error);
                 alert("Ha ocurrido un error. Actualice la página.");
             });
+            setTimeout(() => {
             this.setState({ openCortina: false });
+            }, 1000);
         }
-        , 1000);
+        , 3000);
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";

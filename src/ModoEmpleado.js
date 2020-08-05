@@ -28,7 +28,7 @@ if (day.length < 2) {
 const materialDateInput = year + "-" + month + "-" + day;
 if (month < "12") {
   month = parseInt(month) + 1;
-}else{
+} else {
   month = 1;
   year = parseInt(year) + 1;
 }
@@ -53,21 +53,24 @@ export default class ModoEmpleado extends React.Component {
     }
   }
   componentDidMount() {
-    var user = auth.currentUser;
-    var docRef = db.collection("usuarios").doc(user.email);
-    let component = this;
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        component.setState({ usuario: doc.data() });
-      } else {
+    this.setState({ openCortina: true });
+    setTimeout(() => {
+      var user = auth.currentUser;
+      var docRef = db.collection("usuarios").doc(user.email);
+      let component = this;
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+          component.setState({ usuario: doc.data() });
+        } else {
+          alert("Ha ocurrido un error. Actualice la página.");
+        }
+      }).catch(function (error) {
+        console.log(error);
         alert("Ha ocurrido un error. Actualice la página.");
-      }
-    }).catch(function (error) {
-      console.log(error);
-      alert("Ha ocurrido un error. Actualice la página.");
-    });
-    this.setState({ openCortina: false });
+      });
+      this.setState({ openCortina: false });
+    }, 1000);
   }
   buscarEventos(estado) {
     var filtro = db.collection("eventos").where("estado", "==", estado)
@@ -307,14 +310,14 @@ export default class ModoEmpleado extends React.Component {
     //alert(fromDate + "/" + toDate + "/" + dueño + "/" + provincia + "/" + ciudad)
     eventosFiltrados = eventosFiltrados.filter(ev => ev.data.dateComienzo.substr(0, 4) + "" + ev.data.dateComienzo.substr(5, 2) + "" + ev.data.dateComienzo.substr(8, 2) + "" + ev.data.timeComienzo.substr(0, 2) + "" + ev.data.timeComienzo.substr(3, 2) > fromDate);
     eventosFiltrados = eventosFiltrados.filter(ev => ev.data.dateComienzo.substr(0, 4) + "" + ev.data.dateComienzo.substr(5, 2) + "" + ev.data.dateComienzo.substr(8, 2) + "" + ev.data.timeComienzo.substr(0, 2) + "" + ev.data.timeComienzo.substr(3, 2) < toDate);
-     if (provincia.trim() !== "") {
+    if (provincia.trim() !== "") {
       eventosFiltrados = eventosFiltrados.filter(ev => ev.data.provincia === provincia);
     }
     if (ciudad.trim() !== "") {
       eventosFiltrados = eventosFiltrados.filter(ev => ev.data.ciudad === ciudad);
     }
     if (dueño.trim() !== "") {
-      eventosFiltrados = eventosFiltrados.filter(ev => ev.data.nombre_dueño_evento.includes(dueño) );
+      eventosFiltrados = eventosFiltrados.filter(ev => ev.data.nombre_dueño_evento.includes(dueño));
     }
     setTimeout(() => {
       this.setState({ eventos: eventosFiltrados })
@@ -348,7 +351,7 @@ export default class ModoEmpleado extends React.Component {
   limpiarFiltros = () => {
     this.setState({ provinciaDisplay: "" });
     this.setState({ ciudad: "" });
-    this.setState({ provincia: "" });    
+    this.setState({ provincia: "" });
     document.getElementById("dueño").value = "";
     document.getElementById("desde").value = materialDateInput;
     document.getElementById("hasta").value = fechaProximoMes;
@@ -402,7 +405,7 @@ export default class ModoEmpleado extends React.Component {
           <input id="hasta" type="date" text="hasta" defaultValue={fechaProximoMes} className="filtro-busqueda" />
           <label>Dueño: </label>
           <input id="dueño" type="" text="Dueño" className="filtro-busqueda" />
-         <br></br>
+          <br></br>
           <div className="filtros-inline">
             <div className="prov-filter">
               <TextField id="provincia" select value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" style={{ width: 200, }} >
@@ -412,9 +415,9 @@ export default class ModoEmpleado extends React.Component {
             {ciudadesMostrar}
           </div>
           <div id="filtros-activos-botones">
-          <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button-activos">Buscar</button>
-          <button id="filter_button" onClick={this.cerrarFiltros} className="filter-button-cerrar"> Cerrar Filtros</button>
-          <button id="filter_button" onClick={this.limpiarFiltros} className="filter-button-cerrar"> Limpiar Filtros</button>
+            <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button-activos">Buscar</button>
+            <button id="filter_button" onClick={this.cerrarFiltros} className="filter-button-cerrar"> Cerrar Filtros</button>
+            <button id="filter_button" onClick={this.limpiarFiltros} className="filter-button-cerrar"> Limpiar Filtros</button>
           </div>
         </div>
       } else {
