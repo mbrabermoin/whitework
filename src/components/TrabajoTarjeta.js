@@ -81,6 +81,7 @@ class TrabajoTarjeta extends React.Component {
         //Editar.cambiarEstadoEvento(evento, "postulado");
         Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
         Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
+        alert("Postulado Correctamente.")
     }
     handleClosePostulados = () => {
         this.setState({ openPostulados: false });
@@ -146,12 +147,12 @@ class TrabajoTarjeta extends React.Component {
                 var nombre_comentador = this.state.usuario.fullname;
                 var foto = this.state.usuario.urlFoto;
                 var trabajo = this.state.trabajo;
-                 //alert(mail_comentador+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/TaE")
+                //alert(mail_comentador+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/TaE")
                 Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "CaE");
                 Editar.trabajoPuntuadoPorEmpleador(trabajo);
-                if(this.state.puntuadoEmpleado === "Y"){
-                    var puntuados= this.state.cantPuntEvento;
-                    var evento = this.state.evento;              
+                if (this.state.puntuadoEmpleado === "Y") {
+                    var puntuados = this.state.cantPuntEvento;
+                    var evento = this.state.evento;
                     Editar.agregarPuntuadoEvento(evento, puntuados)
                 }
                 alert("Comentario Agregado.")
@@ -182,13 +183,13 @@ class TrabajoTarjeta extends React.Component {
                 //alert(mail_comentador+"/"+nombre_comentador+"/"+foto+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/EaC")
                 Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "EaC");
                 Editar.trabajoPuntuadoPorEmpleado(trabajo);
-                if(this.state.puntuadoEmpleador === "Y"){
-                    var puntuados= this.state.cantPuntEvento;
-                    var evento = this.state.evento;              
+                if (this.state.puntuadoEmpleador === "Y") {
+                    var puntuados = this.state.cantPuntEvento;
+                    var evento = this.state.evento;
                     Editar.agregarPuntuadoEvento(evento, puntuados)
                 }
                 alert("Comentario Agregado.")
-                this.setState({ openPuntuacion: false });
+                this.setState({ openPuntuacionEmpleado: false });
             }
         }
     }
@@ -292,17 +293,29 @@ class TrabajoTarjeta extends React.Component {
         var photoAsignado = "";
         if (this.state.usuarioAsignado !== null) {
             nombreAsignado = this.state.usuarioAsignado.fullname;
-            photoAsignado = <div className="AsignadoFoto">
-                <img src={this.state.usuarioAsignado.urlFoto} alt="profile card" />
-            </div>
+            if (this.state.usuarioAsignado.urlFoto !== "" && this.state.usuarioAsignado.urlFoto !== null) {
+                photoAsignado = <div className="AsignadoFoto">
+                    <img src={this.state.usuarioAsignado.urlFoto} alt="profile card" />
+                </div>
+            } else {
+                photoAsignado = <div className="AsignadoFoto">
+                    <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="profile card" />
+                </div>
+            }
         }
         var nombreAsignadoDueño = "";
         var photoAsignadoDueño = "";
         if (this.state.dueño !== null) {
             nombreAsignadoDueño = this.state.dueño.fullname;
-            photoAsignadoDueño = <div className="AsignadoFoto">
-                <img src={this.state.dueño.urlFoto} alt="profile card" />
-            </div>
+            if (this.state.dueño.urlFoto !== "" && this.state.dueño.urlFoto !== null) {
+                photoAsignadoDueño = <div className="AsignadoFoto">
+                    <img src={this.state.dueño.urlFoto} alt="profile card" />
+                </div>
+            } else {
+                photoAsignadoDueño = <div className="AsignadoFoto">
+                    <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="profile card" />
+                </div>
+            }
         }
         return (
             <div>

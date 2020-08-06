@@ -17,7 +17,7 @@ class ModoEmpleador extends React.Component {
       usuario: props.usuario,
       nombreUsuario: props.nombreUsuario,
       openCortina: true,
-      staffcompleto: false,
+      //staffcompleto: false,
     }
   }
   componentDidMount() {
@@ -38,8 +38,9 @@ class ModoEmpleador extends React.Component {
       this.setState({ openCortina: false });
     }, 1000);
   }
-  buscarStaffCompletos(estado) {
-    var filtro = db.collection("eventos").where("estado", "==", estado)
+  buscarStaffCompletos() {
+    var mail = this.state.usuario.email;
+    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {
@@ -122,9 +123,9 @@ class ModoEmpleador extends React.Component {
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Staff Completo";
-    this.setState({ staffcompleto: true });
+    //this.setState({ staffcompleto: true });
     this.setState({ estadoDeEvento: "staffCompleto" });
-    this.buscarStaffCompletos("postulado")
+    this.buscarStaffCompletos()
   }
   elegirEstadoEnProceso = () => {
     this.setState({ openCortina: true });
@@ -195,19 +196,23 @@ class ModoEmpleador extends React.Component {
     var date = today.getFullYear() + "" + mes + "" + dia;
     var time = hora + "" + minutos;
     var dateTime = date + time;
-    
+
     console.log(dateTime)
     var mail = this.state.usuario.email;
     var eventos = "";
-    if (this.state.staffcompleto === false) {
-      if (this.state.estadoDeEvento === "pendiente") {
+    if (this.state.estadoDeEvento === "pendiente") {
+      eventos = this.state.eventos.filter(function (evento) {
+        return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+      });
+    } else {
+      if (this.state.estadoDeEvento === "postulado") {
         eventos = this.state.eventos.filter(function (evento) {
           return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
         });
       } else {
-        if (this.state.estadoDeEvento === "postulado") {
+        if (this.state.estadoDeEvento === "staffCompleto") {
           eventos = this.state.eventos.filter(function (evento) {
-            return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados < evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
+            return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados === evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
           });
         } else {
           if (this.state.estadoDeEvento === "enproceso") {
@@ -218,7 +223,7 @@ class ModoEmpleador extends React.Component {
           } else {
             if (this.state.estadoDeEvento === "completado") {
               eventos = this.state.eventos.filter(function (evento) {
-                return  evento.data.mail_dueño_evento === mail && evento.data.cantAsignados > evento.data.cantPuntuados && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
+                return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados > evento.data.cantPuntuados && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
               });
             } else {
               if (this.state.estadoDeEvento === "puntuado") {
@@ -230,10 +235,6 @@ class ModoEmpleador extends React.Component {
           }
         }
       }
-    } else {
-      eventos = this.state.eventos.filter(function (evento) {
-        return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados === evento.data.cantidadTrabajos && evento.data.dateComienzo.substr(0, 4) + "" + evento.data.dateComienzo.substr(5, 2) + "" + evento.data.dateComienzo.substr(8, 2) + "" + evento.data.timeComienzo.substr(0, 2) + "" + evento.data.timeComienzo.substr(3, 2) > dateTime;
-      });
     }
     var contenedorEventos = "";
     console.log(eventos)

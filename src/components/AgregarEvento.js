@@ -164,7 +164,6 @@ export default class AgregarEvento extends React.Component {
                             var fromDateConcat = dateComienzo.substr(0, 4) + "" + dateComienzo.substr(5, 2) + "" + dateComienzo.substr(8, 2) + "" + timeComienzo.substr(0, 2) + "" + timeComienzo.substr(3, 2);
                             var toDateConcat = dateFinaliza.substr(0, 4) + "" + dateFinaliza.substr(5, 2) + "" + dateFinaliza.substr(8, 2) + "" + timeFinaliza.substr(0, 2) + "" + timeFinaliza.substr(3, 2);
                             var dateTime = this.obtenerFechaActual();
-                            alert(fromDateConcat + "//" + toDateConcat + "//" + dateTime);
                             if (fromDateConcat >= toDateConcat) {
                                 alert("Fecha de Finalización debe ser posterior a la de Comienzo.")
                             } else {
