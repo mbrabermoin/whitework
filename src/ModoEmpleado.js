@@ -455,12 +455,12 @@ export default class ModoEmpleado extends React.Component {
             } else {
               if (this.state.estadoDeEvento === "completado") {
                 eventos = this.state.eventos.filter(function (evento) {
-                  return evento.data.mail_dueño_evento !== mail && evento.data.estado !== "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                  return evento.data.mail_dueño_evento !== mail && evento.data.cantAsignados > evento.data.cantPuntuados && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
                 });
               } else {
                 if (this.state.estadoDeEvento === "puntuado") {
                   eventos = this.state.eventos.filter(function (evento) {
-                    return evento.data.mail_dueño_evento !== mail && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
+                    return evento.data.mail_dueño_evento !== mail && evento.data.cantAsignados === evento.data.cantPuntuados && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;;
                   });
                 }
               }
