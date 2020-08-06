@@ -39,6 +39,7 @@ class Agregar extends React.Component {
             cantidadTrabajos: cantidadTrabajos,
             cantPostulados: 0,
             cantAsignados: 0,
+            cantPuntuados: 0,
         }).then(() => {
             console.log("Evento Creado")            
         }).catch(() => {

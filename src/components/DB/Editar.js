@@ -3,7 +3,7 @@ import db from '../../index';
 
 class Editar extends React.Component {
   //Usuarios
-  modificarNombreUsuario = (fullname, email)=> {
+  modificarNombreUsuario = (fullname, email) => {
     db.collection("usuarios").doc(email).update({
       fullname: fullname,
     }).then(() => {
@@ -12,7 +12,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarTelefonoUsuario = (telefono, email)=> {
+  modificarTelefonoUsuario = (telefono, email) => {
     db.collection("usuarios").doc(email).update({
       telefono: telefono,
     }).then(() => {
@@ -21,7 +21,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarOcupacionUsuario = (ocupacion, email)=> {
+  modificarOcupacionUsuario = (ocupacion, email) => {
     db.collection("usuarios").doc(email).update({
       ocupacion: ocupacion,
     }).then(() => {
@@ -30,7 +30,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarUbicacionUsuario = (ubicacion, email)=> {
+  modificarUbicacionUsuario = (ubicacion, email) => {
     db.collection("usuarios").doc(email).update({
       ubicacion: ubicacion,
     }).then(() => {
@@ -39,7 +39,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarDescripcionEmpleadoUsuario = (descripcionEmpleado, email)=> {
+  modificarDescripcionEmpleadoUsuario = (descripcionEmpleado, email) => {
     db.collection("usuarios").doc(email).update({
       descripcionEmpleado: descripcionEmpleado,
     }).then(() => {
@@ -48,7 +48,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarDescripcionEmpleadorUsuario = (descripcionEmpleador, email)=> {
+  modificarDescripcionEmpleadorUsuario = (descripcionEmpleador, email) => {
     db.collection("usuarios").doc(email).update({
       descripcionEmpleador: descripcionEmpleador,
     }).then(() => {
@@ -57,7 +57,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarFacebookUsuario = (facebook, email)=> {
+  modificarFacebookUsuario = (facebook, email) => {
     db.collection("usuarios").doc(email).update({
       facebook: facebook,
     }).then(() => {
@@ -66,7 +66,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarTwitterUsuario = (twitter, email)=> {
+  modificarTwitterUsuario = (twitter, email) => {
     db.collection("usuarios").doc(email).update({
       twitter: twitter,
     }).then(() => {
@@ -75,7 +75,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarInstagramUsuario = (instagram, email)=> {
+  modificarInstagramUsuario = (instagram, email) => {
     db.collection("usuarios").doc(email).update({
       instagram: instagram,
     }).then(() => {
@@ -84,7 +84,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarLinkedinUsuario = (linkedin, email)=> {
+  modificarLinkedinUsuario = (linkedin, email) => {
     db.collection("usuarios").doc(email).update({
       linkedin: linkedin,
     }).then(() => {
@@ -93,7 +93,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarEmpleadoActivo = (empleadoActivo, email)=> {
+  modificarEmpleadoActivo = (empleadoActivo, email) => {
     db.collection("usuarios").doc(email).update({
       empleadoActivo: empleadoActivo,
     }).then(() => {
@@ -103,7 +103,7 @@ class Editar extends React.Component {
     })
   }
   //Eventos
-  cambiarEstadoEvento = (evento, estado)=> {
+  cambiarEstadoEvento = (evento, estado) => {
     db.collection("eventos").doc(evento).update({
       estado: estado,
     }).then(() => {
@@ -111,17 +111,17 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }    
-  restarTrabajo = (evento, cantTrabajos)=> {
+  }
+  restarTrabajo = (evento, cantTrabajos) => {
     db.collection("eventos").doc(evento).update({
-      cantidadTrabajos: cantTrabajos- 1,
+      cantidadTrabajos: cantTrabajos - 1,
     }).then(() => {
       console.log("Modificado")
     }).catch(() => {
       console.log("error")
     })
-  } 
-  agregarPostulacionEvento = (evento, cantPostEvento, estado)=> {
+  }
+  agregarPostulacionEvento = (evento, cantPostEvento, estado) => {
     db.collection("eventos").doc(evento).update({
       cantPostulados: cantPostEvento,
       estado: estado,
@@ -131,7 +131,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  asignarTrabajadorAEvento = (evento, estado, cantPostEvento, cantAsignados)=> {
+  asignarTrabajadorAEvento = (evento, estado, cantPostEvento, cantAsignados) => {
     db.collection("eventos").doc(evento).update({
       estado: estado,
       cantPostulados: cantPostEvento,
@@ -141,8 +141,8 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }    
-  rechazarTrabajadorAEvento = (evento, estado, cantPostEvento)=> {
+  }
+  rechazarTrabajadorAEvento = (evento, estado, cantPostEvento) => {
     db.collection("eventos").doc(evento).update({
       estado: estado,
       cantPostulados: cantPostEvento,
@@ -151,9 +151,18 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }    
+  }
+  agregarPuntuadoEvento = (evento, cantPuntEvento) => {
+    db.collection("eventos").doc(evento).update({
+      cantPuntuados: cantPuntEvento + 1,
+  }).then(() => {
+    console.log("Modificado")
+  }).catch(() => {
+    console.log("error")
+  })
+}
   //Trabajos
-  agregarPostulacionTrabajo = (trabajo, estado, cantPost)=> {
+  agregarPostulacionTrabajo = (trabajo, estado, cantPost) => {
     db.collection("trabajos").doc(trabajo).update({
       estado: estado,
       cantPostulados: cantPost,
@@ -162,8 +171,8 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }  
-  cambiarEstadoTrabajo = (trabajo, estado)=> {
+  }
+  cambiarEstadoTrabajo = (trabajo, estado) => {
     db.collection("trabajos").doc(trabajo).update({
       estado: estado,
     }).then(() => {
@@ -171,8 +180,8 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  } 
-  rechazarTrabajo = (trabajo, estado, cantPost)=> {
+  }
+  rechazarTrabajo = (trabajo, estado, cantPost) => {
     db.collection("trabajos").doc(trabajo).update({
       estado: estado,
       cantPostulados: cantPost,
@@ -181,8 +190,8 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }   
-  asignarTrabajador = (mailTrabajador, trabajo)=> {
+  }
+  asignarTrabajador = (mailTrabajador, trabajo) => {
     db.collection("trabajos").doc(trabajo).update({
       mail_trabajador: mailTrabajador,
       estado: "asignado",
@@ -192,6 +201,24 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }   
+  }
+  trabajoPuntuadoPorEmpleado = (trabajo) => {
+    db.collection("trabajos").doc(trabajo).update({
+      puntuadoEmpleado: "Y",
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  trabajoPuntuadoPorEmpleador = (trabajo) => {
+    db.collection("trabajos").doc(trabajo).update({
+      puntuadoEmpleador: "Y",
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
 }
 export default new Editar();

@@ -163,7 +163,7 @@ class ModoEmpleador extends React.Component {
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
     this.setState({ estadoDeEvento: "puntuado" });
     this.setState({ staffcompleto: false });
-    this.buscarEventos("puntuado")
+    this.buscarCompletado()
   }
 
   render() {
@@ -218,12 +218,12 @@ class ModoEmpleador extends React.Component {
           } else {
             if (this.state.estadoDeEvento === "completado") {
               eventos = this.state.eventos.filter(function (evento) {
-                return  evento.data.estado !== "puntuado" && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
+                return  evento.data.mail_dueño_evento === mail && evento.data.cantAsignados > evento.data.cantPuntuados && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
               });
             } else {
               if (this.state.estadoDeEvento === "puntuado") {
                 eventos = this.state.eventos.filter(function (evento) {
-                  return evento.data.mail_dueño_evento === mail;
+                  return evento.data.mail_dueño_evento === mail && evento.data.cantAsignados === evento.data.cantPuntuados && evento.data.dateFinaliza.substr(0, 4) + "" + evento.data.dateFinaliza.substr(5, 2) + "" + evento.data.dateFinaliza.substr(8, 2) + "" + evento.data.timeFinaliza.substr(0, 2) + "" + evento.data.timeFinaliza.substr(3, 2) < dateTime;
                 });
               }
             }
@@ -243,7 +243,7 @@ class ModoEmpleador extends React.Component {
     </div>
     } else {
       contenedorEventos = <div className='library'>
-        {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
+        {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
         ))}
       </div>
     }

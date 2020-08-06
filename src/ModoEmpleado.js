@@ -165,7 +165,7 @@ export default class ModoEmpleado extends React.Component {
     var trab = [];
     var events = [];
     var mailUsuario = this.state.usuario.email;
-    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).where("puntuadoEmpleado", "==", "N").get()
+    db.collection("trabajos").where("mail_trabajador", "==", mailUsuario).get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           trab.push(doc.data().id_evento);
@@ -474,7 +474,7 @@ export default class ModoEmpleado extends React.Component {
       </div>
       } else {
         contenedorEventos = <div className='library'>
-          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantAsignados={evento.data.cantAsignados} modo="empleado" />
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados}  cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleado" />
           ))}
         </div>
       }

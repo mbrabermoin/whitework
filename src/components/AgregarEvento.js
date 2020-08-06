@@ -110,6 +110,11 @@ export default class AgregarEvento extends React.Component {
         this.setState({ openEvento: false });
         this.setState({ cantTrabajos: 0 });
         this.setState({ arrayTrabajos: [] });
+        this.setState({ provinciaDisplay: "" });
+        this.setState({ ciudadDisplay: "" });
+        this.setState({ provincia: "" });
+        this.setState({ ciudad: "" });
+        this.setState({ ciudades: [] });
     };
     handleOpenEvento = () => {
         this.setState({ openEvento: true });
@@ -149,35 +154,45 @@ export default class AgregarEvento extends React.Component {
                         if (direccion.trim() === "") {
                             alert("Dirección es necesaria.")
                         } else {
-                            if (this.state.cantTrabajos === 0) {
-                                alert("Se necesita al menos un trabajo para crear el evento.")
+                            const mail_dueño_evento = this.state.usuario.email;
+                            const nombre_dueño_evento = this.state.usuario.fullname;
+                            const cantidadTrabajos = this.state.cantTrabajos;
+                            const dateComienzo = document.getElementById("date").value;
+                            const timeComienzo = document.getElementById("time").value;
+                            const dateFinaliza = document.getElementById("date2").value;
+                            const timeFinaliza = document.getElementById("time2").value;
+                            var fromDateConcat = dateComienzo.substr(0, 4) + "" + dateComienzo.substr(5, 2) + "" + dateComienzo.substr(8, 2) + "" + timeComienzo.substr(0, 2) + "" + timeComienzo.substr(3, 2);
+                            var toDateConcat = dateFinaliza.substr(0, 4) + "" + dateFinaliza.substr(5, 2) + "" + dateFinaliza.substr(8, 2) + "" + timeFinaliza.substr(0, 2) + "" + timeFinaliza.substr(3, 2);
+                            var dateTime = this.obtenerFechaActual();
+                            alert(fromDateConcat + "//" + toDateConcat + "//" + dateTime);
+                            if (fromDateConcat >= toDateConcat) {
+                                alert("Fecha de Finalización debe ser posterior a la de Comienzo.")
                             } else {
-                                const mail_dueño_evento = this.state.usuario.email;
-                                const nombre_dueño_evento = this.state.usuario.fullname;
-                                const cantidadTrabajos = this.state.cantTrabajos;
-                                const dateComienzo = document.getElementById("date").value;
-                                const timeComienzo = document.getElementById("time").value;
-                                const dateFinaliza = document.getElementById("date2").value;
-                                const timeFinaliza = document.getElementById("time2").value;
-                                // alert(nombre + "//" + provincia + "//"+ ciudad + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
-                                const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
-                                for (let t = 0; t < this.state.cantTrabajos; t++) {
-                                    const rolT = this.state.arrayTrabajos[t].rol;
-                                    const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
-                                    const datecomienzotrab = this.state.arrayTrabajos[t].datecomienzotrab;
-                                    const datefintrab = this.state.arrayTrabajos[t].datefintrab;
-                                    const timecomienzotrab = this.state.arrayTrabajos[t].timecomienzotrab;
-                                    const timefintrab = this.state.arrayTrabajos[t].timefintrab;
-                                    const pago = this.state.arrayTrabajos[t].pago;
-                                    const periodo = this.state.arrayTrabajos[t].periodo;
-                                    const categoria = this.state.arrayTrabajos[t].categoria;
-                                    setTimeout(function () {
-                                        Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, timecomienzotrab, datefintrab, timefintrab, pago, periodo, categoria);
-                                    }, t * 1000);
+                                if (dateTime >= fromDateConcat) {
+                                    alert("La fecha de Comiezo debe ser posterior a la actual.")
+                                } else {
+                                    if (this.state.cantTrabajos === 0) {
+                                        alert("Se necesita al menos un trabajo para crear el evento.")
+                                    } else {
+                                        // alert(nombre + "//" + provincia + "//"+ ciudad + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
+                                        const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
+                                        for (let t = 0; t < this.state.cantTrabajos; t++) {
+                                            const rolT = this.state.arrayTrabajos[t].rol;
+                                            const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
+                                            /*const datecomienzotrab = this.state.arrayTrabajos[t].datecomienzotrab;
+                                            const datefintrab = this.state.arrayTrabajos[t].datefintrab;
+                                            const timecomienzotrab = this.state.arrayTrabajos[t].timecomienzotrab;
+                                            const timefintrab = this.state.arrayTrabajos[t].timefintrab;*/
+                                            const pago = this.state.arrayTrabajos[t].pago;
+                                            const periodo = this.state.arrayTrabajos[t].periodo;
+                                            const categoria = this.state.arrayTrabajos[t].categoria;
+                                            setTimeout(function () {
+                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
+                                            }, t * 1000);
+                                        }
+                                        this.handleCloseEvento();
+                                    }
                                 }
-                                this.setState({ openEvento: false });
-                                this.setState({ cantTrabajos: 0 });
-                                this.setState({ arrayTrabajos: [] });
                             }
                         }
                     }
@@ -185,7 +200,37 @@ export default class AgregarEvento extends React.Component {
             }
         }
     }
-
+    obtenerFechaActual() {
+        var today = new Date();
+        var mes = "";
+        if ((today.getMonth() + 1).toString().length === 2) {
+            mes = (today.getMonth() + 1)
+        } else {
+            mes = 0 + "" + (today.getMonth() + 1)
+        }
+        var dia = "";
+        if (today.getDate().toString().length === 2) {
+            dia = today.getDate()
+        } else {
+            dia = 0 + "" + today.getDate()
+        }
+        var minutos = "";
+        if (today.getMinutes().toString().length === 2) {
+            minutos = today.getMinutes()
+        } else {
+            minutos = 0 + "" + today.getMinutes()
+        }
+        var hora = "";
+        if (today.getHours().toString().length === 2) {
+            hora = today.getHours()
+        } else {
+            hora = 0 + "" + today.getHours()
+        }
+        var date = today.getFullYear() + "" + mes + "" + dia;
+        var time = hora + "" + minutos;
+        var dateTime = date + time;
+        return dateTime;
+    }
     handleAgregarTrabajo = () => {
         const rol = document.getElementById("rol").value;
         if (rol.trim() === "") {
@@ -204,11 +249,11 @@ export default class AgregarEvento extends React.Component {
                         alert("Periodo es Requerido.")
                     } else {
                         const categoria = this.state.categoriaDisplay;
-                        const datecomienzotrab = document.getElementById("date-comienzo-trab").value;
+                        /*const datecomienzotrab = document.getElementById("date-comienzo-trab").value;
                         const datefintrab = document.getElementById("date-fin-trab").value;
                         const timecomienzotrab = document.getElementById("time-comienzo-trab").value;
-                        const timefintrab = document.getElementById("time-fin-trab").value;
-                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, datecomienzotrab: datecomienzotrab, timecomienzotrab: timecomienzotrab, datefintrab: datefintrab, timefintrab: timefintrab, categoria: categoria };
+                        const timefintrab = document.getElementById("time-fin-trab").value;*/
+                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, categoria: categoria };//datecomienzotrab: datecomienzotrab, timecomienzotrab: timecomienzotrab, datefintrab: datefintrab, timefintrab: timefintrab
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -231,18 +276,18 @@ export default class AgregarEvento extends React.Component {
         this.setState({ provinciaDisplay: event.target.value });
         var provincia = provincias.filter(provincia => provincia.id === event.target.value);
         this.setState({ provincia: provincia[0].name });
-        var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value);
+        var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value || ciudad.id_state === 0);
         this.setState({ ciudades: cities });
     }
     handleCambiarCiudad = name => event => {
         this.setState({ ciudadDisplay: event.target.value });
-        var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());        
+        var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());
         this.setState({ ciudad: ciudad[0].name })
     }
     render() {
         var ciudadesMostrar = ""
         if (this.state.provinciaDisplay === "") {
-            ciudadesMostrar = <TextField id="ciudad2" disabled required  SelectProps={{ native: true, }} onChange="" label="Ciudad" fullWidth>
+            ciudadesMostrar = <TextField id="ciudad2" disabled required SelectProps={{ native: true, }} onChange="" label="Ciudad" fullWidth>
 
             </TextField>
         } else {
@@ -253,7 +298,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} estadoEvento="pendiente" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} categoria={trabajo.categoria} modo="empleador" />
+                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} estadoEvento="pendiente" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />//datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} 
                 ))}
             </div>
         } else {
@@ -351,11 +396,11 @@ export default class AgregarEvento extends React.Component {
                         <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarCategoria('categoriaDisplay')} label="Categoria" fullWidth>
                             {categorias.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
-                        <TextField id="date-comienzo-trab" required label="Comienzo" type="date" defaultValue={materialDateInput} />
+                        {/*<TextField id="date-comienzo-trab" required label="Comienzo" type="date" defaultValue={materialDateInput} />
                         <TextField id="time-comienzo-trab" required type="time" defaultValue="00:00" label=" " />
                         <br />
                         <TextField id="date-fin-trab" label="Terminación" type="date" defaultValue={materialDateInput} />
-                        <TextField id="time-fin-trab" type="time" defaultValue="00:00" label=" " />
+                        <TextField id="time-fin-trab" type="time" defaultValue="00:00" label=" " />*/}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseTrabajo} color="secondary">

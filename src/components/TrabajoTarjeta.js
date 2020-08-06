@@ -35,17 +35,20 @@ class TrabajoTarjeta extends React.Component {
             pago: this.props.pago,
             periodo: this.props.periodo,
             categoria: this.props.categoria,
-            datecomienzotrab: this.props.datecomienzotrab,
-            timecomienzotrab: this.props.timecomienzotrab,
-            datefintrab: this.props.datefintrab,
-            timefintrab: this.props.timefintrab,
+            //datecomienzotrab: this.props.datecomienzotrab,
+            //timecomienzotrab: this.props.timecomienzotrab,
+            //datefintrab: this.props.datefintrab,
+            //timefintrab: this.props.timefintrab,
             usuario: this.props.usuario,
             cantPost: this.props.cantPost,
             cantPostEvento: this.props.cantPostEvento,
+            cantPuntEvento: this.props.cantPuntEvento,
             cantAsignados: this.props.cantAsignados,
             usuarioAsignado: null,
             mailDueño: this.props.dueño,
             dueño: null,
+            puntuadoEmpleado: this.props.puntuadoEmpleado,
+            puntuadoEmpleador: this.props.puntuadoEmpleador,
         }
     }
     buscarPostulados(trabajo) {
@@ -142,8 +145,15 @@ class TrabajoTarjeta extends React.Component {
                 var mail_comentador = this.state.usuario.email;
                 var nombre_comentador = this.state.usuario.fullname;
                 var foto = this.state.usuario.urlFoto;
-                //alert(mail_comentador+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/TaE")
+                var trabajo = this.state.trabajo;
+                 //alert(mail_comentador+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/TaE")
                 Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "CaE");
+                Editar.trabajoPuntuadoPorEmpleador(trabajo);
+                if(this.state.puntuadoEmpleado === "Y"){
+                    var puntuados= this.state.cantPuntEvento;
+                    var evento = this.state.evento;              
+                    Editar.agregarPuntuadoEvento(evento, puntuados)
+                }
                 alert("Comentario Agregado.")
                 this.setState({ openPuntuacion: false });
             }
@@ -168,8 +178,15 @@ class TrabajoTarjeta extends React.Component {
                 var mail_comentador = this.state.usuario.email;
                 var nombre_comentador = this.state.usuario.fullname;
                 var foto = this.state.usuario.urlFoto;
+                var trabajo = this.state.trabajo;
                 //alert(mail_comentador+"/"+nombre_comentador+"/"+foto+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/EaC")
                 Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "EaC");
+                Editar.trabajoPuntuadoPorEmpleado(trabajo);
+                if(this.state.puntuadoEmpleador === "Y"){
+                    var puntuados= this.state.cantPuntEvento;
+                    var evento = this.state.evento;              
+                    Editar.agregarPuntuadoEvento(evento, puntuados)
+                }
                 alert("Comentario Agregado.")
                 this.setState({ openPuntuacion: false });
             }
@@ -191,16 +208,21 @@ class TrabajoTarjeta extends React.Component {
             } else {
                 if (this.state.asignado === this.state.usuario.email) {
                     if (this.state.estadoEvento === "postulado") {
-                        botones = <button className='eliminartrabajo-btn' onClick="">Rechazar</button>
+                        botones = <button className='eliminartrabajo-btn' onClick="">Deshacer Postulación</button>
                     } else {
                         if (this.state.estadoEvento === "aceptado") {
-                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar</button>
+                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Aisgnación</button>
                         } else {
                             if (this.state.estadoEvento === "enproceso") {
                                 botones = ""
                             } else {
                                 if (this.state.estadoEvento === "completado") {
-                                    botones = <button className='postularse-btn' onClick={this.handleOpenPuntuacionEmpleado}>Valorar Empleador</button>
+                                    if (this.state.puntuadoEmpleado === "Y") {
+                                        botones = <button disable className='asignado-btn' onClick="">Ya Puntuado</button>
+                                    } else {
+                                        botones = <button className='postularse-btn' onClick={this.handleOpenPuntuacionEmpleado}>Valorar Empleador</button>
+
+                                    }
                                 } else {
                                     if (this.state.estadoEvento === "puntuado") {
                                         botones = <button disable className='asignado-btn' onClick="">Puntuado</button>
@@ -215,9 +237,15 @@ class TrabajoTarjeta extends React.Component {
             }
         } else {
             if (this.state.estadoEvento === "pendiente") {
-                botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
-                    <button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>
-                </div>
+                if (this.state.asignado !== "") {
+                    botones = <div><button className='editar-btn' onClick="">Ver Asignado</button>
+                        <button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>
+                    </div>
+                } else {
+                    botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
+                        <button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>
+                    </div>
+                }
             } else {
                 if (this.state.estadoEvento === "postulado") {
                     if (this.state.cantPost > 0) {
@@ -225,14 +253,20 @@ class TrabajoTarjeta extends React.Component {
                     }
                 } else {
                     if (this.state.estadoEvento === "staffCompleto") {
-                        botones = <button className='eliminartrabajo-btn' onClick="">Rechazar</button>
+                        botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar</button>
+                            <button className='editar-btn' onClick="">Ver Asignado</button>
+                        </div>
                     } else {
                         if (this.state.estadoEvento === "enproceso") {
                             botones = ""
                         } else {
                             if (this.state.estadoEvento === "completado") {
                                 if (this.state.asignado !== "") {
-                                    botones = <button className='editar-btn' onClick={this.handleOpenPuntuacion}>Valorar Empleado</button>
+                                    if (this.state.puntuadoEmpleador === "Y") {
+                                        botones = <button disable className='asignado-btn' onClick="">Ya Puntuado</button>
+                                    } else {
+                                        botones = <button className='editar-btn' onClick={this.handleOpenPuntuacion}>Valorar Empleado</button>
+                                    }
                                 } else {
                                     botones = "";
                                 }
@@ -280,7 +314,7 @@ class TrabajoTarjeta extends React.Component {
                             {botones}
                         </div>
                         <h3>{this.props.descripcion}</h3>
-                        <h3>Comienza: {this.state.datecomienzotrab} - {this.state.timecomienzotrab}   Finaliza: {this.state.datefintrab} - {this.state.timefintrab}</h3>
+                        {/*<h3>Comienza: {this.state.datecomienzotrab} - {this.state.timecomienzotrab}   Finaliza: {this.state.datefintrab} - {this.state.timefintrab}</h3>*/}
                         <p className="esp text-react">{this.state.pago}$ por {this.state.periodo}</p>
                     </div>
                 </div>
@@ -365,7 +399,7 @@ class TrabajoTarjeta extends React.Component {
 
                         {photoAsignadoDueño}
                         <DialogContentText>
-                            ¿Como calificarias su trabajo?
+                            ¿Como calificarias su Trato?
                         </DialogContentText>
                         <TextField id="opinionEmpleado" autoFocus multiline="true" rows="6" margin="dense" label="Opinión" type="opinion" fullWidth />
                         <form>
