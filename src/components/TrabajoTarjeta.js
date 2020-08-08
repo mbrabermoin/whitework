@@ -13,6 +13,8 @@ import PostuladoTarjeta from './PostuladoTarjeta';
 import TextField from '@material-ui/core/TextField';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import db from '../index';
+import EmpleadoDetalle from "./EmpleadoDetalle";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -20,11 +22,13 @@ class TrabajoTarjeta extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            openCortina: false,
             openPostulados: false,
             openPuntuacion: false,
             openPuntuacionEmpleado: false,
             postulados: [],
             asignado: this.props.asignado,
+            asignadoObjeto: null,
             modo: this.props.modo,
             rol: this.props.rol,
             evento: this.props.evento,
@@ -49,6 +53,7 @@ class TrabajoTarjeta extends React.Component {
             dueño: null,
             puntuadoEmpleado: this.props.puntuadoEmpleado,
             puntuadoEmpleador: this.props.puntuadoEmpleador,
+            openDetalleAsignado: false,
         }
     }
     buscarPostulados(trabajo) {
@@ -95,6 +100,28 @@ class TrabajoTarjeta extends React.Component {
     }
     handleClosePuntuacionEmpleado = () => {
         this.setState({ openPuntuacionEmpleado: false });
+    }
+    handleCloseDetalleAsignado = () => {
+        this.setState({ openDetalleAsignado: false });
+    }
+    handleOpenDetalleAsignado = () => {
+        var docRef = db.collection("usuarios").doc(this.state.asignado);
+        let component = this;
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                component.setState({ asignadoObjeto: doc.data() });
+            } else {
+                alert("Ha ocurrido un error. Actualice la página.");
+            }
+        }).catch(function (error) {
+            console.log(error);
+            alert("Ha ocurrido un error. Actualice la página.");
+        });
+        this.setState({ openCortina: true })
+        setTimeout(() => {
+            this.setState({ openCortina: false })
+            this.setState({ openDetalleAsignado: true });
+        }, 1000);
     }
     handleOpenPuntuacion = () => {
         var docRef = db.collection("usuarios").doc(this.state.asignado);
@@ -196,7 +223,7 @@ class TrabajoTarjeta extends React.Component {
     render() {
         var categoria = "";
         if (this.state.categoria !== "") {
-            categoria = " - Categoria: " + this.state.categoria;
+            categoria = " - Categoría: " + this.state.categoria;
         }
         var botones = "";
         if (this.state.modo === "empleado") {
@@ -204,7 +231,7 @@ class TrabajoTarjeta extends React.Component {
                 if (this.state.asignado === "") {
                     botones = <button className='postularse-btn' onClick={this.postularse}>Postularse</button>
                 } else {
-                    botones = <button disable className='asignado-btn' onClick="">Asignado</button>
+                    botones = <button disable className='asignado-btn'>Asignado</button>
                 }
             } else {
                 if (this.state.asignado === this.state.usuario.email) {
@@ -215,18 +242,18 @@ class TrabajoTarjeta extends React.Component {
                             botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Aisgnación</button>
                         } else {
                             if (this.state.estadoEvento === "enproceso") {
-                                botones = ""
+                                botones = <button disable className='asignado-btn'>Mi Asignación</button>
                             } else {
                                 if (this.state.estadoEvento === "completado") {
                                     if (this.state.puntuadoEmpleado === "Y") {
-                                        botones = <button disable className='asignado-btn' onClick="">Ya Puntuado</button>
+                                        botones = <button disable className='asignado-btn'>Ya Puntuado</button>
                                     } else {
                                         botones = <button className='postularse-btn' onClick={this.handleOpenPuntuacionEmpleado}>Valorar Empleador</button>
 
                                     }
                                 } else {
                                     if (this.state.estadoEvento === "puntuado") {
-                                        botones = <button disable className='asignado-btn' onClick="">Puntuado</button>
+                                        botones = <button disable className='asignado-btn'>Puntuado</button>
                                     }
                                 }
                             }
@@ -239,12 +266,13 @@ class TrabajoTarjeta extends React.Component {
         } else {
             if (this.state.estadoEvento === "pendiente") {
                 if (this.state.asignado !== "") {
-                    botones = <div><button className='editar-btn' onClick="">Ver Asignado</button>
-                        <button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>
+                    botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar Asignado</button>
+                    <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>                        
+                        {/*<button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>*/}
                     </div>
                 } else {
                     botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
-                        <button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>
+                        <button className='editar-btn' onClick="">Editar</button>
                     </div>
                 }
             } else {
@@ -254,17 +282,25 @@ class TrabajoTarjeta extends React.Component {
                     }
                 } else {
                     if (this.state.estadoEvento === "staffCompleto") {
-                        botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar</button>
-                            <button className='editar-btn' onClick="">Ver Asignado</button>
+                        botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar Asignado</button>
+                            <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
                         </div>
                     } else {
                         if (this.state.estadoEvento === "enproceso") {
-                            botones = ""
+                            if (this.state.asignado !== "") {
+                                botones = <div>
+                                    <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
+                                </div>
+                            } else {
+                                botones = "";
+                            }
                         } else {
                             if (this.state.estadoEvento === "completado") {
                                 if (this.state.asignado !== "") {
                                     if (this.state.puntuadoEmpleador === "Y") {
-                                        botones = <button disable className='asignado-btn' onClick="">Ya Puntuado</button>
+                                        botones = <div><button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
+                                            <button disable className='asignado-btn'>Ya Puntuado</button>
+                                        </div>
                                     } else {
                                         botones = <button className='editar-btn' onClick={this.handleOpenPuntuacion}>Valorar Empleado</button>
                                     }
@@ -274,7 +310,9 @@ class TrabajoTarjeta extends React.Component {
                             } else {
                                 if (this.state.estadoEvento === "puntuado") {
                                     if (this.state.asignado !== "") {
-                                        botones = <button disable className='asignado-btn' onClick="">Puntuado</button>
+                                        botones = <div><button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
+                                            <button disable className='asignado-btn'>Puntuado</button>
+                                        </div>
                                     } else {
                                         botones = "";
                                     }
@@ -448,6 +486,30 @@ class TrabajoTarjeta extends React.Component {
                             COMENTAR
                          </Button>
                     </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openDetalleAsignado}
+                    onClose={this.handleCloseDetalleAsignado}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Asignado para {this.state.rol}</DialogTitle>
+                    <DialogContent dividers>
+                        <EmpleadoDetalle usuario={this.state.asignadoObjeto} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseDetalleAsignado} color="primary">
+                            CERRAR
+                 </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openCortina}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
                 </Dialog>
             </div>
         );

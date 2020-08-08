@@ -237,7 +237,7 @@ export default class AgregarEvento extends React.Component {
         } else {
             const descripciontrab = document.getElementById("descripcion-trab").value;
             if (descripciontrab.trim() === "") {
-                alert("Descripcion es Requerida.")
+                alert("Descripción es Requerida.")
             } else {
                 const pago = document.getElementById("pago").value;
                 if (pago.trim() === "") {
@@ -322,7 +322,7 @@ export default class AgregarEvento extends React.Component {
                             Ingrese los datos necesarios para poder crear su evento.
                     </DialogContentText>
                         <TextField id="nombre" required autoFocus margin="dense" label="Nombre del evento" type="evento" fullWidth />
-                        <TextField id="descripcion" required multiline rows="2" margin="dense" label="Descripcion" type="evento" fullWidth />
+                        <TextField id="descripcion" required multiline rows="2" margin="dense" label="Descripción" type="evento" fullWidth />
                         <TextField id="provincia" select required value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" fullWidth>
                             {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
                         </TextField>
@@ -392,7 +392,7 @@ export default class AgregarEvento extends React.Component {
                         <TextField id="periodo" select required margin="dense" value={this.state.periodoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo de Pago" fullWidth>
                             {periodos.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
-                        <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarCategoria('categoriaDisplay')} label="Categoria" fullWidth>
+                        <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarCategoria('categoriaDisplay')} label="Categoría" fullWidth>
                             {categorias.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
                         {/*<TextField id="date-comienzo-trab" required label="Comienzo" type="date" defaultValue={materialDateInput} />

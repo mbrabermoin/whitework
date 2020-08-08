@@ -86,7 +86,7 @@ class PerfilEmpleado extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleado = puntajeEmpleado + parseInt(doc.data().puntaje);
                     cantidadPuntajes = cantidadPuntajes + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
                     comments.push(comentario);
                 });
             })
@@ -101,7 +101,7 @@ class PerfilEmpleado extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleador = puntajeEmpleador + parseInt(doc.data().puntaje);
                     cantidadPuntajesEmpleador = cantidadPuntajesEmpleador + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
                     commentsEmpleador.push(comentario);
                 });
             })
@@ -382,7 +382,8 @@ class PerfilEmpleado extends React.Component {
 
                     <div className="tweet-body">
                         <span className="userName">{comentarioEmpleado.nombreComentador}</span>
-                        <p className="message">{comentarioEmpleado.comentario}</p>
+                        <p className="message">{comentarioEmpleado.comentario}</p><br></br>
+                        <p className="message">Puntaje: {comentarioEmpleado.puntaje}</p>
                     </div>
                 </article>
             ))}
@@ -398,7 +399,8 @@ class PerfilEmpleado extends React.Component {
                     </div>
                     <div className="tweet-body">
                         <span className="userName">{comentarioEmpleador.nombreComentador}</span>
-                        <p className="message">{comentarioEmpleador.comentario}</p>
+                        <p className="message">{comentarioEmpleador.comentario}</p><br></br>
+                        <p className="message">Puntaje: {comentarioEmpleador.puntaje}</p>
                     </div>
                 </article>
             ))}
@@ -448,7 +450,7 @@ class PerfilEmpleado extends React.Component {
                             </div>
                             <div className="profile-card-inf__item">
                                 <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                                <div className="profile-card-inf__txt">Trabajos Contratados</div>
+                                <div className="profile-card-inf__txt">Puntuajes de Empleados</div>
                             </div>
                             <div className="profile-card-inf__item">
                                 <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>

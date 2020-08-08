@@ -42,7 +42,7 @@ class EmpleadoDetalle extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleado = puntajeEmpleado + parseInt(doc.data().puntaje);
                     cantidadPuntajes = cantidadPuntajes + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
                     comments.push(comentario);
                 });
             })
@@ -174,7 +174,8 @@ class EmpleadoDetalle extends React.Component {
 
                     <div className="tweet-body">
                         <span className="userName">{comentarioEmpleado.nombreComentador}</span>
-                        <p className="message">{comentarioEmpleado.comentario}</p>
+                        <p className="message">{comentarioEmpleado.comentario}</p><br></br>
+                        <p className="message">Puntaje: {comentarioEmpleado.puntaje}</p>
                     </div>
                 </article>
             ))}
