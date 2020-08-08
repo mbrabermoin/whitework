@@ -187,7 +187,7 @@ export default class AgregarEvento extends React.Component {
                                             const categoria = this.state.arrayTrabajos[t].categoria;
                                             setTimeout(function () {
                                                 Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
-                                            }, t * 1000);
+                                            }, t * 1100);
                                         }
                                         this.handleCloseEvento();
                                     }
