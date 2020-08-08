@@ -212,7 +212,7 @@ class TrabajoTarjeta extends React.Component {
                         botones = <button className='eliminartrabajo-btn' onClick="">Deshacer Postulación</button>
                     } else {
                         if (this.state.estadoEvento === "aceptado") {
-                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Aisgnación</button>
+                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Asignación</button>
                         } else {
                             if (this.state.estadoEvento === "enproceso") {
                                 botones = ""
