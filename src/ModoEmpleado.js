@@ -50,6 +50,7 @@ export default class ModoEmpleado extends React.Component {
       ciudadDisplay: "",
       ciudades: [],
       filtroActivo: false,
+      trabajosPostulados: [],
     }
   }
   componentDidMount() {
@@ -60,7 +61,6 @@ export default class ModoEmpleado extends React.Component {
       let component = this;
       docRef.get().then(function (doc) {
         if (doc.exists) {
-          console.log("Document data:", doc.data());
           component.setState({ usuario: doc.data() });
         } else {
           alert("Ha ocurrido un error. Actualice la página.");
@@ -133,12 +133,14 @@ export default class ModoEmpleado extends React.Component {
   }
   buscarPostulaciones() {
     var post = [];
+    var trabajosPostulados = [];
     var events = [];
     var mailUsuario = this.state.usuario.email;
     db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           post.push(doc.data().id_evento);
+          trabajosPostulados.push(doc.data().id_trabajo);
         });
       })
       .catch(function (error) {
@@ -156,8 +158,9 @@ export default class ModoEmpleado extends React.Component {
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
+      this.setState({ trabajosPostulados: trabajosPostulados })  
     setTimeout(() => {
-      this.setState({ eventos: events })
+      this.setState({ eventos: events })      
       this.setState({ openCortina: false });
     }, 1000);
   }
@@ -474,7 +477,7 @@ export default class ModoEmpleado extends React.Component {
       </div>
       } else {
         contenedorEventos = <div className='library'>
-          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados}  cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleado" />
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados}  cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} trabajosPostulados={this.state.trabajosPostulados} modo="empleado" />
           ))}
         </div>
       }

@@ -54,6 +54,7 @@ class TrabajoTarjeta extends React.Component {
             puntuadoEmpleado: this.props.puntuadoEmpleado,
             puntuadoEmpleador: this.props.puntuadoEmpleador,
             openDetalleAsignado: false,
+            postulado: this.props.postulado,
         }
     }
     buscarPostulados(trabajo) {
@@ -234,12 +235,20 @@ class TrabajoTarjeta extends React.Component {
                     botones = <button disable className='asignado-btn'>Asignado</button>
                 }
             } else {
-                if (this.state.asignado === this.state.usuario.email) {
-                    if (this.state.estadoEvento === "postulado") {
-                        botones = <button className='eliminartrabajo-btn' onClick="">Deshacer Postulación</button>
+                if (this.state.estadoEvento === "postulado") {
+                    if (this.state.asignado !== "") {
+                        botones = <button disable className='asignado-btn'>Asignado</button>
                     } else {
+                        if (this.state.postulado === "Y") {
+                            botones = <button className='eliminartrabajo-btn' onClick="">Deshacer Postulación</button>
+                        } else {
+                            botones = ""
+                        }
+                    }
+                } else {
+                    if (this.state.asignado === this.state.usuario.email) {
                         if (this.state.estadoEvento === "aceptado") {
-                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Aisgnación</button>
+                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Asignación</button>
                         } else {
                             if (this.state.estadoEvento === "enproceso") {
                                 botones = <button disable className='asignado-btn'>Mi Asignación</button>
@@ -258,16 +267,20 @@ class TrabajoTarjeta extends React.Component {
                                 }
                             }
                         }
+                    } else {
+                        if (this.state.asignado !== "") {
+                            botones = <button disable className='asignado-btn'>Asignado</button>
+                        } else {
+                            botones = ""
+                        }
                     }
-                } else {
-                    botones = ""
                 }
             }
         } else {
             if (this.state.estadoEvento === "pendiente") {
                 if (this.state.asignado !== "") {
                     botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar Asignado</button>
-                    <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>                        
+                        <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
                         {/*<button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>*/}
                     </div>
                 } else {
