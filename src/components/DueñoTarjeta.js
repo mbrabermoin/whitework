@@ -43,6 +43,11 @@ class DueñoTarjeta extends React.Component {
             nombre = this.state.usuario.fullname;
             email = this.state.usuario.email;
             photoUrl = this.state.usuario.urlFoto;
+            if(this.state.usuario.urlFoto === "" || this.state.urlFoto === null){
+                photoUrl = "https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png";
+;            }else{
+                photoUrl = this.state.usuario.urlFoto;
+            }
             telefono = this.state.usuario.telefono;
             if (this.state.usuario.descripcionEmpleador !== null && this.state.usuario.descripcionEmpleador !== "") {
                 descripcion = this.state.usuario.descripcionEmpleador;
