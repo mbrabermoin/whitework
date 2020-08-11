@@ -89,6 +89,50 @@ class TrabajoTarjeta extends React.Component {
         Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
         alert("Postulado Correctamente.")
     }
+    deshacerPostulacion = () => {
+        this.setState({ openCortina: true })
+        var mail = this.state.usuario.email;
+        var evento = this.state.evento;
+        var trabajo = this.state.trabajo;
+        var postulacion = "";
+        var cantPostTrabajo = 0;
+        var cantPostEvento = this.state.cantPostEvento - 1;
+        db.collection("postulaciones").where("id_evento", "==", evento).where("mail_postulante", "==", mail).get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    postulacion = doc.data().id_postulacion;
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+        db.collection("trabajos").where("id_trabajo", "==", trabajo).get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    cantPostTrabajo = doc.data().cantPostulados - 1;
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+        setTimeout(() => {
+            Eliminar.eliminarPostulacion(postulacion)
+            if (cantPostTrabajo === 0) {
+                Editar.rechazarTrabajo(trabajo, "pendiente", cantPostTrabajo)
+                if (cantPostEvento === 0) {
+                    Editar.rechazarTrabajadorAEvento(evento, "pendiente", cantPostEvento);
+                } else {
+                    Editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
+                }
+            } else {
+                Editar.rechazarTrabajo(trabajo, "postulado", cantPostTrabajo)
+                Editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
+            }
+            this.setState({ openCortina: false })
+            alert("Postulación cancelada.")
+        }, 1000);
+
+    }
     handleClosePostulados = () => {
         this.setState({ openPostulados: false });
     }
@@ -240,7 +284,7 @@ class TrabajoTarjeta extends React.Component {
                         botones = <button disable className='asignado-btn'>Asignado</button>
                     } else {
                         if (this.state.postulado === "Y") {
-                            botones = <button className='eliminartrabajo-btn' onClick="">Deshacer Postulación</button>
+                            botones = <button className='eliminartrabajo-btn' onClick={this.deshacerPostulacion}>Deshacer Postulación</button>
                         } else {
                             botones = ""
                         }
