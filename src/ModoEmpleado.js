@@ -232,7 +232,7 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("enproceso").style.color = "#b2bbbd";
     document.getElementById("completados").style.color = "#b2bbbd";
     document.getElementById("puntuados").style.color = "#b2bbbd";
-    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Busqueda";
+    document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Búsqueda";
     this.setState({ estadoDeEvento: "pendiente" });
   }
   elegirEstadoPostulaciones = () => {
@@ -486,7 +486,7 @@ export default class ModoEmpleado extends React.Component {
       <div>
         <main className='grid'>
           <div className='progress-bar'>
-            <span onClick={this.elegirEstadoBusqueda} className="estados" id="busqueda">Busqueda</span>
+            <span onClick={this.elegirEstadoBusqueda} className="estados" id="busqueda">Búsqueda</span>
             <span onClick={this.elegirEstadoPostulaciones} className="estados" id="postulaciones">Postulaciones</span>
             <span onClick={this.elegirEstadoAceptado} className="estados" id="aceptados">Aceptados</span>
             <span onClick={this.elegirEstadoEnProceso} className="estados" id="enproceso">En Proceso</span>
@@ -495,7 +495,7 @@ export default class ModoEmpleado extends React.Component {
           </div>
           <div className='track'>
             <div className='top'>
-              <p id="temporales-titulo" className='ux'>Eventos Temporales - Busqueda</p>
+              <p id="temporales-titulo" className='ux'>Eventos Temporales - Búsqueda</p>
             </div>
             {filtros}
             {contenedorEventos}
