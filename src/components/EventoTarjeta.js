@@ -47,6 +47,7 @@ class EventoTarjeta extends React.Component {
             trabajos: [],
             trabajosPostulados: this.props.trabajosPostulados,
         }
+        this.actualizarEventos = this.actualizarEventos.bind(this);
     }
     buscarTrabajos(evento) {
         var trab = [];
@@ -118,6 +119,9 @@ class EventoTarjeta extends React.Component {
     handleOpenEliminarEvento = () => {
         this.setState({ openEliminarEvento: true });
     }
+    actualizarEventos() {
+        this.props.actualizarEventosGeneral();
+    }
     eliminarEvento = () => { 
         Eliminar.eliminarEvento(this.state.eventoid);
         var filtro = db.collection("trabajos").where("id_evento", "==", this.state.eventoid)
@@ -149,7 +153,7 @@ class EventoTarjeta extends React.Component {
         }
         var trabajos = this.state.trabajos;
         var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo}/>
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} actualizarEventos={this.actualizarEventos} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzotrab={trabajo.data.dateComienzo} datefintrab={trabajo.data.dateFinaliza} timecomienzotrab={trabajo.data.timeComienzo} timefintrab={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo}/>
             ))}
         </div>
         

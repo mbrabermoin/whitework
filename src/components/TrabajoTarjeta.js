@@ -78,16 +78,19 @@ class TrabajoTarjeta extends React.Component {
         Editar.restarTrabajo(evento, cantTrabajos);
     }
     postularse = () => {
+        this.setState({ openCortina: true })
         var mail = this.state.usuario.email;
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
         var cantPost = this.state.cantPost + 1;
         var cantPostEvento = this.state.cantPostEvento + 1;
         Agregar.agregarPostulacion(mail, trabajo, evento);
-        //Editar.cambiarEstadoEvento(evento, "postulado");
         Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
         Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
-        alert("Postulado Correctamente.")
+        setTimeout(() => {
+            alert("Postulado Correctamente.")
+            this.props.actualizarEventos();
+        }, 1000);
     }
     deshacerPostulacion = () => {
         this.setState({ openCortina: true })
@@ -128,8 +131,8 @@ class TrabajoTarjeta extends React.Component {
                 Editar.rechazarTrabajo(trabajo, "postulado", cantPostTrabajo)
                 Editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
             }
-            this.setState({ openCortina: false })
             alert("Postulación cancelada.")
+            this.props.actualizarEventos();
         }, 1000);
 
     }
@@ -247,6 +250,7 @@ class TrabajoTarjeta extends React.Component {
             if (puntuacion === -1) {
                 alert("Debe puntuar para dejar su comentario.")
             } else {
+                this.setState({ openCortina: true })
                 var mail_comentado = this.state.mailDueño;
                 var mail_comentador = this.state.usuario.email;
                 var nombre_comentador = this.state.usuario.fullname;
@@ -260,8 +264,11 @@ class TrabajoTarjeta extends React.Component {
                     var evento = this.state.evento;
                     Editar.agregarPuntuadoEvento(evento, puntuados)
                 }
-                alert("Comentario Agregado.")
-                this.setState({ openPuntuacionEmpleado: false });
+                setTimeout(() => {
+                    alert("Comentario Agregado.")
+                    this.props.actualizarEventos();
+                    this.setState({ openPuntuacionEmpleado: false });
+                }, 1000);
             }
         }
     }
@@ -372,6 +379,12 @@ class TrabajoTarjeta extends React.Component {
                                         </div>
                                     } else {
                                         botones = "";
+                                    }
+                                } else {
+                                    if (this.state.estadoEvento === "agregando") {
+                                        botones = <div><button className='eliminartrabajo-btn' onClick="">Eliminar</button>
+                                            <button className='editar-btn' onClick="">Editar</button>
+                                        </div>
                                     }
                                 }
                             }

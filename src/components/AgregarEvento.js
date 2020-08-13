@@ -297,7 +297,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} estadoEvento="pendiente" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />//datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} 
+                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />//datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} 
                 ))}
             </div>
         } else {
