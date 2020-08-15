@@ -56,6 +56,7 @@ class TrabajoTarjeta extends React.Component {
             openDetalleAsignado: false,
             postulado: this.props.postulado,
         }
+        this.actualizarEventosPost = this.actualizarEventosPost.bind(this);
     }
     buscarPostulados(trabajo) {
         var filtro = db.collection("postulaciones").where("id_trabajo", "==", trabajo)
@@ -217,6 +218,7 @@ class TrabajoTarjeta extends React.Component {
             if (puntuacion === -1) {
                 alert("Debe puntuar para dejar su comentario.")
             } else {
+                this.setState({ openCortina: true })
                 var mail_comentado = this.state.asignado;
                 var mail_comentador = this.state.usuario.email;
                 var nombre_comentador = this.state.usuario.fullname;
@@ -230,8 +232,11 @@ class TrabajoTarjeta extends React.Component {
                     var evento = this.state.evento;
                     Editar.agregarPuntuadoEvento(evento, puntuados)
                 }
-                alert("Comentario Agregado.")
-                this.setState({ openPuntuacion: false });
+                setTimeout(() => {
+                    alert("Comentario Agregado.")
+                    this.props.actualizarEventos();
+                    this.setState({ openPuntuacion: false });
+                }, 1000);
             }
         }
     }
@@ -271,6 +276,9 @@ class TrabajoTarjeta extends React.Component {
                 }, 1000);
             }
         }
+    }
+    actualizarEventosPost() {
+        this.props.actualizarEventos();
     }
     render() {
         var categoria = "";
@@ -395,7 +403,7 @@ class TrabajoTarjeta extends React.Component {
         }
         var postulados = this.state.postulados;
         var contenedorPostulados = <div>
-            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion} cantPost={this.state.cantPost} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} />))}
+            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} actualizarEventosPost={this.actualizarEventosPost} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion} cantPost={this.state.cantPost} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} />))}
         </div>
         var nombreAsignado = "";
         var photoAsignado = "";

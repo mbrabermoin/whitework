@@ -23,6 +23,7 @@ class PostuladoTarjeta extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            openCortina: false,
             mailPostulado: this.props.mailPostulado,
             trabajo: this.props.trabajo,
             postulacion: this.props.postulacion,
@@ -61,6 +62,7 @@ class PostuladoTarjeta extends React.Component {
             });
     }
     aceptarPostulante = () => {
+        this.setState({ openCortina: true })
         var mail = this.state.usuario.email;
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
@@ -75,8 +77,13 @@ class PostuladoTarjeta extends React.Component {
         } else {
             editar.asignarTrabajadorAEvento(evento, "postulado", nuevaCantPostEvento, nuevaCantAsignados);
         }
+        setTimeout(() => {
+            alert("Postulante Aceptado.")
+            this.props.actualizarEventosPost();
+        }, 1000);
     }
     rechazarPostulante = () => {
+        this.setState({ openCortina: true })
         var evento = this.state.evento;
         var trabajo = this.state.trabajo;
         var postulacion = this.state.postulacion;
@@ -94,6 +101,10 @@ class PostuladoTarjeta extends React.Component {
             editar.rechazarTrabajo(trabajo, "postulado", cantPostTrabajo)
             editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
         }
+        setTimeout(() => {
+            alert("Postulante Rechazado.")
+            this.props.actualizarEventosPost();
+        }, 1000);
     }
     handleCloseDetallePostulado = () => {
         this.setState({ openDetallePostulado: false });
@@ -204,6 +215,12 @@ class PostuladoTarjeta extends React.Component {
                  </Button>
                     </DialogActions>
                 </Dialog>
+                <Dialog
+          open={this.state.openCortina}
+          TransitionComponent={Transition}
+          aria-labelledby="form-dialog-title"
+        >
+        </Dialog>
             </div>
         );
     }

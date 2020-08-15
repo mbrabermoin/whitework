@@ -17,8 +17,8 @@ class ModoEmpleador extends React.Component {
       usuario: props.usuario,
       nombreUsuario: props.nombreUsuario,
       openCortina: true,
-      //staffcompleto: false,
     }
+    this.actualizarEventosGeneral = this.actualizarEventosGeneral.bind(this);
   }
   componentDidMount() {
     this.buscarEventos("pendiente");
@@ -98,7 +98,6 @@ class ModoEmpleador extends React.Component {
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Pendientes";
     this.setState({ estadoDeEvento: "pendiente" });
-    this.setState({ staffcompleto: false });
     this.buscarEventos("pendiente")
   }
   elegirEstadoPostulaciones = () => {
@@ -111,7 +110,6 @@ class ModoEmpleador extends React.Component {
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Postulaciones";
     this.setState({ estadoDeEvento: "postulado" });
-    this.setState({ staffcompleto: false });
     this.buscarEventos("postulado")
   }
   elegirEstadoStaffCompleto = () => {
@@ -123,7 +121,6 @@ class ModoEmpleador extends React.Component {
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Staff Completo";
-    //this.setState({ staffcompleto: true });
     this.setState({ estadoDeEvento: "staffCompleto" });
     this.buscarStaffCompletos()
   }
@@ -136,7 +133,6 @@ class ModoEmpleador extends React.Component {
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
-    this.setState({ staffcompleto: false });
     this.setState({ estadoDeEvento: "enproceso" });
     this.buscarEnProceso()
   }
@@ -149,7 +145,6 @@ class ModoEmpleador extends React.Component {
     document.getElementById("completados-empleador").style.color = "black";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Completados";
-    this.setState({ staffcompleto: false });
     this.setState({ estadoDeEvento: "completado" });
     this.buscarCompletado()
   }
@@ -163,10 +158,18 @@ class ModoEmpleador extends React.Component {
     document.getElementById("puntuados-empleador").style.color = "black";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
     this.setState({ estadoDeEvento: "puntuado" });
-    this.setState({ staffcompleto: false });
     this.buscarCompletado()
   }
-
+  actualizarEventosGeneral() {
+    this.setState({ eventos: [] })
+    if (this.state.estadoDeEvento === "postulado") {
+      this.buscarEventos("postulado")
+    }else{
+      if (this.state.estadoDeEvento === "completado") {
+        this.buscarCompletado()
+      }
+    }
+  }
   render() {
     var today = new Date();
     var mes = "";
@@ -244,7 +247,7 @@ class ModoEmpleador extends React.Component {
     </div>
     } else {
       contenedorEventos = <div className='library'>
-        {eventos.map(evento => (<EventoTarjeta key={evento.id} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
+        {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
         ))}
       </div>
     }
