@@ -368,8 +368,12 @@ export default class ModoEmpleado extends React.Component {
       if (this.state.estadoDeEvento === "postulado") {
         this.buscarPostulaciones();
       } else {
-        if (this.state.estadoDeEvento === "completado") {
-          this.buscarAsignados();
+        if (this.state.estadoDeEvento === "aceptado") {
+          this.buscarAsignados()
+        } else {
+          if (this.state.estadoDeEvento === "completado") {
+            this.buscarAsignados();
+          }
         }
       }
     }

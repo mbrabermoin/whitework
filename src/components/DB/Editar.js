@@ -161,6 +161,15 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  desasignarEmpleadoAEvento = (evento, nuevaCantAsignados) =>   {
+    db.collection("eventos").doc(evento).update({
+      cantAsignados: nuevaCantAsignados,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   agregarPuntuadoEvento = (evento, cantPuntEvento) => {
     db.collection("eventos").doc(evento).update({
       cantPuntuados: cantPuntEvento + 1,
@@ -199,12 +208,22 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }
+  }    
   asignarTrabajador = (mailTrabajador, trabajo) => {
     db.collection("trabajos").doc(trabajo).update({
       mail_trabajador: mailTrabajador,
       estado: "asignado",
       cantPostulados: 0,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  desasignarEmpleado = (trabajo) => {
+    db.collection("trabajos").doc(trabajo).update({
+      mail_trabajador: "",
+      estado: "pendiente",
     }).then(() => {
       console.log("Modificado")
     }).catch(() => {

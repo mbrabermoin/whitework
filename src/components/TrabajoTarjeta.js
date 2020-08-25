@@ -165,6 +165,30 @@ class TrabajoTarjeta extends React.Component {
         }, 1000);
 
     }
+    rechazarAsignacion = () => {
+        this.setState({ openCortina: true });
+        var trabajo = this.state.trabajo;
+        var evento = this.state.evento;
+        var nuevaCantAsignado = this.state.cantAsignados - 1;
+        Editar.desasignarEmpleado(trabajo);
+        Editar.desasignarEmpleadoAEvento(evento, nuevaCantAsignado);
+        setTimeout(() => {
+            alert("Desasignado Correctamente.")
+            this.props.actualizarEventos();
+        }, 1000);
+    }
+    rechazarAlAsignado = () => {
+        this.setState({ openCortina: true });
+        var trabajo = this.state.trabajo;
+        var evento = this.state.evento;
+        var nuevaCantAsignado = this.state.cantAsignados - 1;
+        Editar.desasignarEmpleado(trabajo);
+        Editar.desasignarEmpleadoAEvento(evento, nuevaCantAsignado);
+        setTimeout(() => {
+            alert("Rechazado Correctamente.")
+            this.props.actualizarEventos();
+        }, 1000);
+    }    
     handleClosePostulados = () => {
         this.setState({ openPostulados: false });
     }
@@ -252,7 +276,6 @@ class TrabajoTarjeta extends React.Component {
                 var nombre_comentador = this.state.usuario.fullname;
                 var foto = this.state.usuario.urlFoto;
                 var trabajo = this.state.trabajo;
-                //alert(mail_comentador+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/TaE")
                 Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "CaE");
                 Editar.trabajoPuntuadoPorEmpleador(trabajo);
                 if (this.state.puntuadoEmpleado === "Y") {
@@ -289,7 +312,6 @@ class TrabajoTarjeta extends React.Component {
                 var nombre_comentador = this.state.usuario.fullname;
                 var foto = this.state.usuario.urlFoto;
                 var trabajo = this.state.trabajo;
-                //alert(mail_comentador+"/"+nombre_comentador+"/"+foto+"/"+mail_comentado+"/"+opinion+"/"+puntuacion+"/EaC")
                 Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "EaC");
                 Editar.trabajoPuntuadoPorEmpleado(trabajo);
                 if (this.state.puntuadoEmpleador === "Y") {
@@ -341,7 +363,7 @@ class TrabajoTarjeta extends React.Component {
                 } else {
                     if (this.state.asignado === this.state.usuario.email) {
                         if (this.state.estadoEvento === "aceptado") {
-                            botones = <button className='eliminartrabajo-btn' onClick="">Rechazar Asignación</button>
+                            botones = <button className='eliminartrabajo-btn' onClick={this.rechazarAsignacion}>Rechazar Asignación</button>
                         } else {
                             if (this.state.estadoEvento === "enproceso") {
                                 botones = <button disable className='asignado-btn'>Mi Asignación</button>
@@ -372,7 +394,7 @@ class TrabajoTarjeta extends React.Component {
         } else {
             if (this.state.estadoEvento === "pendiente") {
                 if (this.state.asignado !== "") {
-                    botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar Asignado</button>
+                    botones = <div><button className='eliminartrabajo-btn' onClick={this.rechazarAlAsignado}>Rechazar Asignado</button>
                         <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
                         {/*<button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>*/}
                     </div>
@@ -389,7 +411,7 @@ class TrabajoTarjeta extends React.Component {
                     }
                 } else {
                     if (this.state.estadoEvento === "staffCompleto") {
-                        botones = <div><button className='eliminartrabajo-btn' onClick="">Rechazar Asignado</button>
+                        botones = <div><button className='eliminartrabajo-btn' onClick={this.rechazarAlAsignado}>Rechazar Asignado</button>
                             <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
                         </div>
                     } else {
