@@ -162,11 +162,15 @@ class ModoEmpleador extends React.Component {
   }
   actualizarEventosGeneral() {
     this.setState({ eventos: [] })
-    if (this.state.estadoDeEvento === "postulado") {
-      this.buscarEventos("postulado")
+    if (this.state.estadoDeEvento === "pendiente") {
+      this.buscarEventos("pendiente")
     }else{
-      if (this.state.estadoDeEvento === "completado") {
-        this.buscarCompletado()
+      if (this.state.estadoDeEvento === "postulado") {
+        this.buscarEventos("postulado")
+      } else {
+        if (this.state.estadoDeEvento === "completado") {
+          this.buscarCompletado()
+        }
       }
     }
   }

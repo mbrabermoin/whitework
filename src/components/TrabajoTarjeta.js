@@ -39,10 +39,10 @@ class TrabajoTarjeta extends React.Component {
             pago: this.props.pago,
             periodo: this.props.periodo,
             categoria: this.props.categoria,
-            //datecomienzotrab: this.props.datecomienzotrab,
-            //timecomienzotrab: this.props.timecomienzotrab,
-            //datefintrab: this.props.datefintrab,
-            //timefintrab: this.props.timefintrab,
+            dateComienzo: this.props.datecomienzo,
+            timeComienzo: this.props.timecomienzo,
+            dateFinaliza: this.props.datefin,
+            timeFinaliza: this.props.timefin,
             usuario: this.props.usuario,
             cantPost: this.props.cantPost,
             cantPostEvento: this.props.cantPostEvento,
@@ -55,6 +55,8 @@ class TrabajoTarjeta extends React.Component {
             puntuadoEmpleador: this.props.puntuadoEmpleador,
             openDetalleAsignado: false,
             postulado: this.props.postulado,
+            indexAgregando: this.props.trabajoid,
+            trabajoAgregando: this.props.trabajoAgregando,
         }
         this.actualizarEventosPost = this.actualizarEventosPost.bind(this);
     }
@@ -72,11 +74,37 @@ class TrabajoTarjeta extends React.Component {
         });
     }
     eliminarTrabajo = () => {
+        this.setState({ openCortina: true })
         var trabajo = this.state.trabajo;
         var evento = this.state.evento;
         var cantTrabajos = this.state.cantTrabajos;
         Eliminar.eliminarTrabajo(trabajo);
         Editar.restarTrabajo(evento, cantTrabajos);
+        setTimeout(() => {
+            alert("Trabajo Eliminado.")
+            this.props.actualizarEventos();
+        }, 1100);   
+    }    
+    duplicar = () => {
+        this.setState({ openCortina: true })
+        var evento = this.state.evento;
+        var mail = this.state.mailDueño;
+        var rol = this.state.rol;
+        var descripcion = this.state.descripcion;        
+        var dateComienzo = this.state.dateComienzo;
+        var timeComienzo = this.state.timeComienzo;
+        var dateFinaliza = this.state.dateFinaliza;
+        var timeFinaliza = this.state.timeFinaliza;
+        var pago = this.state.pago;
+        var periodo = this.state.periodo;
+        var categoria = this.state.categoria;
+        var cantTrabajos = this.state.cantTrabajos;
+        Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
+        Editar.sumarTrabajo(evento, cantTrabajos);       
+        setTimeout(() => {
+            alert("Trabajo Duplicado.")
+            this.props.actualizarEventos();
+        }, 1100);          
     }
     postularse = () => {
         this.setState({ openCortina: true })
@@ -277,6 +305,12 @@ class TrabajoTarjeta extends React.Component {
             }
         }
     }
+    eliminarEnAgregando = () => {
+        this.props.eliminarTrabajoAgregando(this.state.indexAgregando)
+    }
+    duplicarEnAgregando = () => {
+        this.props.duplicarTrabajoAgregando(this.state.indexAgregando, this.state.trabajoAgregando)
+    }
     actualizarEventosPost() {
         this.props.actualizarEventos();
     }
@@ -345,6 +379,7 @@ class TrabajoTarjeta extends React.Component {
                 } else {
                     botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
                         <button className='editar-btn' onClick="">Editar</button>
+                        <button className='editar-btn' onClick={this.duplicar}>Duplicar</button>
                     </div>
                 }
             } else {
@@ -390,8 +425,9 @@ class TrabajoTarjeta extends React.Component {
                                     }
                                 } else {
                                     if (this.state.estadoEvento === "agregando") {
-                                        botones = <div><button className='eliminartrabajo-btn' onClick="">Eliminar</button>
+                                        botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarEnAgregando}>Eliminar</button>
                                             <button className='editar-btn' onClick="">Editar</button>
+                                            <button className='editar-btn' onClick={this.duplicarEnAgregando}>Duplicar</button>
                                         </div>
                                     }
                                 }

@@ -121,6 +121,15 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  sumarTrabajo = (evento, cantTrabajos) => {
+    db.collection("eventos").doc(evento).update({
+      cantidadTrabajos: cantTrabajos + 1,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   agregarPostulacionEvento = (evento, cantPostEvento, estado) => {
     db.collection("eventos").doc(evento).update({
       cantPostulados: cantPostEvento,

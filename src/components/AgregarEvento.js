@@ -105,6 +105,8 @@ export default class AgregarEvento extends React.Component {
             ciudades: [],
             arrayTrabajos: [],
         }
+        this.eliminarTrabajoAgregando = this.eliminarTrabajoAgregando.bind(this);
+        this.duplicarTrabajoAgregando = this.duplicarTrabajoAgregando.bind(this);
     }
     handleCloseEvento = () => {
         this.setState({ openEvento: false });
@@ -283,6 +285,37 @@ export default class AgregarEvento extends React.Component {
         var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());
         this.setState({ ciudad: ciudad[0].name })
     }
+    eliminarTrabajoAgregando(index) {
+        this.setState({ openCortina: true });
+        var trabajos = [];
+        trabajos = this.state.arrayTrabajos;
+        this.state.arrayTrabajos.splice(index, 1);
+        this.setState({ openLista: false });
+        setTimeout(() => {
+            this.setState({ arrayTrabajos: trabajos });
+            var nuevaCantidad = this.state.cantTrabajos - 1;
+            this.setState({ cantTrabajos: nuevaCantidad });
+            this.setState({ openTrabajo: false });
+            this.setState({ openLista: true });
+            this.setState({ openCortina: false });
+        }, 300);
+    }
+    duplicarTrabajoAgregando(index, trabajo) {
+        this.setState({ openCortina: true });
+        var trabajos = [];
+        trabajos = this.state.arrayTrabajos;
+        console.log(trabajo)
+        this.state.arrayTrabajos.splice(index, 0, trabajo);
+        this.setState({ openLista: false });
+        setTimeout(() => {
+            this.setState({ arrayTrabajos: trabajos });
+            var nuevaCantidad = this.state.cantTrabajos + 1;
+            this.setState({ cantTrabajos: nuevaCantidad });
+            this.setState({ openTrabajo: false });
+            this.setState({ openLista: true });
+            this.setState({ openCortina: false });
+        }, 300);
+    }
     render() {
         var ciudadesMostrar = ""
         if (this.state.provinciaDisplay === "") {
@@ -297,7 +330,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map(trabajo => (<TrabajoTarjeta rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />//datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} 
+                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />//datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} 
                 ))}
             </div>
         } else {
