@@ -7,6 +7,7 @@ import linkedin from "./logos/linkedin.png";
 import locacion from "./logos/locacion.png";
 import telefono from "./logos/whatsapp.png";
 import email from "./logos/email.png";
+import cuilvalidado from "./logos/validado.png";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -30,6 +31,7 @@ class PerfilEmpleado extends React.Component {
         super(props);
         this.state = {
             usuario: props.usuario,
+            openModalCUIL: false,
             openModalFacebook: false,
             openModalTwitter: false,
             openModalInstagram: false,
@@ -59,6 +61,7 @@ class PerfilEmpleado extends React.Component {
         this.guardarTelefono = this.guardarTelefono.bind(this)
         this.guardarUbicacion = this.guardarUbicacion.bind(this)
         this.guardarOcupacion = this.guardarOcupacion.bind(this)
+        this.guardarCUIL = this.guardarCUIL.bind(this)
         this.guardarDescripcionEmpleador = this.guardarDescripcionEmpleador.bind(this)
         this.guardarDescripcionEmpleado = this.guardarDescripcionEmpleado.bind(this)
     }
@@ -77,7 +80,7 @@ class PerfilEmpleado extends React.Component {
         }).catch(function (error) {
             console.log(error);
             alert("Ha ocurrido un error. Actualice la página.");
-        });        
+        });
         var puntajeEmpleado = 0;
         var cantidadPuntajes = 0;
         var comments = [];
@@ -190,6 +193,12 @@ class PerfilEmpleado extends React.Component {
     handleAbrirLinkedIn = () => {
         this.setState({ openModalLinkedIn: true });
     };
+    handleAbrirCUIL = () => {
+        this.setState({ openModalCUIL: true });
+    };
+    handleCloseCUIL = () => {
+        this.setState({ openModalCUIL: false });
+    };    
     handleCloseComentariosEmpleado = () => {
         this.setState({ openComentariosEmpleado: false });
     };
@@ -219,7 +228,18 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalTelefono: false });
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
+    }
+    guardarCUIL() {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        const cuil = document.getElementById("cuil").value;
+        Modificar.modificarCUILUsuario(cuil, email);
+        this.refrescarUsuario();
+        this.setState({ openModalCUIL: false });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+        }, 1000);
     }
     guardarOcupacion() {
         this.setState({ openCortina: true });
@@ -230,7 +250,7 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalOcupacion: false });
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
     }
     guardarUbicacion() {
         this.setState({ openCortina: true });
@@ -240,7 +260,7 @@ class PerfilEmpleado extends React.Component {
         this.refrescarUsuario();
         this.setState({ openModalUbicacion: false });
         setTimeout(() => {
-        this.setState({ openCortina: false });
+            this.setState({ openCortina: false });
         }, 1000);
     }
     guardarDescripcionEmpleador() {
@@ -251,7 +271,7 @@ class PerfilEmpleado extends React.Component {
         this.refrescarUsuario();
         this.setState({ openModalDescripcionEmpleador: false });
         setTimeout(() => {
-        this.setState({ openCortina: false });
+            this.setState({ openCortina: false });
         }, 1000);
     }
     guardarDescripcionEmpleado() {
@@ -262,7 +282,7 @@ class PerfilEmpleado extends React.Component {
         this.refrescarUsuario();
         this.setState({ openModalDescripcionEmpleado: false });
         setTimeout(() => {
-        this.setState({ openCortina: false });
+            this.setState({ openCortina: false });
         }, 1000);
     }
     guardarFacebook() {
@@ -274,7 +294,7 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalFacebook: false });
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
     }
 
     guardarInstagram() {
@@ -286,7 +306,7 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalInstagram: false });
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
     }
     guardarTwitter() {
         this.setState({ openCortina: true });
@@ -297,7 +317,7 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalTwitter: false });
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
     }
     guardarLinkedIn() {
         this.setState({ openCortina: true });
@@ -308,7 +328,7 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openModalLinkedIn: false });
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
     }
     refrescarUsuario() {
         var docRef = db.collection("usuarios").doc(this.state.usuario.email);
@@ -331,15 +351,15 @@ class PerfilEmpleado extends React.Component {
         Modificar.modificarEmpleadoActivo(event.target.checked, email);
         setTimeout(() => {
             this.setState({ openCortina: false });
-            }, 1000);
+        }, 1000);
     };
     render() {
         var foto = "";
-        if(this.state.usuario.urlFoto !== ""){
-        foto = <img src={this.state.usuario.urlFoto} alt="profile card" />
-    }else{
-        foto = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="profile card" />
-    }
+        if (this.state.usuario.urlFoto !== "") {
+            foto = <img src={this.state.usuario.urlFoto} alt="profile card" />
+        } else {
+            foto = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="profile card" />
+        }
         var Numerotelefono = "";
         if (this.state.usuario.telefono === "" || this.state.usuario.telefono === null) {
             Numerotelefono = "Ingresar Telefono"
@@ -358,11 +378,27 @@ class PerfilEmpleado extends React.Component {
         } else {
             ocupacion = this.state.usuario.ocupacion
         }
+        var cuil = "";
+        var cuilValidado = "";
+        if (this.state.usuario.cuil === "" || this.state.usuario.cuil === null) {
+            cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>Ingresar CUIL </strong> </div>
+            cuilValidado ="";
+        } else {
+            if (this.state.usuario.cuilValidado === "N") {
+                cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>CUIL: {this.state.usuario.cuil} </strong> </div>
+                cuilValidado = ""
+            } else {
+                cuil = <div onClick="" className="profile-card__txt"><strong>CUIL: {this.state.usuario.cuil} </strong> </div>
+                cuilValidado = <span className="profile-card-cuilVal__icon">
+                <img width="20" height="20" alt="fb" src={cuilvalidado} />
+            </span>
+            }
+        }
         var descripcionEmpleador = "";
         if (this.state.usuario.descripcionEmpleador === "" || this.state.usuario.descripcionEmpleador === null) {
             descripcionEmpleador = "Ingresar Breve Descripción como Empleador"
         } else {
-            descripcionEmpleador = "Descripción como empleador: " +this.state.usuario.descripcionEmpleador
+            descripcionEmpleador = "Descripción como empleador: " + this.state.usuario.descripcionEmpleador
         }
         var descripcionEmpleado = "";
         if (this.state.usuario.descripcionEmpleado === "" || this.state.usuario.descripcionEmpleado === null) {
@@ -413,6 +449,10 @@ class PerfilEmpleado extends React.Component {
                     </div>
                     <div className="profile-card__cnt js-profile-cnt">
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
+                        <div className="profile-card-loc">                            
+                            {cuil}
+                            {cuilValidado}
+                        </div>
                         <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
                         <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
                         <div className="profile-card-loc">
@@ -422,7 +462,7 @@ class PerfilEmpleado extends React.Component {
                             <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
                                 {Ubicacion}
                             </span>
-                         </div>
+                        </div>
                         <div className="profile-card-email">
                             <span className="profile-card-email__icon">
                                 <img width="60" height="60" alt="fb" src={email} />
@@ -494,6 +534,27 @@ class PerfilEmpleado extends React.Component {
 
                     </div>
                 </div>
+                <Dialog
+                    open={this.state.openModalCUIL}
+                    onClose={this.handleCloseCUIL}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">CUIL:</DialogTitle>
+                    <DialogContent dividers>
+                        <TextField id="cuil" autoFocus margin="dense" label="CUIL (Debera esperar la validación del sistema)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseCUIL} color="primary">
+                            Cancel
+                         </Button>
+                        <Button onClick={this.guardarCUIL} color="primary">
+                            Ok
+                         </Button>
+                    </DialogActions>
+                </Dialog>
                 {/*Facebook*/}
                 <Dialog
                     open={this.state.openModalFacebook}

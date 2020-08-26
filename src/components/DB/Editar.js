@@ -57,6 +57,15 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarCUILUsuario = (cuil, email) => {
+    db.collection("usuarios").doc(email).update({
+      cuil: cuil,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }  
   modificarFacebookUsuario = (facebook, email) => {
     db.collection("usuarios").doc(email).update({
       facebook: facebook,

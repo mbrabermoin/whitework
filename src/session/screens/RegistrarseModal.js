@@ -77,6 +77,8 @@ function createMailUser() {
                                     })
                                         .then(registeredUser => {
                                             db.collection("usuarios").doc(registeredUser.user.email).set({
+                                                cuil: "",
+                                                cuilValidado: "N",
                                                 email: registeredUser.user.email,
                                                 urlFoto: "",
                                                 telefono: "",

@@ -134,6 +134,12 @@ a:hover {
   font-size: 27px;
   margin-right: 10px;
 }
+.profile-card-cuilVal__icon {
+  display: inline-flex;
+  font-size: 27px;
+  margin-left: 5px;
+  margin-top: -18px;
+}
 .profile-card-tel {
   display: flex;
   justify-content: center;

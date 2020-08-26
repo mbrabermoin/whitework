@@ -311,7 +311,6 @@ export default class ModoEmpleado extends React.Component {
     var eventosFiltrados = events;
     fromDate = fromDate.substr(0, 4) + "" + fromDate.substr(5, 2) + "" + fromDate.substr(8, 2)
     toDate = toDate.substr(0, 4) + "" + toDate.substr(5, 2) + "" + toDate.substr(8, 2)
-    //alert(fromDate + "/" + toDate + "/" + dueño + "/" + provincia + "/" + ciudad)
     eventosFiltrados = eventosFiltrados.filter(ev => ev.data.dateComienzo.substr(0, 4) + "" + ev.data.dateComienzo.substr(5, 2) + "" + ev.data.dateComienzo.substr(8, 2) + "" + ev.data.timeComienzo.substr(0, 2) + "" + ev.data.timeComienzo.substr(3, 2) > fromDate);
     eventosFiltrados = eventosFiltrados.filter(ev => ev.data.dateComienzo.substr(0, 4) + "" + ev.data.dateComienzo.substr(5, 2) + "" + ev.data.dateComienzo.substr(8, 2) + "" + ev.data.timeComienzo.substr(0, 2) + "" + ev.data.timeComienzo.substr(3, 2) < toDate);
     if (provincia.trim() !== "") {

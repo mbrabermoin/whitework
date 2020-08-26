@@ -83,14 +83,14 @@ class TrabajoTarjeta extends React.Component {
         setTimeout(() => {
             alert("Trabajo Eliminado.")
             this.props.actualizarEventos();
-        }, 1100);   
-    }    
+        }, 1100);
+    }
     duplicar = () => {
         this.setState({ openCortina: true })
         var evento = this.state.evento;
         var mail = this.state.mailDueño;
         var rol = this.state.rol;
-        var descripcion = this.state.descripcion;        
+        var descripcion = this.state.descripcion;
         var dateComienzo = this.state.dateComienzo;
         var timeComienzo = this.state.timeComienzo;
         var dateFinaliza = this.state.dateFinaliza;
@@ -100,26 +100,34 @@ class TrabajoTarjeta extends React.Component {
         var categoria = this.state.categoria;
         var cantTrabajos = this.state.cantTrabajos;
         Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
-        Editar.sumarTrabajo(evento, cantTrabajos);       
+        Editar.sumarTrabajo(evento, cantTrabajos);
         setTimeout(() => {
             alert("Trabajo Duplicado.")
             this.props.actualizarEventos();
-        }, 1100);          
+        }, 1100);
     }
     postularse = () => {
-        this.setState({ openCortina: true })
-        var mail = this.state.usuario.email;
-        var trabajo = this.state.trabajo;
-        var evento = this.state.evento;
-        var cantPost = this.state.cantPost + 1;
-        var cantPostEvento = this.state.cantPostEvento + 1;
-        Agregar.agregarPostulacion(mail, trabajo, evento);
-        Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
-        Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
-        setTimeout(() => {
-            alert("Postulado Correctamente.")
-            this.props.actualizarEventos();
-        }, 1000);
+        if (this.state.usuario.cuil === "") {
+            alert("Necesitas un CUIL antes de postularse.")
+        } else {
+            if (this.state.usuario.cuilValidado === "N") {
+                alert("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.")
+            } else {
+                this.setState({ openCortina: true })
+                var mail = this.state.usuario.email;
+                var trabajo = this.state.trabajo;
+                var evento = this.state.evento;
+                var cantPost = this.state.cantPost + 1;
+                var cantPostEvento = this.state.cantPostEvento + 1;
+                Agregar.agregarPostulacion(mail, trabajo, evento);
+                Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
+                Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
+                setTimeout(() => {
+                    alert("Postulado Correctamente.")
+                    this.props.actualizarEventos();
+                }, 1000);
+            }
+        }
     }
     deshacerPostulacion = () => {
         this.setState({ openCortina: true })
@@ -188,7 +196,7 @@ class TrabajoTarjeta extends React.Component {
             alert("Rechazado Correctamente.")
             this.props.actualizarEventos();
         }, 1000);
-    }    
+    }
     handleClosePostulados = () => {
         this.setState({ openPostulados: false });
     }
