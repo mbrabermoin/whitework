@@ -123,7 +123,7 @@ class TrabajoTarjeta extends React.Component {
                 Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
                 Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
                 setTimeout(() => {
-                    alert("Postulado Correctamente.")
+                    this.props.mostrarMensajeExito("Postulado Correctamente.");
                     this.props.actualizarEventos();
                 }, 1000);
             }

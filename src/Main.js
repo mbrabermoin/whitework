@@ -9,10 +9,9 @@ import db from "./index";
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="down" ref={ref} {...props} />;
+    return <Slide direction="down" ref={ref} {...props} />;
 });
 let show = false;
-
 // show/hide dropdown menu
 function userOptions() {
     if (show === false) {
@@ -50,10 +49,10 @@ class Main extends React.Component {
                 alert("Ha ocurrido un error. Actualice la página.");
             });
             setTimeout(() => {
-            this.setState({ openCortina: false });
+                this.setState({ openCortina: false });
             }, 1000);
         }
-        , 3000);
+            , 3000);
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
@@ -78,7 +77,6 @@ class Main extends React.Component {
         this.setState({ modo: "perfil" });
     }
     render() {
-
         var fotoPerfil = <img src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="Avatar" className="avatar" />;
         if (this.state.usuario !== null && this.state.usuario.urlFoto !== null && this.state.usuario.urlFoto !== "") {
             fotoPerfil = <img src={this.state.usuario.urlFoto} alt="Avatar" className="avatar" />
@@ -89,11 +87,11 @@ class Main extends React.Component {
             screen = <PerfilEmpleado usuario={this.state.usuario} />
         } else {
             if (this.state.modo === "empleado") {
-                screen = <ModoEmpleado usuario={this.state.usuario}  />
+                screen = <ModoEmpleado usuario={this.state.usuario} />
             } else {
                 screen = <ModoEmpleador usuario={this.state.usuario} />
             }
-        }
+        }        
         return (
             <div className="App">
                 <nav className='navbar'>
@@ -118,11 +116,11 @@ class Main extends React.Component {
                 </div>
                 {screen}
                 <Dialog
-      open={this.state.openCortina}
-      TransitionComponent={Transition}
-      aria-labelledby="form-dialog-title"
-  >  
-  </Dialog>
+                    open={this.state.openCortina}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
+                </Dialog>
             </div>);
     }
 }

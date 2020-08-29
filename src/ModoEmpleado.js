@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import * as provinciasjson from './components/JSONs/Provincias.json';
 import * as ciudadesjson from './components/JSONs/Ciudades.json';
 import { MenuItem } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -51,6 +53,8 @@ export default class ModoEmpleado extends React.Component {
       ciudades: [],
       filtroActivo: false,
       trabajosPostulados: [],
+      MensajeExito: "",
+      openMensajeExito: false,
     }
     this.actualizarEventosGeneral = this.actualizarEventosGeneral.bind(this);
   }
@@ -377,6 +381,13 @@ export default class ModoEmpleado extends React.Component {
       }
     }
   }
+  mostrarMensajeExito = (mensaje) => {
+    this.setState({ MensajeExito: mensaje})
+    this.setState({ openMensajeExito: true });
+  }
+  cerrarMensajeExito = () => {
+    this.setState({ openMensajeExito: false });
+  }
   render() {
     var ciudadesMostrar = ""
     if (this.state.provinciaDisplay === "") {
@@ -495,13 +506,18 @@ export default class ModoEmpleado extends React.Component {
       </div>
       } else {
         contenedorEventos = <div className='library'>
-          {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} trabajosPostulados={this.state.trabajosPostulados} modo="empleado" />
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} mostrarMensajeExito={this.mostrarMensajeExito} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} trabajosPostulados={this.state.trabajosPostulados} modo="empleado" />
           ))}
         </div>
       }
     }
     return (
       <div>
+        <Snackbar open={this.state.openMensajeExito} autoHideDuration={6000} onClose={this.cerrarMensajeExito}>
+          <Alert onClose={this.cerrarMensajeExito} severity="success">
+          {this.state.MensajeExito}
+  </Alert>
+        </Snackbar>
         <main className='grid'>
           <div className='progress-bar'>
             <span onClick={this.elegirEstadoBusqueda} className="estados" id="busqueda">Búsqueda</span>

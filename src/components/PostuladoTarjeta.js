@@ -201,7 +201,7 @@ class PostuladoTarjeta extends React.Component {
                     open={this.state.openDetallePostulado}
                     onClose={this.handleCloseDetallePostulado}
                     TransitionComponent={Transition}
-                    fullWidth={true}
+                    fullScreen 
                     maxWidth={'md'}
                     aria-labelledby="form-dialog-title"
                 >
