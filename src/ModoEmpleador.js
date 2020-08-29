@@ -4,6 +4,8 @@ import AgregarEvento from "./components/AgregarEvento";
 import db from './index';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -17,6 +19,9 @@ class ModoEmpleador extends React.Component {
       usuario: props.usuario,
       nombreUsuario: props.nombreUsuario,
       openCortina: true,
+      MensajeExito: "",
+      openMensajeExito: false,
+      modoMensaje: "success",
     }
     this.actualizarEventosGeneral = this.actualizarEventosGeneral.bind(this);
   }
@@ -178,6 +183,14 @@ class ModoEmpleador extends React.Component {
       }
     }
   }
+  mostrarMensajeExito = (mensaje, modo) => {
+    this.setState({ modoMensaje: modo });
+    this.setState({ MensajeExito: mensaje });
+    this.setState({ openMensajeExito: true });
+  }
+  cerrarMensajeExito = () => {
+    this.setState({ openMensajeExito: false });
+  }
   render() {
     var today = new Date();
     var mes = "";
@@ -255,12 +268,17 @@ class ModoEmpleador extends React.Component {
     </div>
     } else {
       contenedorEventos = <div className='library'>
-        {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
+        {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} mostrarMensajeExito={this.mostrarMensajeExito} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
         ))}
       </div>
     }
     return (
       <div>
+        <Snackbar open={this.state.openMensajeExito} autoHideDuration={2000} onClose={this.cerrarMensajeExito}>
+          <Alert variant="filled" onClose={this.cerrarMensajeExito} severity={this.state.modoMensaje}>
+            {this.state.MensajeExito}
+          </Alert>
+        </Snackbar>
         <main className='grid'>
           <div className='progress-bar'>
             <span onClick={this.elegirEstadoPendiente} id="pendientes-empleador">Pendientes</span>
@@ -269,7 +287,7 @@ class ModoEmpleador extends React.Component {
             <span onClick={this.elegirEstadoEnProceso} id="enproceso-empleador">En Proceso</span>
             <span onClick={this.elegirEstadoCompletados} id="completados-empleador">Completados</span>
             <span onClick={this.elegirEstadoPuntuados} id="puntuados-empleador">Puntuados</span>
-            <div className="push-right"><AgregarEvento usuario={this.state.usuario} /></div>
+            <div className="push-right"><AgregarEvento usuario={this.state.usuario} mostrarMensajeExito={this.mostrarMensajeExito}/></div>
           </div>
           <div className='track'>
             <div className='top'>

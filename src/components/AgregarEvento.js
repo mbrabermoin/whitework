@@ -72,7 +72,6 @@ const dateNow = new Date();
 const year = dateNow.getFullYear();
 const monthWithOffset = dateNow.getUTCMonth() + 1;
 var day = dateNow.getUTCDate().toString();
-// Setting current Month number from current Date object
 var month = monthWithOffset.toString();
 if (monthWithOffset.toString().length < 2) {
     month = "0" + month
@@ -138,23 +137,23 @@ export default class AgregarEvento extends React.Component {
     handleAgregarEvento = () => {
         const nombre = document.getElementById("nombre").value;
         if (nombre.trim() === "") {
-            alert("Nombre es necesario.")
+            this.props.mostrarMensajeExito("Nombre es necesario.", "error");
         } else {
             const descripcion = document.getElementById("descripcion").value;
             if (descripcion.trim() === "") {
-                alert("Descripción es necesaria.")
+                this.props.mostrarMensajeExito("Descripción es necesaria.", "error");
             } else {
                 const provincia = this.state.provincia;
                 if (provincia.trim() === "") {
-                    alert("Provincia es necesaria.")
+                    this.props.mostrarMensajeExito("Provincia es necesaria.", "error");
                 } else {
                     const ciudad = this.state.ciudad;
                     if (ciudad.trim() === "") {
-                        alert("Ciudad es necesaria.")
+                        this.props.mostrarMensajeExito("Ciudad es necesaria.", "error");
                     } else {
                         const direccion = document.getElementById("direccion").value;
                         if (direccion.trim() === "") {
-                            alert("Dirección es necesaria.")
+                            this.props.mostrarMensajeExito("Dirección es necesaria.", "error");
                         } else {
                             const mail_dueño_evento = this.state.usuario.email;
                             const nombre_dueño_evento = this.state.usuario.fullname;
@@ -167,23 +166,18 @@ export default class AgregarEvento extends React.Component {
                             var toDateConcat = dateFinaliza.substr(0, 4) + "" + dateFinaliza.substr(5, 2) + "" + dateFinaliza.substr(8, 2) + "" + timeFinaliza.substr(0, 2) + "" + timeFinaliza.substr(3, 2);
                             var dateTime = this.obtenerFechaActual();
                             if (fromDateConcat >= toDateConcat) {
-                                alert("Fecha de Finalización debe ser posterior a la de Comienzo.")
+                                this.props.mostrarMensajeExito("Fecha de Finalización debe ser posterior a la de Comienzo.", "error");
                             } else {
                                 if (dateTime >= fromDateConcat) {
-                                    alert("La fecha de Comiezo debe ser posterior a la actual.")
+                                    this.props.mostrarMensajeExito("La fecha de Comiezo debe ser posterior a la actual.", "error");
                                 } else {
                                     if (this.state.cantTrabajos === 0) {
-                                        alert("Se necesita al menos un trabajo para crear el evento.")
+                                        this.props.mostrarMensajeExito("Se necesita al menos un trabajo para crear el evento.", "error");
                                     } else {
-                                        // alert(nombre + "//" + provincia + "//"+ ciudad + "//" + direccion + "//" + datetimeComienzo + "//" + datetimeFinaliza)
                                         const nuevoEvento = Agregar.agregarEvento(nombre, descripcion, mail_dueño_evento, nombre_dueño_evento, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, cantidadTrabajos);
                                         for (let t = 0; t < this.state.cantTrabajos; t++) {
                                             const rolT = this.state.arrayTrabajos[t].rol;
                                             const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
-                                            /*const datecomienzotrab = this.state.arrayTrabajos[t].datecomienzotrab;
-                                            const datefintrab = this.state.arrayTrabajos[t].datefintrab;
-                                            const timecomienzotrab = this.state.arrayTrabajos[t].timecomienzotrab;
-                                            const timefintrab = this.state.arrayTrabajos[t].timefintrab;*/
                                             const pago = this.state.arrayTrabajos[t].pago;
                                             const periodo = this.state.arrayTrabajos[t].periodo;
                                             const categoria = this.state.arrayTrabajos[t].categoria;
@@ -191,6 +185,7 @@ export default class AgregarEvento extends React.Component {
                                                 Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
                                             }, t * 1100);
                                         }
+                                        this.props.mostrarMensajeExito("Trabajo Agregado Correctamente.", "success");
                                         this.handleCloseEvento();
                                     }
                                 }
@@ -235,26 +230,22 @@ export default class AgregarEvento extends React.Component {
     handleAgregarTrabajo = () => {
         const rol = document.getElementById("rol").value;
         if (rol.trim() === "") {
-            alert("Rol es Requerido.")
+            this.props.mostrarMensajeExito("Rol es Requerido.", "error");
         } else {
             const descripciontrab = document.getElementById("descripcion-trab").value;
             if (descripciontrab.trim() === "") {
-                alert("Descripción es Requerida.")
+                this.props.mostrarMensajeExito("Descripción es Requerida.", "error");
             } else {
                 const pago = document.getElementById("pago").value;
                 if (pago.trim() === "") {
-                    alert("Pago es Requerido.")
+                    this.props.mostrarMensajeExito("Pago es Requerido.", "error");
                 } else {
                     const periodo = this.state.periodoDisplay;
                     if (periodo.trim() === "") {
-                        alert("Periodo es Requerido.")
+                        this.props.mostrarMensajeExito("Periodo es Requerido.", "error");
                     } else {
                         const categoria = this.state.categoriaDisplay;
-                        /*const datecomienzotrab = document.getElementById("date-comienzo-trab").value;
-                        const datefintrab = document.getElementById("date-fin-trab").value;
-                        const timecomienzotrab = document.getElementById("time-comienzo-trab").value;
-                        const timefintrab = document.getElementById("time-fin-trab").value;*/
-                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, categoria: categoria };//datecomienzotrab: datecomienzotrab, timecomienzotrab: timecomienzotrab, datefintrab: datefintrab, timefintrab: timefintrab
+                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, categoria: categoria };
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -330,7 +321,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />//datecomienzotrab={trabajo.datecomienzotrab} datefintrab={trabajo.datefintrab} timecomienzotrab={trabajo.timecomienzotrab} timefintrab={trabajo.timefintrab} 
+                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
                 ))}
             </div>
         } else {
@@ -428,11 +419,6 @@ export default class AgregarEvento extends React.Component {
                         <TextField id="categoria" select margin="dense" value={this.state.categoriaDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarCategoria('categoriaDisplay')} label="Categoría" fullWidth>
                             {categorias.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
-                        {/*<TextField id="date-comienzo-trab" required label="Comienzo" type="date" defaultValue={materialDateInput} />
-                        <TextField id="time-comienzo-trab" required type="time" defaultValue="00:00" label=" " />
-                        <br />
-                        <TextField id="date-fin-trab" label="Terminación" type="date" defaultValue={materialDateInput} />
-                        <TextField id="time-fin-trab" type="time" defaultValue="00:00" label=" " />*/}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseTrabajo} color="secondary">

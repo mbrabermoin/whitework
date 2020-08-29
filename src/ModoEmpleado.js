@@ -55,6 +55,7 @@ export default class ModoEmpleado extends React.Component {
       trabajosPostulados: [],
       MensajeExito: "",
       openMensajeExito: false,
+      modoMensaje: "success",
     }
     this.actualizarEventosGeneral = this.actualizarEventosGeneral.bind(this);
   }
@@ -381,8 +382,9 @@ export default class ModoEmpleado extends React.Component {
       }
     }
   }
-  mostrarMensajeExito = (mensaje) => {
-    this.setState({ MensajeExito: mensaje})
+  mostrarMensajeExito = (mensaje, modo) => {
+    this.setState({ modoMensaje: modo });
+    this.setState({ MensajeExito: mensaje });
     this.setState({ openMensajeExito: true });
   }
   cerrarMensajeExito = () => {
@@ -513,10 +515,10 @@ export default class ModoEmpleado extends React.Component {
     }
     return (
       <div>
-        <Snackbar open={this.state.openMensajeExito} autoHideDuration={6000} onClose={this.cerrarMensajeExito}>
-          <Alert onClose={this.cerrarMensajeExito} severity="success">
-          {this.state.MensajeExito}
-  </Alert>
+        <Snackbar open={this.state.openMensajeExito} autoHideDuration={2000} onClose={this.cerrarMensajeExito}>
+          <Alert variant="filled" onClose={this.cerrarMensajeExito} severity={this.state.modoMensaje}>
+            {this.state.MensajeExito}
+          </Alert>
         </Snackbar>
         <main className='grid'>
           <div className='progress-bar'>

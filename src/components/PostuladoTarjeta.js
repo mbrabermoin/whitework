@@ -78,7 +78,7 @@ class PostuladoTarjeta extends React.Component {
             editar.asignarTrabajadorAEvento(evento, "postulado", nuevaCantPostEvento, nuevaCantAsignados);
         }
         setTimeout(() => {
-            alert("Postulante Aceptado.")
+            this.props.mostrarMensajeExitoPost("Postulante Aceptado Correctamente.", "success");
             this.props.actualizarEventosPost();
         }, 1000);
     }
@@ -102,7 +102,7 @@ class PostuladoTarjeta extends React.Component {
             editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
         }
         setTimeout(() => {
-            alert("Postulante Rechazado.")
+            this.props.mostrarMensajeExitoPost("Postulante Rechazado.", "success");
             this.props.actualizarEventosPost();
         }, 1000);
     }

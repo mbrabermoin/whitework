@@ -112,8 +112,8 @@ class EventoTarjeta extends React.Component {
     actualizarEventos() {
         this.props.actualizarEventosGeneral();
     }
-    mostrarMensajeExito(mensaje) {
-        this.props.mostrarMensajeExito(mensaje);
+    mostrarMensajeExito(mensaje, modo) {
+        this.props.mostrarMensajeExito(mensaje, modo);
     }
     eliminarEvento = () => { 
         Eliminar.eliminarEvento(this.state.eventoid);
@@ -125,6 +125,7 @@ class EventoTarjeta extends React.Component {
         }, error => {
             console.log(error)
         });
+        this.props.mostrarMensajeExito("Evento Eliminado Correctamente.", "success");
     }
     render() {
         var fechas = this.state.datecomienzo + " - " + this.state.timecomienzo;

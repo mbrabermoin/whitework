@@ -59,6 +59,7 @@ class TrabajoTarjeta extends React.Component {
             trabajoAgregando: this.props.trabajoAgregando,
         }
         this.actualizarEventosPost = this.actualizarEventosPost.bind(this);
+        this.mostrarMensajeExitoPost = this.mostrarMensajeExitoPost.bind(this);
     }
     buscarPostulados(trabajo) {
         var filtro = db.collection("postulaciones").where("id_trabajo", "==", trabajo)
@@ -81,7 +82,7 @@ class TrabajoTarjeta extends React.Component {
         Eliminar.eliminarTrabajo(trabajo);
         Editar.restarTrabajo(evento, cantTrabajos);
         setTimeout(() => {
-            alert("Trabajo Eliminado.")
+            this.props.mostrarMensajeExito("Trabajo Eliminado Correctamente.", "success");
             this.props.actualizarEventos();
         }, 1100);
     }
@@ -102,16 +103,16 @@ class TrabajoTarjeta extends React.Component {
         Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
         Editar.sumarTrabajo(evento, cantTrabajos);
         setTimeout(() => {
-            alert("Trabajo Duplicado.")
+            this.props.mostrarMensajeExito("Trabajo Duplicado Correctamente.", "success");
             this.props.actualizarEventos();
         }, 1100);
     }
     postularse = () => {
         if (this.state.usuario.cuil === "") {
-            alert("Necesitas un CUIL antes de postularse.")
+            this.props.mostrarMensajeExito("Necesitas un CUIL antes de postularte.", "error");
         } else {
             if (this.state.usuario.cuilValidado === "N") {
-                alert("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.")
+                this.props.mostrarMensajeExito("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
             } else {
                 this.setState({ openCortina: true })
                 var mail = this.state.usuario.email;
@@ -123,7 +124,7 @@ class TrabajoTarjeta extends React.Component {
                 Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
                 Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
                 setTimeout(() => {
-                    this.props.mostrarMensajeExito("Postulado Correctamente.");
+                    this.props.mostrarMensajeExito("Postulado Correctamente.", "success");
                     this.props.actualizarEventos();
                 }, 1000);
             }
@@ -168,7 +169,7 @@ class TrabajoTarjeta extends React.Component {
                 Editar.rechazarTrabajo(trabajo, "postulado", cantPostTrabajo)
                 Editar.rechazarTrabajadorAEvento(evento, "postulado", cantPostEvento);
             }
-            alert("Postulación cancelada.")
+            this.props.mostrarMensajeExito("Postulación Cancelada.", "success");
             this.props.actualizarEventos();
         }, 1000);
 
@@ -181,7 +182,7 @@ class TrabajoTarjeta extends React.Component {
         Editar.desasignarEmpleado(trabajo);
         Editar.desasignarEmpleadoAEvento(evento, nuevaCantAsignado);
         setTimeout(() => {
-            alert("Desasignado Correctamente.")
+            this.props.mostrarMensajeExito("Trabajo Desasignado Correctamente.", "success");
             this.props.actualizarEventos();
         }, 1000);
     }
@@ -193,7 +194,7 @@ class TrabajoTarjeta extends React.Component {
         Editar.desasignarEmpleado(trabajo);
         Editar.desasignarEmpleadoAEvento(evento, nuevaCantAsignado);
         setTimeout(() => {
-            alert("Rechazado Correctamente.")
+            this.props.mostrarMensajeExito("Empleado Rechazado Correctamente.", "success");
             this.props.actualizarEventos();
         }, 1000);
     }
@@ -273,10 +274,10 @@ class TrabajoTarjeta extends React.Component {
             }
         }
         if (opinion === "") {
-            alert("Debe ingresar un comentario.");
+            this.props.mostrarMensajeExito("Debe ingresar un comentario.", "error");
         } else {
             if (puntuacion === -1) {
-                alert("Debe puntuar para dejar su comentario.")
+                this.props.mostrarMensajeExito("Debe puntuar para dejar su comentario.", "error");
             } else {
                 this.setState({ openCortina: true })
                 var mail_comentado = this.state.asignado;
@@ -292,7 +293,7 @@ class TrabajoTarjeta extends React.Component {
                     Editar.agregarPuntuadoEvento(evento, puntuados)
                 }
                 setTimeout(() => {
-                    alert("Comentario Agregado.")
+                    this.props.mostrarMensajeExito("Comentario Agregado Correctamente.", "success");
                     this.props.actualizarEventos();
                     this.setState({ openPuntuacion: false });
                 }, 1000);
@@ -309,10 +310,10 @@ class TrabajoTarjeta extends React.Component {
             }
         }
         if (opinion === "") {
-            alert("Debe ingresar un comentario.");
+            this.props.mostrarMensajeExito("Debe ingresar un comentario.", "error");
         } else {
             if (puntuacion === -1) {
-                alert("Debe puntuar para dejar su comentario.")
+                this.props.mostrarMensajeExito("Debe puntuar para dejar su comentario.", "error");
             } else {
                 this.setState({ openCortina: true })
                 var mail_comentado = this.state.mailDueño;
@@ -328,7 +329,7 @@ class TrabajoTarjeta extends React.Component {
                     Editar.agregarPuntuadoEvento(evento, puntuados)
                 }
                 setTimeout(() => {
-                    alert("Comentario Agregado.")
+                    this.props.mostrarMensajeExito("Comentario Agregado Correctamente.", "success");
                     this.props.actualizarEventos();
                     this.setState({ openPuntuacionEmpleado: false });
                 }, 1000);
@@ -343,6 +344,9 @@ class TrabajoTarjeta extends React.Component {
     }
     actualizarEventosPost() {
         this.props.actualizarEventos();
+    }
+    mostrarMensajeExitoPost(mensaje, modo) {
+        this.props.mostrarMensajeExito(mensaje, modo);
     }
     render() {
         var categoria = "";
@@ -469,7 +473,7 @@ class TrabajoTarjeta extends React.Component {
         }
         var postulados = this.state.postulados;
         var contenedorPostulados = <div>
-            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} actualizarEventosPost={this.actualizarEventosPost} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion} cantPost={this.state.cantPost} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} />))}
+            {postulados.map(postulado => (<PostuladoTarjeta key={postulado.id} actualizarEventosPost={this.actualizarEventosPost} mostrarMensajeExitoPost={this.mostrarMensajeExitoPost} mailPostulado={postulado.data.mail_postulante} trabajo={postulado.data.id_trabajo} evento={postulado.data.id_evento} postulacion={postulado.data.id_postulacion} cantPost={this.state.cantPost} cantPostEvento={this.state.cantPostEvento} cantAsignados={this.state.cantAsignados} />))}
         </div>
         var nombreAsignado = "";
         var photoAsignado = "";
@@ -546,7 +550,7 @@ class TrabajoTarjeta extends React.Component {
                         <DialogContentText>
                             ¿Como calificarias su trabajo?
                     </DialogContentText>
-                        <TextField id="nombre" autoFocus multiline="true" rows="6" margin="dense" label="Opinión" type="opinion" fullWidth />
+                        <TextField id="nombre" autoFocus multiline="true" rows="6" margin="dense" label="Comentario" type="opinion" fullWidth />
                         <form>
                             <p className="clasificacion-stars">
                                 <input id="radio1" type="radio" name="estrellas" value="10" />
@@ -596,7 +600,7 @@ class TrabajoTarjeta extends React.Component {
                         <DialogContentText>
                             ¿Como calificarias su Trato?
                         </DialogContentText>
-                        <TextField id="opinionEmpleado" autoFocus multiline="true" rows="6" margin="dense" label="Opinión" type="opinion" fullWidth />
+                        <TextField id="opinionEmpleado" autoFocus multiline="true" rows="6" margin="dense" label="Comentario" type="opinion" fullWidth />
                         <form>
                             <p className="clasificacion-stars">
                                 <input id="radio1" type="radio" name="estrellasEmpleado" value="10" />
