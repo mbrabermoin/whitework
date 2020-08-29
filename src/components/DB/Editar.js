@@ -21,6 +21,15 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarFotoUsuario = (urlFoto, email) => {
+    db.collection("usuarios").doc(email).update({
+      urlFoto: urlFoto,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   modificarOcupacionUsuario = (ocupacion, email) => {
     db.collection("usuarios").doc(email).update({
       ocupacion: ocupacion,

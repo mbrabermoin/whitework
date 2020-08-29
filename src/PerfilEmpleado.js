@@ -20,6 +20,8 @@ import { auth } from "./firebase";
 import db from './index';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import FileUploader from "react-firebase-file-uploader";
+import firebase from "firebase";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -52,6 +54,11 @@ class PerfilEmpleado extends React.Component {
             openComentariosEmpleado: false,
             openComentariosEmpleador: false,
             empleadoActivo: false,
+            //Files
+            avatar: "",
+            isUploading: false,
+            progress: 0,
+            avatarURL: ""
         }
         this.guardarFacebook = this.guardarFacebook.bind(this)
         this.guardarInstagram = this.guardarInstagram.bind(this)
@@ -133,6 +140,20 @@ class PerfilEmpleado extends React.Component {
             this.setState({ openCortina: false });
         }, 2000);
     }
+    //Files
+    handleUploadSuccess = filename => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        this.setState({ avatar: filename, progress: 100, isUploading: false });
+        firebase.storage().ref("images").child(filename).getDownloadURL().then(url =>
+            this.setState({ avatarURL: url }));
+        firebase.storage().ref("images").child(filename).getDownloadURL().then(url =>
+            Modificar.modificarFotoUsuario(url, email));
+            setTimeout(() => {
+                this.refrescarUsuario();
+                this.setState({ openCortina: false });
+            }, 1000);
+    };
     handleCerrarNombre = () => {
         this.setState({ openModalNombre: false });
     };
@@ -198,7 +219,7 @@ class PerfilEmpleado extends React.Component {
     };
     handleCloseCUIL = () => {
         this.setState({ openModalCUIL: false });
-    };    
+    };
     handleCloseComentariosEmpleado = () => {
         this.setState({ openComentariosEmpleado: false });
     };
@@ -382,7 +403,7 @@ class PerfilEmpleado extends React.Component {
         var cuilValidado = "";
         if (this.state.usuario.cuil === "" || this.state.usuario.cuil === null) {
             cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>Ingresar CUIL </strong> </div>
-            cuilValidado ="";
+            cuilValidado = "";
         } else {
             if (this.state.usuario.cuilValidado === "N") {
                 cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>CUIL: {this.state.usuario.cuil} </strong> </div>
@@ -390,8 +411,8 @@ class PerfilEmpleado extends React.Component {
             } else {
                 cuil = <div onClick="" className="profile-card__txt"><strong>CUIL: {this.state.usuario.cuil} </strong> </div>
                 cuilValidado = <span className="profile-card-cuilVal__icon">
-                <img width="20" height="20" alt="fb" src={cuilvalidado} />
-            </span>
+                    <img width="20" height="20" alt="fb" src={cuilvalidado} />
+                </span>
             }
         }
         var descripcionEmpleador = "";
@@ -446,13 +467,31 @@ class PerfilEmpleado extends React.Component {
                 <div className="profile-card js-profile-card">
                     <div className="profile-card__img">
                         {foto}
-                    </div>
+                        
+                    </div>                    
                     <div className="profile-card__cnt js-profile-cnt">
+                        <div style={{height: 40}}>
+                    <label style={{backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer'}}>
+                        Cambiar foto de perfil
+                    <FileUploader
+                            accept="image/*"
+                            name="avatar"
+                            randomizeFilename
+                            hidden
+                            storageRef={firebase.storage().ref("images")}
+                            onUploadSuccess={this.handleUploadSuccess}
+                        />
+                        </label>
+                        </div>
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
-                        <div className="profile-card-loc">                            
+                        <div className="profile-card-loc">
                             {cuil}
                             {cuilValidado}
                         </div>
+                        <label>
+                            Select your awesome avatar
+                        
+                        </label>
                         <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
                         <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
                         <div className="profile-card-loc">
@@ -521,6 +560,19 @@ class PerfilEmpleado extends React.Component {
                                 </span>
                             </div>
                         </div>
+                        {/*<div style={{margin: 20, height: 20}}>
+                        <label style={{backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer'}}>
+                        Subir CV
+                    <FileUploader
+                            accept="image/*"
+                            name="avatar"
+                            randomizeFilename
+                            hidden
+                            storageRef={firebase.storage().ref("CV")}
+                            onUploadSuccess={this.handleUploadSuccess}
+                        />
+                        </label>
+        </div>*/}
                         <div className="profile-card-desc">
                             <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
                                 {descripcionEmpleado}
