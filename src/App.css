@@ -328,7 +328,7 @@ ul {
   outline: none;
   cursor: pointer;
   height: 40px;
-  width: 100px;
+  width: 90px;
   background-color:  #3659a2;
   border-radius: 5px;
 }
@@ -337,15 +337,32 @@ ul {
   background-color: #eee; 
   color: #3659a2;
 }
+.duplicar-btn {
+  margin-top: 10px;
+  margin-left: 10px;
+  color: #eee;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  height: 40px;
+  width: 90px;
+  background-color:  #3659a2;
+  border-radius: 5px;
+}
+.duplicar-btn:hover {
+  cursor: pointer;
+  background-color: #eee; 
+  color: #3659a2;
+}
 .eliminar-btn {
-  margin-left:10px;
+  margin-left: 10px;
   margin-top: 10px;
   color: #eee;
   font-size: 15px;
   outline: none;
   cursor: pointer;
   height: 40px;
-  width: 100px;
+  width: 90px;
   background-color:  red;
   border-radius: 5px;
 }
@@ -467,7 +484,7 @@ ul {
   font-size: 15px;
 }
 .middle-library {
-  padding: 15px 30px;
+  padding: 15px 15px;
 }
 .desc {
   color: #b2bbbd;

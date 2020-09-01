@@ -353,9 +353,9 @@ export default class AgregarEvento extends React.Component {
                         {ciudadesMostrar}
                         <TextField id="direccion" required margin="dense" label="Dirección" type="direccion" fullWidth />
                         <TextField id="date" required label="Comienzo:" type="date" defaultValue={materialDateInput} />
-                        <TextField id="time" required type="time" defaultValue="00:00" label=" " />
+                        <TextField id="time" type="time" defaultValue="00:00" label=" " />
                         <br />
-                        <TextField id="date2" label="Terminación:" type="date" defaultValue={materialDateInput} />
+                        <TextField id="date2" required label="Terminación:" type="date" defaultValue={materialDateInput} />
                         <TextField id="time2" type="time" defaultValue="00:00" label=" " />
                         <Grid container
                             direction="row"
