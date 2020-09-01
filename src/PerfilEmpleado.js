@@ -488,10 +488,6 @@ class PerfilEmpleado extends React.Component {
                             {cuil}
                             {cuilValidado}
                         </div>
-                        <label>
-                            Select your awesome avatar
-                        
-                        </label>
                         <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
                         <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
                         <div className="profile-card-loc">
