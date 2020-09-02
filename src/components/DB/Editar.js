@@ -266,5 +266,18 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarTrabajo = (trabajo, rol, descripcion, pago, periodo, categoria) => {
+    db.collection("trabajos").doc(trabajo).update({
+      rol: rol,
+      descripcion: descripcion,
+      pago: pago,
+      periodo: periodo,
+      categoria: categoria,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
 }
 export default new Editar();

@@ -38,6 +38,7 @@ class EventoTarjeta extends React.Component {
             openDetalle: false,
             openTrabajo: false,
             openPerfil: false,
+            openCortina: false,
             openEliminarEvento: false,
             openDuplicarEvento: false,
             estadoEvento: this.props.estado,
@@ -93,8 +94,10 @@ class EventoTarjeta extends React.Component {
                     console.log("Error getting documents: ", error);
                 });
         }
-
+        this.setState({ openCortina: true });
         setTimeout(() => {
+            this.setState({ openCortina: false });
+            this.setState({ openTrabajo: true });
             this.setState({ trabajos: trab })
         }, 1000);
     }
@@ -107,8 +110,7 @@ class EventoTarjeta extends React.Component {
     handleCloseTrabajos = () => {
         this.setState({ openTrabajo: false });
     }
-    handleOpenTrabajos = () => {
-        this.setState({ openTrabajo: true });
+    handleOpenTrabajos = () => {        
         this.buscarTrabajos(this.state.eventoid);
     }
     handleClosePerfil = () => {
@@ -128,6 +130,9 @@ class EventoTarjeta extends React.Component {
     }
     handleOpenDuplicarEvento = () => {
         this.setState({ openDuplicarEvento: true });
+    }
+    actualizarTrabajos = () => {
+        this.props.actualizarEventosGeneral();        
     }
     actualizarEventos() {
         this.props.actualizarEventosGeneral();
@@ -252,7 +257,7 @@ class EventoTarjeta extends React.Component {
         }
         var trabajos = this.state.trabajos;
         var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} actualizarEventos={this.actualizarEventos} mostrarMensajeExito={this.mostrarMensajeExito} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzo={trabajo.data.dateComienzo} datefin={trabajo.data.dateFinaliza} timecomienzo={trabajo.data.timeComienzo} timefin={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo} />
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} actualizarEventos={this.actualizarEventos} actualizarTrabajos={this.actualizarTrabajos} mostrarMensajeExito={this.mostrarMensajeExito} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzo={trabajo.data.dateComienzo} datefin={trabajo.data.dateFinaliza} timecomienzo={trabajo.data.timeComienzo} timefin={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo} />
             ))}
         </div>
 
@@ -393,6 +398,12 @@ class EventoTarjeta extends React.Component {
                             Si
                          </Button>
                     </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openCortina}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
                 </Dialog>
             </div>
         );

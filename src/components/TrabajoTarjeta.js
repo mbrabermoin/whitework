@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import db from '../index';
 import EmpleadoDetalle from "./EmpleadoDetalle";
+import BotonEditarTrabajo from "./EditarTrabajo";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -60,6 +61,8 @@ class TrabajoTarjeta extends React.Component {
         }
         this.actualizarEventosPost = this.actualizarEventosPost.bind(this);
         this.mostrarMensajeExitoPost = this.mostrarMensajeExitoPost.bind(this);
+        this.mostrarMensajeExitoEdit = this.mostrarMensajeExitoEdit.bind(this);
+        this.actualizarTrabajos = this.actualizarTrabajos.bind(this);
     }
     buscarPostulados(trabajo) {
         var filtro = db.collection("postulaciones").where("id_trabajo", "==", trabajo)
@@ -348,6 +351,12 @@ class TrabajoTarjeta extends React.Component {
     mostrarMensajeExitoPost(mensaje, modo) {
         this.props.mostrarMensajeExito(mensaje, modo);
     }
+    mostrarMensajeExitoEdit(mensaje, modo) {
+        this.props.mostrarMensajeExito(mensaje, modo);
+    }
+    actualizarTrabajos() {
+        this.props.actualizarTrabajos();
+    }
     render() {
         var categoria = "";
         if (this.state.categoria !== "") {
@@ -408,11 +417,11 @@ class TrabajoTarjeta extends React.Component {
                 if (this.state.asignado !== "") {
                     botones = <div><button className='eliminartrabajo-btn' onClick={this.rechazarAlAsignado}>Rechazar Asignado</button>
                         <button className='editar-btn' onClick={this.handleOpenDetalleAsignado}>Ver Asignado</button>
-                        {/*<button className='editar-btn' onClick={this.editarTrabajo}>Editar</button>*/}
                     </div>
                 } else {
                     botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
-                        <button className='editar-btn' onClick="">Editar</button>
+                        {/*<button className='editar-btn' onClick="">Editar</button>*/}
+                        <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} actualizarTrabajosEdit={this.actualizarTrabajos} estado={this.state.estadoEvento} trabajo={this.state.trabajo}/>
                         <button className='editar-btn' onClick={this.duplicar}>Duplicar</button>
                     </div>
                 }
