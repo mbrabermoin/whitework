@@ -106,6 +106,8 @@ export default class AgregarEvento extends React.Component {
         }
         this.eliminarTrabajoAgregando = this.eliminarTrabajoAgregando.bind(this);
         this.duplicarTrabajoAgregando = this.duplicarTrabajoAgregando.bind(this);
+        this.editarTrabajoAgregando = this.editarTrabajoAgregando.bind(this);
+        this.mostrarMensajeExito = this.mostrarMensajeExito.bind(this);
     }
     handleCloseEvento = () => {
         this.setState({ openEvento: false });
@@ -295,8 +297,8 @@ export default class AgregarEvento extends React.Component {
         this.setState({ openCortina: true });
         var trabajos = [];
         trabajos = this.state.arrayTrabajos;
-        console.log(trabajo)
-        this.state.arrayTrabajos.splice(index, 0, trabajo);
+        const job = { rol: trabajo.rol, descripciontrab: trabajo.descripciontrab, pago: trabajo.pago, periodo: trabajo.periodo, categoria: trabajo.categoria };
+        this.state.arrayTrabajos.splice(index, 0, job);
         this.setState({ openLista: false });
         setTimeout(() => {
             this.setState({ arrayTrabajos: trabajos });
@@ -306,6 +308,25 @@ export default class AgregarEvento extends React.Component {
             this.setState({ openLista: true });
             this.setState({ openCortina: false });
         }, 300);
+    }
+    editarTrabajoAgregando(index, rol, descripciontrab, pago, periodo, categoria){
+        this.setState({ openCortina: true });
+        var trabajos = this.state.arrayTrabajos;
+        trabajos[index].rol = rol;
+        trabajos[index].descripciontrab = descripciontrab;
+        trabajos[index].pago = pago;
+        trabajos[index].periodo = periodo;
+        trabajos[index].categoria = categoria;
+        this.setState({ openLista: false });
+        setTimeout(() => {
+            this.setState({ arrayTrabajos: trabajos});
+            this.setState({ openTrabajo: false });
+            this.setState({ openLista: true });
+            this.setState({ openCortina: false });
+        }, 300);
+    }
+    mostrarMensajeExito(mensaje, modo) {
+        this.props.mostrarMensajeExito(mensaje, modo);
     }
     render() {
         var ciudadesMostrar = ""
@@ -321,7 +342,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
+                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
                 ))}
             </div>
         } else {

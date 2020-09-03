@@ -73,7 +73,7 @@ class EditarTrabajo extends React.Component {
             pago: "",
             periodoDisplay: "",
             categoriaDisplay: "",
-
+            trabajoObjeto: this.props.trabajoObjeto,
         }
     }
     handleCambiarPeriodo = name => event => {
@@ -108,16 +108,25 @@ class EditarTrabajo extends React.Component {
                 console.log(error);
                 alert("Ha ocurrido un error. Actualice la página.");
             });
-        }
-        setTimeout(() => {
-            this.setState({ rol: rol });
-            this.setState({ descripcion: descripcion });
-            this.setState({ pago: pago });
-            this.setState({ periodoDisplay: periodo });
-            this.setState({ categoriaDisplay: categoria });
+            setTimeout(() => {
+                this.setState({ rol: rol });
+                this.setState({ descripcion: descripcion });
+                this.setState({ pago: pago });
+                this.setState({ periodoDisplay: periodo });
+                this.setState({ categoriaDisplay: categoria });
+                this.setState({ openCortina: false });
+                this.setState({ openTrabajo: true });
+            }, 1100);
+        } else {
+            this.setState({ rol: this.state.trabajoObjeto.rol });
+            this.setState({ descripcion: this.state.trabajoObjeto.descripciontrab });
+            this.setState({ pago: this.state.trabajoObjeto.pago });
+            this.setState({ periodoDisplay: this.state.trabajoObjeto.periodo });
+            this.setState({ categoriaDisplay: this.state.trabajoObjeto.categoria });
             this.setState({ openCortina: false });
             this.setState({ openTrabajo: true });
-        }, 1100);
+        }
+
     };
     handleEditarTrabajo = () => {
         const rol = document.getElementById("rol").value;
@@ -136,16 +145,22 @@ class EditarTrabajo extends React.Component {
                     if (periodo.trim() === "") {
                         this.props.mostrarMensajeExitoEdit("Periodo es Requerido.", "error");
                     } else {
-                        this.setState({ openCortina: true });
                         const trabajoid = this.state.trabajoid;
                         const categoria = this.state.categoriaDisplay;
-                        Editar.modificarTrabajo(trabajoid, rol, descripciontrab, pago, periodo, categoria)
-                        setTimeout(() => {
-                            this.props.actualizarTrabajosEdit();
-                            this.props.mostrarMensajeExitoEdit("Trabajo Actualizado Correctamente.", "success");
+                        if (this.state.estado !== "agregando") {
+                            this.setState({ openCortina: true });
+                            Editar.modificarTrabajo(trabajoid, rol, descripciontrab, pago, periodo, categoria)
+                            setTimeout(() => {
+                                this.props.actualizarTrabajosEdit();
+                                this.props.mostrarMensajeExitoEdit("Trabajo Actualizado Correctamente.", "success");
+                                this.setState({ openCortina: false });
+                                this.setState({ openTrabajo: false });
+                            }, 1000);
+                        } else {
+                            this.props.editarEnAgregando(rol, descripciontrab, pago, periodo, categoria)
                             this.setState({ openCortina: false });
                             this.setState({ openTrabajo: false });
-                        }, 1000);
+                        }
                     }
                 }
             }

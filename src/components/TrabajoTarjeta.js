@@ -345,6 +345,9 @@ class TrabajoTarjeta extends React.Component {
     duplicarEnAgregando = () => {
         this.props.duplicarTrabajoAgregando(this.state.indexAgregando, this.state.trabajoAgregando)
     }
+    editarEnAgregando = (rol, descripciontrab, pago, periodo, categoria) => {
+        this.props.editarTrabajoAgregando(this.state.indexAgregando, rol, descripciontrab, pago, periodo, categoria)
+    }
     actualizarEventosPost() {
         this.props.actualizarEventos();
     }
@@ -421,7 +424,7 @@ class TrabajoTarjeta extends React.Component {
                 } else {
                     botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
                         {/*<button className='editar-btn' onClick="">Editar</button>*/}
-                        <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} actualizarTrabajosEdit={this.actualizarTrabajos} estado={this.state.estadoEvento} trabajo={this.state.trabajo}/>
+                        <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} actualizarTrabajosEdit={this.actualizarTrabajos} estado={this.state.estadoEvento} trabajo={this.state.trabajo} />
                         <button className='editar-btn' onClick={this.duplicar}>Duplicar</button>
                     </div>
                 }
@@ -469,7 +472,7 @@ class TrabajoTarjeta extends React.Component {
                                 } else {
                                     if (this.state.estadoEvento === "agregando") {
                                         botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarEnAgregando}>Eliminar</button>
-                                            <button className='editar-btn' onClick="">Editar</button>
+                                            <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} estado={this.state.estadoEvento} trabajoObjeto={this.state.trabajoAgregando} editarEnAgregando={this.editarEnAgregando}/>
                                             <button className='editar-btn' onClick={this.duplicarEnAgregando}>Duplicar</button>
                                         </div>
                                     }
