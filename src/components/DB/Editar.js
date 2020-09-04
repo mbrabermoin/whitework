@@ -74,7 +74,7 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }  
+  }
   modificarFacebookUsuario = (facebook, email) => {
     db.collection("usuarios").doc(email).update({
       facebook: facebook,
@@ -179,7 +179,7 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  desasignarEmpleadoAEvento = (evento, nuevaCantAsignados) =>   {
+  desasignarEmpleadoAEvento = (evento, nuevaCantAsignados) => {
     db.collection("eventos").doc(evento).update({
       cantAsignados: nuevaCantAsignados,
     }).then(() => {
@@ -191,12 +191,29 @@ class Editar extends React.Component {
   agregarPuntuadoEvento = (evento, cantPuntEvento) => {
     db.collection("eventos").doc(evento).update({
       cantPuntuados: cantPuntEvento + 1,
-  }).then(() => {
-    console.log("Modificado")
-  }).catch(() => {
-    console.log("error")
-  })
-}
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  editarEvento = (evento, nombre, descripcion, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza) => {
+    db.collection("eventos").doc(evento).update({
+      titulo: nombre,
+      descripcion: descripcion,
+      ciudad: ciudad,
+      provincia: provincia,
+      direccion: direccion,
+      dateComienzo: dateComienzo,
+      timeComienzo: timeComienzo,
+      dateFinaliza: dateFinaliza,
+      timeFinaliza: timeFinaliza,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   //Trabajos
   agregarPostulacionTrabajo = (trabajo, estado, cantPost) => {
     db.collection("trabajos").doc(trabajo).update({
@@ -226,7 +243,7 @@ class Editar extends React.Component {
     }).catch(() => {
       console.log("error")
     })
-  }    
+  }
   asignarTrabajador = (mailTrabajador, trabajo) => {
     db.collection("trabajos").doc(trabajo).update({
       mail_trabajador: mailTrabajador,
@@ -266,6 +283,18 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarHorariosTrabajo = (trabajo, dateComienzo, dateFinaliza, timeComienzo, timeFinaliza) => {
+    db.collection("trabajos").doc(trabajo).update({
+      dateComienzo: dateComienzo,
+      dateFinaliza: dateFinaliza,
+      timeComienzo: timeComienzo,
+      timeFinaliza: timeFinaliza,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   modificarTrabajo = (trabajo, rol, descripcion, pago, periodo, categoria) => {
     db.collection("trabajos").doc(trabajo).update({
       rol: rol,
@@ -279,5 +308,6 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+
 }
 export default new Editar();

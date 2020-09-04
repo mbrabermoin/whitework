@@ -187,7 +187,7 @@ export default class AgregarEvento extends React.Component {
                                                 Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
                                             }, t * 1100);
                                         }
-                                        this.props.mostrarMensajeExito("Trabajo Agregado Correctamente.", "success");
+                                        this.props.mostrarMensajeExito("Evento Agregado Correctamente.", "success");
                                         this.handleCloseEvento();
                                     }
                                 }

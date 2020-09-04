@@ -13,10 +13,16 @@ import db from '../index';
 import DueñoTarjeta from './DueñoTarjeta';
 import Eliminar from './DB/Eliminar';
 import Agregar from './DB/Agregar';
+import Editar from './DB/Editar';
+import * as provinciasjson from './JSONs/Provincias.json';
+import * as ciudadesjson from './JSONs/Ciudades.json';
+import { MenuItem } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
+const provincias = provinciasjson.default.states;
+const ciudades = ciudadesjson.default.cities;
 const dateNow = new Date();
 const year = dateNow.getFullYear();
 const monthWithOffset = dateNow.getUTCMonth() + 1;
@@ -61,6 +67,11 @@ class EventoTarjeta extends React.Component {
             cantAsignados: this.props.cantAsignados,
             trabajos: [],
             trabajosPostulados: this.props.trabajosPostulados,
+            provinciaDisplay: "",
+            ciudadDisplay: "",
+            ciudades: [],
+            provinciaNueva: "",
+            ciudadNueva: "",
         }
         this.actualizarEventos = this.actualizarEventos.bind(this);
         this.mostrarMensajeExito = this.mostrarMensajeExito.bind(this);
@@ -102,15 +113,30 @@ class EventoTarjeta extends React.Component {
         }, 1000);
     }
     handleCloseDetalle = () => {
+        this.setState({ provinciaDisplay: "" });
+        this.setState({ ciudadDisplay: "" });
+        this.setState({ ciudades: [] });
         this.setState({ openDetalle: false });
     };
     handleOpenDetalle = () => {
-        this.setState({ openDetalle: true });
+        if (this.state.modo === "empleador" && this.state.cantAsignados === 0 && this.state.estadoEvento === "pendiente") {
+            var provincia = provincias.filter(provincia => provincia.name === this.state.provincia);
+            this.setState({ provinciaDisplay: provincia[0].id });
+            this.setState({ provinciaNueva: provincia[0].name });
+            var cities = ciudades.filter(ciudad => ciudad.id_state === provincia[0].id || ciudad.id_state === 0);
+            this.setState({ ciudades: cities });
+            var ciudadObjeto = ciudades.filter(ciudad => ciudad.id_state === this.state.provinciaDisplay || ciudad.name === this.state.ciudad);
+            this.setState({ ciudadDisplay: ciudadObjeto[0].id });
+            this.setState({ ciudadNueva: ciudadObjeto[0].name });
+            this.setState({ openDetalle: true });
+        } else {
+            this.setState({ openDetalle: true });
+        }
     };
     handleCloseTrabajos = () => {
         this.setState({ openTrabajo: false });
     }
-    handleOpenTrabajos = () => {        
+    handleOpenTrabajos = () => {
         this.buscarTrabajos(this.state.eventoid);
     }
     handleClosePerfil = () => {
@@ -132,7 +158,7 @@ class EventoTarjeta extends React.Component {
         this.setState({ openDuplicarEvento: true });
     }
     actualizarTrabajos = () => {
-        this.props.actualizarEventosGeneral();        
+        this.props.actualizarEventosGeneral();
     }
     actualizarEventos() {
         this.props.actualizarEventosGeneral();
@@ -200,9 +226,6 @@ class EventoTarjeta extends React.Component {
                 this.props.mostrarMensajeExito("La fecha de Comiezo debe ser posterior a la actual.", "error");
             } else {
                 const nuevoEvento = Agregar.agregarEvento(this.state.titulo, this.state.descripcion, this.state.mailDueño, this.state.nombreDueño, this.state.provincia, this.state.ciudad, this.state.direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, this.state.cantTrabajos);
-                /*setTimeout(function () {
-                    Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
-                }, t * 1100);*/
                 var mailDueño = this.state.mailDueño;
                 db.collection("trabajos").where("id_evento", "==", this.state.eventoid).get()
                     .then(function (querySnapshot) {
@@ -230,9 +253,85 @@ class EventoTarjeta extends React.Component {
             }
         }
     }
+    handleCambiarProvincia = name => event => {
+        this.setState({ provinciaDisplay: event.target.value });
+        var provincia = provincias.filter(provincia => provincia.id === event.target.value);
+        this.setState({ provinciaNueva: provincia[0].name });
+        var cities = ciudades.filter(ciudad => ciudad.id_state === event.target.value || ciudad.id_state === 0);
+        this.setState({ ciudadNueva: "" });
+        this.setState({ ciudades: cities });
+    }
+    handleCambiarCiudad = name => event => {
+        this.setState({ ciudadDisplay: event.target.value });
+        var ciudad = ciudades.filter(city => city.id.toString() === event.target.value.toString());
+        this.setState({ ciudadNueva: ciudad[0].name })
+    }
+    handleEditarEvento = () => {
+        const nombre = document.getElementById("nombre").value;
+        if (nombre.trim() === "") {
+            this.props.mostrarMensajeExito("Nombre es necesario.", "error");
+        } else {
+            const descripcion = document.getElementById("descripcion").value;
+            if (descripcion.trim() === "") {
+                this.props.mostrarMensajeExito("Descripción es necesaria.", "error");
+            } else {
+                const provincia = this.state.provinciaNueva;
+                if (provincia.trim() === "") {
+                    this.props.mostrarMensajeExito("Provincia es necesaria.", "error");
+                } else {
+                    const ciudad = this.state.ciudadNueva;
+                    if (ciudad.trim() === "") {
+                        this.props.mostrarMensajeExito("Ciudad es necesaria.", "error");
+                    } else {
+                        const direccion = document.getElementById("direccion").value;
+                        if (direccion.trim() === "") {
+                            this.props.mostrarMensajeExito("Dirección es necesaria.", "error");
+                        } else {
+                            const dateComienzo = document.getElementById("date").value;
+                            const timeComienzo = document.getElementById("time").value;
+                            const dateFinaliza = document.getElementById("date2").value;
+                            const timeFinaliza = document.getElementById("time2").value;
+                            var fromDateConcat = dateComienzo.substr(0, 4) + "" + dateComienzo.substr(5, 2) + "" + dateComienzo.substr(8, 2) + "" + timeComienzo.substr(0, 2) + "" + timeComienzo.substr(3, 2);
+                            var toDateConcat = dateFinaliza.substr(0, 4) + "" + dateFinaliza.substr(5, 2) + "" + dateFinaliza.substr(8, 2) + "" + timeFinaliza.substr(0, 2) + "" + timeFinaliza.substr(3, 2);
+                            var dateTime = this.obtenerFechaActual();
+                            if (fromDateConcat >= toDateConcat) {
+                                this.props.mostrarMensajeExito("Fecha de Finalización debe ser posterior a la de Comienzo.", "error");
+                            } else {
+                                if (dateTime >= fromDateConcat) {
+                                    this.props.mostrarMensajeExito("La fecha de Comiezo debe ser posterior a la actual.", "error");
+                                } else {
+                                    if (this.state.cantTrabajos === 0) {
+                                        this.props.mostrarMensajeExito("Se necesita al menos un trabajo para crear el evento.", "error");
+                                    } else {
+                                        var evento = this.state.eventoid;
+                                        this.setState({ openCortina: true });
+                                        Editar.editarEvento(evento, nombre, descripcion, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza);
+                                        var filtro = db.collection("trabajos").where("id_evento", "==", this.state.eventoid)
+                                        filtro.onSnapshot((snapShots) => {
+                                            snapShots.docs.map(doc => {
+                                                return Editar.modificarHorariosTrabajo(doc.id, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza);
+                                            })
+                                        }, error => {
+                                            console.log(error)
+                                        });
+                                        setTimeout(() => {
+                                            this.props.mostrarMensajeExito("Evento Modificado Correctamente.", "success");
+                                            this.props.actualizarEventosGeneral();
+                                            this.setState({ openDetalle: false });
+                                            this.setState({ openCortina: false });
+                                        }, 1000);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     render() {
-        var fechas = this.state.datecomienzo + " - " + this.state.timecomienzo;
-        var horarios = this.state.datefin + " - " + this.state.timefin;
+        var inicioDateTime = this.state.datecomienzo + " - " + this.state.timecomienzo;
+        var finDateTime = this.state.datefin + " - " + this.state.timefin;
         var dueño = "";
         if (this.state.modo === "empleado") {
             dueño = <div>
@@ -260,15 +359,59 @@ class EventoTarjeta extends React.Component {
             {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} actualizarEventos={this.actualizarEventos} actualizarTrabajos={this.actualizarTrabajos} mostrarMensajeExito={this.mostrarMensajeExito} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzo={trabajo.data.dateComienzo} datefin={trabajo.data.dateFinaliza} timecomienzo={trabajo.data.timeComienzo} timefin={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo} />
             ))}
         </div>
+        var ciudadesMostrar = ""
+        if (this.state.provinciaDisplay === "") {
+            ciudadesMostrar = <TextField id="ciudad2" disabled required SelectProps={{ native: true, }} onChange="" label="Ciudad" fullWidth>
 
+            </TextField>
+        } else {
+            ciudadesMostrar = <TextField id="ciudad" select required SelectProps={{ native: true, }} value={this.state.ciudadDisplay} onChange={this.handleCambiarCiudad('ciudadDisplay')} label="Ciudad" fullWidth>
+                {this.state.ciudades.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+            </TextField>
+        }
+        var botonGuardarEvento = "";
+        var camposDelEvento = "";
+        var tituloEventoDisplay = "";
+        if (this.state.modo === "empleador" && this.state.cantAsignados === 0 && this.state.estadoEvento === "pendiente") {
+            botonGuardarEvento = <Button onClick={this.handleEditarEvento} color="primary">
+                GUARDAR
+        </Button>;
+            tituloEventoDisplay = ""
+            camposDelEvento = <div>
+                <TextField id="nombre" margin="dense" label="Nombre del evento" type="descripcion" defaultValue={this.state.titulo} fullWidth />
+                <TextField id="descripcion" margin="dense" label="Descripción" type="descripcion" defaultValue={this.state.descripcion} fullWidth />
+                <TextField id="provincia" select required value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" fullWidth>
+                    {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
+                </TextField>
+                {ciudadesMostrar}
+                <TextField id="direccion" required margin="dense" label="Dirección" defaultValue={this.state.direccion} type="direccion" fullWidth />
+                <TextField id="date" required label="Comienzo:" type="date" defaultValue={this.state.datecomienzo} />
+                <TextField id="time" type="time" defaultValue={this.state.timecomienzo} label=" " />
+                <br />
+                <TextField id="date2" required label="Terminación:" type="date" defaultValue={this.state.datefin} />
+                <TextField id="time2" type="time" defaultValue={this.state.timefin} label=" " />
+            </div>
+        } else {
+            tituloEventoDisplay = <DialogContentText>
+                {this.state.titulo}
+            </DialogContentText>
+            camposDelEvento = <div>
+                <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
+                <TextField id="provincia" margin="dense" disabled label="Provincia" type="provincia" value={this.state.provincia} fullWidth />
+                <TextField id="ciudad" margin="dense" disabled label="Ciudad" type="ciudad" value={this.state.ciudad} fullWidth />
+                <TextField id="direccion" margin="dense" disabled label="Dirección" type="direccion" value={this.state.direccion} fullWidth />
+                <TextField id="comienza" margin="dense" disabled label="Comienza" type="" value={inicioDateTime} fullWidth />
+                <TextField id="finaliza" margin="dense" disabled label="Finaliza" type="" value={finDateTime} fullWidth />
+            </div>
+        }
         return (
             <div>
                 <div className='card'>
                     <div className='top-library'>
                         <i className="fas fa-book-open book">{this.state.titulo}</i>
+                        <i className="fas fa-book-open book">{this.state.cantAsignados}/{this.state.cantTrabajos}</i>
                     </div>
                     <div className='middle-library'>
-                        <p className='type'>{this.state.tiempo}</p>
                         <h3 className='job-name'>{this.state.provincia} - {this.state.ciudad}</h3>
                         <p className='desc'>{this.state.descripcion}</p>
                         <button className='resume-btn' onClick={this.handleOpenDetalle}>Ver Detalle</button>
@@ -286,15 +429,8 @@ class EventoTarjeta extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Detalle del Evento</DialogTitle>
                     <DialogContent dividers>
-                        <DialogContentText>
-                            {this.state.titulo}
-                        </DialogContentText>
-                        <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
-                        <TextField id="comienza" margin="dense" disabled label="Comienza" type="" value={fechas} fullWidth />
-                        <TextField id="finaliza" margin="dense" disabled label="Finaliza" type="" value={horarios} fullWidth />
-                        <TextField id="provincia" margin="dense" disabled label="Provincia" type="provincia" value={this.state.provincia} fullWidth />
-                        <TextField id="ciudad" margin="dense" disabled label="Ciudad" type="ciudad" value={this.state.ciudad} fullWidth />
-                        <TextField id="direccion" margin="dense" disabled label="Dirección" type="direccion" value={this.state.direccion} fullWidth />
+                        {tituloEventoDisplay}
+                        {camposDelEvento}
                         <Grid container
                             direction="row"
                             justify="center"
@@ -308,9 +444,10 @@ class EventoTarjeta extends React.Component {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleCloseDetalle} color="primary">
+                        <Button onClick={this.handleCloseDetalle} color="secondary">
                             CERRAR
                          </Button>
+                        {botonGuardarEvento}
                     </DialogActions>
                 </Dialog>
                 {/*Modal Trabajos*/}
