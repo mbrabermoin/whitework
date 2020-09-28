@@ -680,3 +680,34 @@ ul {
 margin-left: 650px;
 margin-top: -35px;
 }
+.task-list{
+  padding: 50px;
+  list-style: none;
+}
+.tarjeta {
+  height: 125px;
+  width: 850px;
+  align-items: center;
+  background: #fff;
+  position: relative;
+  overflow-x: hidden;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  margin-left: 200px;
+  box-sizing: border-box;
+}
+.foto-trabajo {
+  width: 70px;
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute;
+  z-index: 10;
+  left: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.content-tarea{
+  margin-top: 30px;
+}

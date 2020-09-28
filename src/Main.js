@@ -98,7 +98,7 @@ class Main extends React.Component {
                     <ul className="left-ui">
                         <li><img className='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
                         <li className='home'>WHITEWORK</li>
-                        <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Empleado</li>
+                        <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Prestador</li>
                         <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
                     <ul className='right-ui nombre-usuario'>
