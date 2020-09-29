@@ -53,8 +53,8 @@ ul {
 }
 
 .logo {
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
   padding-top: 5px;
 }
 
@@ -710,4 +710,14 @@ margin-top: -35px;
 }
 .content-tarea{
   margin-top: 30px;
+}
+#logo{
+  padding-top: 5px;
+}
+.headers-main{
+  position: relative;
+  top: -15px;
+}
+#foto-institucional{
+margin-top: 25px;
 }

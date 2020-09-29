@@ -1,5 +1,10 @@
 import React from 'react';
-
+import aceptar from "../../logos/aceptar-evento.png";
+import crear from "../../logos/crear-evento.png";
+import buscar from "../../logos/buscar-evento.png";
+import valorar from "../../logos/valorar-trabajo.png";
+import esperar from "../../logos/esperar.png";
+import ww from "../../logos/ww.png";
 class SiteScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +44,7 @@ class SiteScreen extends React.Component {
     var display = "";
     var tareas = "";
     if (this.state.display === "main") {
-      display = <div>
+      display = <div id="foto-institucional">
         <img alt="trabajadores" src="https://controlpublicidad.com/uploads/2019/09/empleados-contentos-120254.jpg"></img>
       </div>
     } else {
@@ -48,7 +53,7 @@ class SiteScreen extends React.Component {
           <ul className="task-list" id="empleado-tareas">
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={buscar} alt="persona" />
                 <div className="content-tarea">
                   <h2>1. Buscar Trabajo</h2>
                   <h3>Podras buscar el trabajo al que deseas postularte.</h3>
@@ -57,7 +62,7 @@ class SiteScreen extends React.Component {
             </li>
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={esperar} alt="persona" />
                 <div className="content-tarea">
                   <h2>2. Esperar aceptación</h2>
                   <h3>Momento de esperar a que tu postulación sea aceptada.</h3>
@@ -66,7 +71,7 @@ class SiteScreen extends React.Component {
             </li>
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={valorar} alt="persona" />
                 <div className="content-tarea">
                   <h2>3. Puntuar a tu empleador</h2>
                   <h3>Podras colocar puntuación sobre el  trato recibido por tu empleador.</h3>
@@ -80,7 +85,7 @@ class SiteScreen extends React.Component {
           <ul className="task-list" id="empleador-tareas">
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={crear} alt="persona" />
                 <div className="content-tarea">
                   <h2>1. Crear Evento</h2>
                   <h3>Definir fecha, trabajo y pagos.</h3>
@@ -89,7 +94,7 @@ class SiteScreen extends React.Component {
             </li>
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={esperar} alt="persona" />
                 <div className="content-tarea">
                   <h2>2. Esperar postulantes</h2>
                   <h3>Momento de esperar a quienes quieran colaborar en tus eventos.</h3>
@@ -98,7 +103,7 @@ class SiteScreen extends React.Component {
             </li>
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={aceptar} alt="persona" />
                 <div className="content-tarea">
                   <h2>3. Aceptar postulantes</h2>
                   <h3>Aceptar o rechazar a los postulantes.</h3>
@@ -107,7 +112,7 @@ class SiteScreen extends React.Component {
             </li>
             <li>
               <div className="tarjeta">
-                <img className="foto-trabajo" src="https://f1.pngfuel.com/png/1008/352/43/circle-silhouette-user-user-profile-user-interface-login-user-account-avatar-data-png-clip-art.png" alt="persona" />
+                <img className="foto-trabajo" src={valorar} alt="persona" />
                 <div className="content-tarea">
                   <h2>4. Puntuar </h2>
                   <h3>Una vez que el trabajo se ha consumado, podras puntuar al trabajador.</h3>
@@ -122,11 +127,11 @@ class SiteScreen extends React.Component {
       <div className="App">
         <nav className='navbar'>
           <ul className="left-ui">
-            <li><img className='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
-            <li className='home' onClick={this.mostrarMain}>WHITEWORK</li>
-            <li id="paginaPrincipal-li" onClick={this.mostrarMain}>Pagina Principal</li>
-            <li id="prestadores-li" onClick={this.mostrarTareasEmpleado}>Prestadores</li>
-            <li id="usuarios-li" onClick={this.mostrarTareasEmpleador}>Empleador</li>
+            <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
+            <li className='home headers-main' onClick={this.mostrarMain}>WHITEWORK</li>
+            <li id="paginaPrincipal-li" className="headers-main" onClick={this.mostrarMain}>Pagina Principal</li>
+            <li id="prestadores-li" className="headers-main" onClick={this.mostrarTareasEmpleado}>Modo Prestador</li>
+            <li id="usuarios-li" className="headers-main" onClick={this.mostrarTareasEmpleador}>Modo Empleador</li>
             {/*<li id="quienessomos-li" onClick="">¿Quienes Somos?</li>*/}
 
           </ul>
