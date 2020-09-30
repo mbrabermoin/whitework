@@ -8,6 +8,7 @@ import { auth } from "./firebase";
 import db from "./index";
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
+import ww from './logos/ww.png';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -91,15 +92,15 @@ class Main extends React.Component {
             } else {
                 screen = <ModoEmpleador usuario={this.state.usuario} />
             }
-        }        
+        }
         return (
             <div className="App">
                 <nav className='navbar'>
                     <ul className="left-ui">
-                        <li><img className='logo' alt="log" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331813/treehouse.svg" /></li>
-                        <li className='home'>WHITEWORK</li>
-                        <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Empleado</li>
-                        <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
+                        <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
+                        <li className='home headers-main'>WHITEWORK</li>
+                        <li id="empleado-li" className="headers-main" onClick={this.abrirEmpleado}>Modo Prestador</li>
+                        <li id="empleador-li" className="headers-main" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
                     <ul className='right-ui nombre-usuario'>
                         <li className='points' id="profileTitle" onClick={this.abrirPerfil}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
