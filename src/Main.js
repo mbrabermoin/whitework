@@ -8,7 +8,7 @@ import { auth } from "./firebase";
 import db from "./index";
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
-import ww from './logos/whiteWork.png';
+import wwsp from './logos/wwsp.png';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -97,7 +97,7 @@ class Main extends React.Component {
             <div className="App">
                 <nav className='navbar'>
                     <ul className="left-ui">
-                        <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
+                        <li><div id="logo"><img className='logo' alt="log" src={wwsp} /></div></li>
                         <li className='home headers-main'>WHITEWORK</li>
                         <li id="empleado-li" className="headers-main" onClick={this.abrirEmpleado}>Modo Prestador</li>
                         <li id="empleador-li" className="headers-main" onClick={this.abrirEmpleador}>Modo Empleador</li>

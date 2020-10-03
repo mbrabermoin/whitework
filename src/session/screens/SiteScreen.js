@@ -4,7 +4,7 @@ import crear from "../../logos/crear-evento.png";
 import buscar from "../../logos/buscar-evento.png";
 import valorar from "../../logos/valorar-trabajo.png";
 import esperar from "../../logos/esperar.png";
-import ww from '../../logos/whiteWork.png';
+import ww from '../../logos/wwsp.png';
 class SiteScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -13,28 +13,28 @@ class SiteScreen extends React.Component {
     }
   }
   componentDidMount() {
-    document.getElementById("paginaPrincipal-li").style.color = "#eeeeee";
+    // document.getElementById("paginaPrincipal-li").style.color = "#eeeeee";
     document.getElementById("usuarios-li").style.color = "#b2bbbd";
     document.getElementById("prestadores-li").style.color = "#b2bbbd";
     //document.getElementById("quienessomos-li").style.display = "#b2bbbd";
     this.setState({ display: "main" });
   }
   mostrarMain = () => {
-    document.getElementById("paginaPrincipal-li").style.color = "#eeeeee";
+    // document.getElementById("paginaPrincipal-li").style.color = "#eeeeee";
     document.getElementById("usuarios-li").style.color = "#b2bbbd";
     document.getElementById("prestadores-li").style.color = "#b2bbbd";
     //document.getElementById("quienessomos-li").style.display = "#b2bbbd";
     this.setState({ display: "main" });
   }
   mostrarTareasEmpleado = () => {
-    document.getElementById("paginaPrincipal-li").style.color = "#b2bbbd";
+    // document.getElementById("paginaPrincipal-li").style.color = "#b2bbbd";
     document.getElementById("usuarios-li").style.color = "#b2bbbd";
     document.getElementById("prestadores-li").style.color = "#eeeeee";
     //document.getElementById("quienessomos-li").style.display = "#b2bbbd";
     this.setState({ display: "empleado" });
   }
   mostrarTareasEmpleador = () => {
-    document.getElementById("paginaPrincipal-li").style.color = "#b2bbbd";
+    // document.getElementById("paginaPrincipal-li").style.color = "#b2bbbd";
     document.getElementById("usuarios-li").style.color = "#eeeeee";
     document.getElementById("prestadores-li").style.color = "#b2bbbd";
     //document.getElementById("quienessomos-li").style.display = "#b2bbbd";
@@ -129,7 +129,7 @@ class SiteScreen extends React.Component {
           <ul className="left-ui">
             <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
             <li className='home headers-main' onClick={this.mostrarMain}>WHITEWORK</li>
-            <li id="paginaPrincipal-li" className="headers-main" onClick={this.mostrarMain}>Pagina Principal</li>
+            {/* <li id="paginaPrincipal-li" className="headers-main" onClick={this.mostrarMain}>Pagina Principal</li> */}
             <li id="prestadores-li" className="headers-main" onClick={this.mostrarTareasEmpleado}>Modo Prestador</li>
             <li id="usuarios-li" className="headers-main" onClick={this.mostrarTareasEmpleador}>Modo Empleador</li>
             {/*<li id="quienessomos-li" onClick="">¿Quienes Somos?</li>*/}
