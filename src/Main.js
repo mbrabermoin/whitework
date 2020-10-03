@@ -8,7 +8,7 @@ import { auth } from "./firebase";
 import db from "./index";
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
-import ww from './logos/ww.png';
+import ww from './logos/whiteWork.png';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });

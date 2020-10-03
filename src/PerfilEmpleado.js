@@ -525,7 +525,7 @@ class PerfilEmpleado extends React.Component {
                             </div>
                             <div className="profile-card-inf__item">
                                 <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                                <div className="profile-card-inf__txt">Puntuajes de Empleados</div>
+                                <div className="profile-card-inf__txt">Puntajes de Empleados</div>
                             </div>
                             <div className="profile-card-inf__item">
                                 <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
