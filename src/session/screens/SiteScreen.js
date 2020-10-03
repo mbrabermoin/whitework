@@ -4,7 +4,7 @@ import crear from "../../logos/crear-evento.png";
 import buscar from "../../logos/buscar-evento.png";
 import valorar from "../../logos/valorar-trabajo.png";
 import esperar from "../../logos/esperar.png";
-import ww from "../../logos/ww.png";
+import ww from '../../logos/whiteWork.png';
 class SiteScreen extends React.Component {
   constructor(props) {
     super(props);
