@@ -48,7 +48,7 @@ class Agregar extends React.Component {
         })
         return ("E" + idHora + "" + mail_dueño_evento);
     }
-    agregarTrabajo = (nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, timecomienzotrab, datefintrab, timefintrab, pago, periodo, categoria) => {
+    agregarTrabajo = (nuevoEvento, mail_dueño_evento, rolT, descripciontrab, datecomienzotrab, timecomienzotrab, datefintrab, timefintrab, metodopago, pago, periodo, categoria) => {
         var idHora = this.obtenerId();
         db.collection("trabajos").doc("T" + idHora + "" + mail_dueño_evento).set({
             id_trabajo:"T" + idHora + "" + mail_dueño_evento,
@@ -59,6 +59,7 @@ class Agregar extends React.Component {
             dateFinaliza: datefintrab,
             timeComienzo: timecomienzotrab,
             timeFinaliza: timefintrab,
+            metodopago: metodopago,
             pago: pago,
             periodo: periodo,
             estado: "pendiente",

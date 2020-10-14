@@ -1,0 +1,47 @@
+[debug] [2020-10-07T20:08:36.837Z] ----------------------------------------------------------------------
+[debug] [2020-10-07T20:08:36.845Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matias\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js ext:install firestore-send-email --project=changapp-1ef52
+[debug] [2020-10-07T20:08:36.847Z] CLI Version:   8.2.0
+[debug] [2020-10-07T20:08:36.847Z] Platform:      win32
+[debug] [2020-10-07T20:08:36.847Z] Node Version:  v10.15.1
+[debug] [2020-10-07T20:08:36.852Z] Time:          Wed Oct 07 2020 17:08:36 GMT-0300 (GMT-03:00)
+[debug] [2020-10-07T20:08:36.853Z] ----------------------------------------------------------------------
+[debug] [2020-10-07T20:08:36.853Z] 
+[debug] [2020-10-07T20:08:37.019Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-10-07T20:08:37.020Z] > authorizing via signed-in user
+[debug] [2020-10-07T20:08:37.023Z] [iam] checking project changapp-1ef52 for permissions ["firebase.projects.get","firebasemods.instances.create"]
+[debug] [2020-10-07T20:08:37.025Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-10-07T20:08:37.026Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-10-07T20:08:37.267Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Wed, 07 Oct 2020 20:08:35 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-07T20:08:37.431Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/changapp-1ef52:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasemods.instances.create"]}
+[debug] [2020-10-07T20:08:38.645Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:37 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=913","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled...
+[debug] [2020-10-07T20:08:38.680Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/changapp-1ef52/services/firebaseextensions.googleapis.com  
+ 
+[debug] [2020-10-07T20:08:39.935Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:38 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[warn] !  extensions: missing required API firebaseextensions.googleapis.com. Enabling now...
+[debug] [2020-10-07T20:08:39.938Z] >>> HTTP REQUEST POST https://serviceusage.googleapis.com/v1/projects/changapp-1ef52/services/firebaseextensions.googleapis.com:enable  
+ 
+[debug] [2020-10-07T20:08:42.332Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:40 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-07T20:08:52.339Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/changapp-1ef52/services/firebaseextensions.googleapis.com  
+ 
+[debug] [2020-10-07T20:08:53.600Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:52 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] +  extensions: required API firebaseextensions.googleapis.com is enabled
+[debug] [2020-10-07T20:08:53.610Z] >>> HTTP REQUEST GET https://extensions-registry.firebaseapp.com/extensions.json  
+ 
+[debug] [2020-10-07T20:08:54.420Z] <<< HTTP RESPONSE 200 {"connection":"keep-alive","content-length":"15044","access-control-allow-origin":"*","cache-control":"max-age=3600","content-type":"application/json","etag":"\"b0465f127222c9666590eec4032918227bb151b481e2159f9596aa6fa032bf8b\"","last-modified":"Fri, 02 Oct 2020 18:45:49 GMT","strict-transport-security":"max-age=31556926; includeSubDomains; preload","accept-ranges":"bytes","date":"Wed, 07 Oct 2020 20:08:52 GMT","x-served-by":"cache-eze19323-EZE","x-cache":"MISS","x-cache-hits":"0","x-timer":"S1602101332.403836,VS0,VE400","vary":"x-fh-requested-host, accept-encoding"}
+[debug] [2020-10-07T20:08:54.423Z] >>> HTTP REQUEST GET https://firebaseextensions.googleapis.com/v1beta/projects/firebasemods/sources/b64b8911-8da0-4f8b-bcb0-dab55fa84afd  
+ 
+[debug] [2020-10-07T20:08:55.867Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:54 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-07T20:08:55.875Z] >>> HTTP REQUEST GET https://cloudbilling.googleapis.com/v1/projects/changapp-1ef52/billingInfo  
+ 
+[debug] [2020-10-07T20:08:56.973Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:55 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-07T20:08:56.975Z] >>> HTTP REQUEST GET https://cloudbilling.googleapis.com/v1/billingAccounts  
+ 
+[debug] [2020-10-07T20:08:58.203Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 07 Oct 2020 20:08:56 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] The extension Trigger Email requires your project to be upgraded to the Blaze plan. Please visit the following link to add a billing account:
+[info] 
+[info] https://console.cloud.google.com/billing/linkedaccount?project=changapp-1ef52
+[info] 

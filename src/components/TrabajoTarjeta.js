@@ -37,6 +37,7 @@ class TrabajoTarjeta extends React.Component {
             trabajo: this.props.trabajo,
             descripcion: this.props.descripcion,
             cantTrabajos: this.props.cantTrabajos,
+            metodopago: this.props.metodopago,
             pago: this.props.pago,
             periodo: this.props.periodo,
             categoria: this.props.categoria,
@@ -99,11 +100,12 @@ class TrabajoTarjeta extends React.Component {
         var timeComienzo = this.state.timeComienzo;
         var dateFinaliza = this.state.dateFinaliza;
         var timeFinaliza = this.state.timeFinaliza;
+        var metodopago = this.state.metodopago;
         var pago = this.state.pago;
         var periodo = this.state.periodo;
         var categoria = this.state.categoria;
         var cantTrabajos = this.state.cantTrabajos;
-        Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
+        Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago, pago, periodo, categoria);
         Editar.sumarTrabajo(evento, cantTrabajos);
         setTimeout(() => {
             this.props.mostrarMensajeExito("Trabajo Duplicado Correctamente.", "success");
@@ -345,8 +347,8 @@ class TrabajoTarjeta extends React.Component {
     duplicarEnAgregando = () => {
         this.props.duplicarTrabajoAgregando(this.state.indexAgregando, this.state.trabajoAgregando)
     }
-    editarEnAgregando = (rol, descripciontrab, pago, periodo, categoria) => {
-        this.props.editarTrabajoAgregando(this.state.indexAgregando, rol, descripciontrab, pago, periodo, categoria)
+    editarEnAgregando = (rol, descripciontrab, metodopago, pago, periodo, categoria) => {
+        this.props.editarTrabajoAgregando(this.state.indexAgregando, rol, descripciontrab, metodopago, pago, periodo, categoria)
     }
     actualizarEventosPost() {
         this.props.actualizarEventos();
@@ -526,8 +528,8 @@ class TrabajoTarjeta extends React.Component {
                         </div>
                         <h3>{this.props.descripcion}</h3>
                         {/*<h3>Comienza: {this.state.datecomienzotrab} - {this.state.timecomienzotrab}   Finaliza: {this.state.datefintrab} - {this.state.timefintrab}</h3>*/}
-                        <p className="esp text-react">{this.state.pago}$ por {this.state.periodo}</p>
-                    </div>
+                        <p className="esp text-react">{this.state.pago}$ por {this.state.periodo} - Metodo de Pago: {this.state.metodopago}</p>
+                      </div>
                 </div>
                 <Dialog
                     open={this.state.openPostulados}

@@ -30,6 +30,24 @@ const periodos = [
         label: 'Total',
     },
 ];
+const metodopago = [
+    {
+        value: 'A Definir',
+        label: 'A Definir',
+    },
+    {
+        value: 'Efectivo',
+        label: 'Efectivo',
+    },
+    {
+        value: 'Transferencia',
+        label: 'Transferencia',
+    },
+    {
+        value: 'MercadoPago',
+        label: 'MercadoPago',
+    },
+];
 const categorias = [
     {
         value: '',
@@ -71,10 +89,14 @@ class EditarTrabajo extends React.Component {
             rol: "",
             descripcion: "",
             pago: "",
+            metodopagoDisplay: "",
             periodoDisplay: "",
             categoriaDisplay: "",
             trabajoObjeto: this.props.trabajoObjeto,
         }
+    }
+    handleCambiarMetodopago = name => event => {
+        this.setState({ metodopagoDisplay: event.target.value });
     }
     handleCambiarPeriodo = name => event => {
         this.setState({ periodoDisplay: event.target.value });
@@ -92,11 +114,13 @@ class EditarTrabajo extends React.Component {
         var pago = "";
         var periodo = "";
         var categoria = "";
+        var metodopago = "";
         if (this.state.estado !== "agregando") {
             db.collection("trabajos").doc(this.state.trabajoid).get().then(function (doc) {
                 if (doc.exists) {
                     rol = doc.data().rol;
                     descripcion = doc.data().descripcion;
+                    metodopago = doc.data().metodopago;
                     pago = doc.data().pago;
                     periodo = doc.data().periodo;
                     categoria = doc.data().categoria;
@@ -112,6 +136,11 @@ class EditarTrabajo extends React.Component {
                 this.setState({ rol: rol });
                 this.setState({ descripcion: descripcion });
                 this.setState({ pago: pago });
+                if (metodopago === "" || metodopago === undefined) {
+                    this.setState({ metodopagoDisplay: 'A Definir' });
+                } else {
+                    this.setState({ metodopagoDisplay: metodopago });
+                }
                 this.setState({ periodoDisplay: periodo });
                 this.setState({ categoriaDisplay: categoria });
                 this.setState({ openCortina: false });
@@ -121,6 +150,7 @@ class EditarTrabajo extends React.Component {
             this.setState({ rol: this.state.trabajoObjeto.rol });
             this.setState({ descripcion: this.state.trabajoObjeto.descripciontrab });
             this.setState({ pago: this.state.trabajoObjeto.pago });
+            this.setState({ metodopagoDisplay: this.state.trabajoObjeto.metodopago });
             this.setState({ periodoDisplay: this.state.trabajoObjeto.periodo });
             this.setState({ categoriaDisplay: this.state.trabajoObjeto.categoria });
             this.setState({ openCortina: false });
@@ -146,10 +176,11 @@ class EditarTrabajo extends React.Component {
                         this.props.mostrarMensajeExitoEdit("Periodo es Requerido.", "error");
                     } else {
                         const trabajoid = this.state.trabajoid;
+                        const metodopago = this.state.metodopagoDisplay;
                         const categoria = this.state.categoriaDisplay;
                         if (this.state.estado !== "agregando") {
                             this.setState({ openCortina: true });
-                            Editar.modificarTrabajo(trabajoid, rol, descripciontrab, pago, periodo, categoria)
+                            Editar.modificarTrabajo(trabajoid, rol, descripciontrab, metodopago, pago, periodo, categoria)
                             setTimeout(() => {
                                 this.props.actualizarTrabajosEdit();
                                 this.props.mostrarMensajeExitoEdit("Trabajo Actualizado Correctamente.", "success");
@@ -157,7 +188,7 @@ class EditarTrabajo extends React.Component {
                                 this.setState({ openTrabajo: false });
                             }, 1000);
                         } else {
-                            this.props.editarEnAgregando(rol, descripciontrab, pago, periodo, categoria)
+                            this.props.editarEnAgregando(rol, descripciontrab, metodopago, pago, periodo, categoria)
                             this.setState({ openCortina: false });
                             this.setState({ openTrabajo: false });
                         }
@@ -181,6 +212,9 @@ class EditarTrabajo extends React.Component {
                     <DialogContent dividers>
                         <TextField id="rol" required autoFocus margin="dense" defaultValue={this.state.rol} label="Rol del trabajador" type="rol" fullWidth />
                         <TextField id="descripcion-trab" required multiline rows="2" defaultValue={this.state.descripcion} margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
+                        <TextField id="metodopago" select required margin="dense" defaultValue={this.state.metodopagoDisplay} value={this.state.metodopagoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarMetodopago('metodopagoDisplay')} label="Metodo de Pago" fullWidth>
+                            {metodopago.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
+                        </TextField>
                         <TextField id="pago" required margin="dense" defaultValue={this.state.pago} label="Pago" type="number" fullWidth />
                         <TextField id="periodo" select required margin="dense" defaultValue={this.state.periodoDisplay} value={this.state.periodoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo de Pago" fullWidth>
                             {periodos.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}

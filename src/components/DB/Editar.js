@@ -295,10 +295,11 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
-  modificarTrabajo = (trabajo, rol, descripcion, pago, periodo, categoria) => {
+  modificarTrabajo = (trabajo, rol, descripcion, metodopago, pago, periodo, categoria) => {
     db.collection("trabajos").doc(trabajo).update({
       rol: rol,
       descripcion: descripcion,
+      metodopago: metodopago,
       pago: pago,
       periodo: periodo,
       categoria: categoria,

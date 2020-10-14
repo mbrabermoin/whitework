@@ -37,6 +37,24 @@ const periodos = [
         label: 'Total',
     },
 ];
+const metodopago = [
+    {
+        value: 'A Definir',
+        label: 'A Definir',
+    },
+    {
+        value: 'Efectivo',
+        label: 'Efectivo',
+    },
+    {
+        value: 'Transferencia',
+        label: 'Transferencia',
+    },
+    {
+        value: 'MercadoPago',
+        label: 'MercadoPago',
+    },
+];
 const categorias = [
     {
         value: '',
@@ -98,6 +116,7 @@ export default class AgregarEvento extends React.Component {
             horaFinalizacion: "",
             cantTrabajos: 0,
             periodoDisplay: "Hora",
+            metodopagoDisplay: "A Definir",
             categoriaDisplay: "",
             provinciaDisplay: "",
             ciudadDisplay: "",
@@ -134,6 +153,7 @@ export default class AgregarEvento extends React.Component {
     handleOpenTrabajo = () => {
         this.setState({ openTrabajo: true });
         this.setState({ periodoDisplay: "Hora" });
+        this.setState({ metodopagoDisplay: "A Definir" });
         this.setState({ categoriaDisplay: "" });
     };
     handleAgregarEvento = () => {
@@ -181,10 +201,11 @@ export default class AgregarEvento extends React.Component {
                                             const rolT = this.state.arrayTrabajos[t].rol;
                                             const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
                                             const pago = this.state.arrayTrabajos[t].pago;
+                                            const metodopago = this.state.arrayTrabajos[t].metodopago;
                                             const periodo = this.state.arrayTrabajos[t].periodo;
                                             const categoria = this.state.arrayTrabajos[t].categoria;
                                             setTimeout(function () {
-                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, pago, periodo, categoria);
+                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago, pago, periodo, categoria);
                                             }, t * 1100);
                                         }
                                         this.props.mostrarMensajeExito("Evento Agregado Correctamente.", "success");
@@ -246,8 +267,9 @@ export default class AgregarEvento extends React.Component {
                     if (periodo.trim() === "") {
                         this.props.mostrarMensajeExito("Periodo es Requerido.", "error");
                     } else {
+                        const metodopago = this.state.metodopagoDisplay;
                         const categoria = this.state.categoriaDisplay;
-                        const job = { rol: rol, descripciontrab: descripciontrab, pago: pago, periodo: periodo, categoria: categoria };
+                        const job = { rol: rol, descripciontrab: descripciontrab,metodopago: metodopago, pago: pago, periodo: periodo, categoria: categoria };
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -258,7 +280,9 @@ export default class AgregarEvento extends React.Component {
         }
 
     }
-
+    handleCambiarMetodopago = name => event => {
+        this.setState({ metodopagoDisplay: event.target.value });
+    }
     handleCambiarPeriodo = name => event => {
         this.setState({ periodoDisplay: event.target.value });
     }
@@ -309,11 +333,12 @@ export default class AgregarEvento extends React.Component {
             this.setState({ openCortina: false });
         }, 300);
     }
-    editarTrabajoAgregando(index, rol, descripciontrab, pago, periodo, categoria){
+    editarTrabajoAgregando(index, rol, descripciontrab, metodopago, pago, periodo, categoria){
         this.setState({ openCortina: true });
         var trabajos = this.state.arrayTrabajos;
         trabajos[index].rol = rol;
         trabajos[index].descripciontrab = descripciontrab;
+        trabajos[index].metodopago = metodopago;
         trabajos[index].pago = pago;
         trabajos[index].periodo = periodo;
         trabajos[index].categoria = categoria;
@@ -342,7 +367,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
+                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} metodopago={trabajo.metodopago} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
                 ))}
             </div>
         } else {
@@ -433,6 +458,9 @@ export default class AgregarEvento extends React.Component {
                     <DialogContent dividers>
                         <TextField id="rol" required autoFocus margin="dense" label="Rol del trabajador" type="rol" fullWidth />
                         <TextField id="descripcion-trab" required multiline rows="2" margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
+                        <TextField id="metodopago" select required margin="dense" value={this.state.metodopagoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarMetodopago('metodopagoDisplay')} label="Metodo de Pago" fullWidth>
+                            {metodopago.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
+                        </TextField>
                         <TextField id="pago" required margin="dense" label="Pago" type="number" fullWidth />
                         <TextField id="periodo" select required margin="dense" value={this.state.periodoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo de Pago" fullWidth>
                             {periodos.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
