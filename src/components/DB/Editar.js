@@ -120,6 +120,15 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  suspenderUsuario = (email) => {
+    db.collection("usuarios").doc(email).update({
+      suspendido: true,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   //Eventos
   cambiarEstadoEvento = (evento, estado) => {
     db.collection("eventos").doc(evento).update({

@@ -149,13 +149,21 @@ class EventoTarjeta extends React.Component {
         this.setState({ openEliminarEvento: false });
     }
     handleOpenEliminarEvento = () => {
-        this.setState({ openEliminarEvento: true });
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExito("No puedes Eliminar evento, su cuenta se encuentra suspendida.", "error");
+        } else {
+            this.setState({ openEliminarEvento: true });
+        }
     }
     handleCloseDuplicarEvento = () => {
         this.setState({ openDuplicarEvento: false });
     }
     handleOpenDuplicarEvento = () => {
-        this.setState({ openDuplicarEvento: true });
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExito("No puedes Duplicar evento, su cuenta se encuentra suspendida.", "error");
+        } else {
+            this.setState({ openDuplicarEvento: true });
+        }
     }
     actualizarTrabajos = () => {
         this.props.actualizarEventosGeneral();
@@ -245,7 +253,7 @@ class EventoTarjeta extends React.Component {
                         const periodo = trab[t].periodo;
                         const categoria = trab[t].categoria;
                         setTimeout(function () {
-                            Agregar.agregarTrabajo(nuevoEvento, mailDueño, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago, pago, periodo, categoria);
+                            Agregar.agregarTrabajo(nuevoEvento, mailDueño, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago, pago, periodo, categoria);
                         }, t * 1100);
                     }
                 }, 1100);
@@ -268,59 +276,63 @@ class EventoTarjeta extends React.Component {
         this.setState({ ciudadNueva: ciudad[0].name })
     }
     handleEditarEvento = () => {
-        const nombre = document.getElementById("nombre").value;
-        if (nombre.trim() === "") {
-            this.props.mostrarMensajeExito("Nombre es necesario.", "error");
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExito("No puedes Editar evento, su cuenta se encuentra suspendida.", "error");
         } else {
-            const descripcion = document.getElementById("descripcion").value;
-            if (descripcion.trim() === "") {
-                this.props.mostrarMensajeExito("Descripción es necesaria.", "error");
+            const nombre = document.getElementById("nombre").value;
+            if (nombre.trim() === "") {
+                this.props.mostrarMensajeExito("Nombre es necesario.", "error");
             } else {
-                const provincia = this.state.provinciaNueva;
-                if (provincia.trim() === "") {
-                    this.props.mostrarMensajeExito("Provincia es necesaria.", "error");
+                const descripcion = document.getElementById("descripcion").value;
+                if (descripcion.trim() === "") {
+                    this.props.mostrarMensajeExito("Descripción es necesaria.", "error");
                 } else {
-                    const ciudad = this.state.ciudadNueva;
-                    if (ciudad.trim() === "") {
-                        this.props.mostrarMensajeExito("Ciudad es necesaria.", "error");
+                    const provincia = this.state.provinciaNueva;
+                    if (provincia.trim() === "") {
+                        this.props.mostrarMensajeExito("Provincia es necesaria.", "error");
                     } else {
-                        const direccion = document.getElementById("direccion").value;
-                        if (direccion.trim() === "") {
-                            this.props.mostrarMensajeExito("Dirección es necesaria.", "error");
+                        const ciudad = this.state.ciudadNueva;
+                        if (ciudad.trim() === "") {
+                            this.props.mostrarMensajeExito("Ciudad es necesaria.", "error");
                         } else {
-                            const dateComienzo = document.getElementById("date").value;
-                            const timeComienzo = document.getElementById("time").value;
-                            const dateFinaliza = document.getElementById("date2").value;
-                            const timeFinaliza = document.getElementById("time2").value;
-                            var fromDateConcat = dateComienzo.substr(0, 4) + "" + dateComienzo.substr(5, 2) + "" + dateComienzo.substr(8, 2) + "" + timeComienzo.substr(0, 2) + "" + timeComienzo.substr(3, 2);
-                            var toDateConcat = dateFinaliza.substr(0, 4) + "" + dateFinaliza.substr(5, 2) + "" + dateFinaliza.substr(8, 2) + "" + timeFinaliza.substr(0, 2) + "" + timeFinaliza.substr(3, 2);
-                            var dateTime = this.obtenerFechaActual();
-                            if (fromDateConcat >= toDateConcat) {
-                                this.props.mostrarMensajeExito("Fecha de Finalización debe ser posterior a la de Comienzo.", "error");
+                            const direccion = document.getElementById("direccion").value;
+                            if (direccion.trim() === "") {
+                                this.props.mostrarMensajeExito("Dirección es necesaria.", "error");
                             } else {
-                                if (dateTime >= fromDateConcat) {
-                                    this.props.mostrarMensajeExito("La fecha de Comiezo debe ser posterior a la actual.", "error");
+                                const dateComienzo = document.getElementById("date").value;
+                                const timeComienzo = document.getElementById("time").value;
+                                const dateFinaliza = document.getElementById("date2").value;
+                                const timeFinaliza = document.getElementById("time2").value;
+                                var fromDateConcat = dateComienzo.substr(0, 4) + "" + dateComienzo.substr(5, 2) + "" + dateComienzo.substr(8, 2) + "" + timeComienzo.substr(0, 2) + "" + timeComienzo.substr(3, 2);
+                                var toDateConcat = dateFinaliza.substr(0, 4) + "" + dateFinaliza.substr(5, 2) + "" + dateFinaliza.substr(8, 2) + "" + timeFinaliza.substr(0, 2) + "" + timeFinaliza.substr(3, 2);
+                                var dateTime = this.obtenerFechaActual();
+                                if (fromDateConcat >= toDateConcat) {
+                                    this.props.mostrarMensajeExito("Fecha de Finalización debe ser posterior a la de Comienzo.", "error");
                                 } else {
-                                    if (this.state.cantTrabajos === 0) {
-                                        this.props.mostrarMensajeExito("Se necesita al menos un trabajo para crear el evento.", "error");
+                                    if (dateTime >= fromDateConcat) {
+                                        this.props.mostrarMensajeExito("La fecha de Comiezo debe ser posterior a la actual.", "error");
                                     } else {
-                                        var evento = this.state.eventoid;
-                                        this.setState({ openCortina: true });
-                                        Editar.editarEvento(evento, nombre, descripcion, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza);
-                                        var filtro = db.collection("trabajos").where("id_evento", "==", this.state.eventoid)
-                                        filtro.onSnapshot((snapShots) => {
-                                            snapShots.docs.map(doc => {
-                                                return Editar.modificarHorariosTrabajo(doc.id, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza);
-                                            })
-                                        }, error => {
-                                            console.log(error)
-                                        });
-                                        setTimeout(() => {
-                                            this.props.mostrarMensajeExito("Evento Modificado Correctamente.", "success");
-                                            this.props.actualizarEventosGeneral();
-                                            this.setState({ openDetalle: false });
-                                            this.setState({ openCortina: false });
-                                        }, 1000);
+                                        if (this.state.cantTrabajos === 0) {
+                                            this.props.mostrarMensajeExito("Se necesita al menos un trabajo para crear el evento.", "error");
+                                        } else {
+                                            var evento = this.state.eventoid;
+                                            this.setState({ openCortina: true });
+                                            Editar.editarEvento(evento, nombre, descripcion, provincia, ciudad, direccion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza);
+                                            var filtro = db.collection("trabajos").where("id_evento", "==", this.state.eventoid)
+                                            filtro.onSnapshot((snapShots) => {
+                                                snapShots.docs.map(doc => {
+                                                    return Editar.modificarHorariosTrabajo(doc.id, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza);
+                                                })
+                                            }, error => {
+                                                console.log(error)
+                                            });
+                                            setTimeout(() => {
+                                                this.props.mostrarMensajeExito("Evento Modificado Correctamente.", "success");
+                                                this.props.actualizarEventosGeneral();
+                                                this.setState({ openDetalle: false });
+                                                this.setState({ openCortina: false });
+                                            }, 1000);
+                                        }
                                     }
                                 }
                             }

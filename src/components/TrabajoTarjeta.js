@@ -15,10 +15,23 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import db from '../index';
 import EmpleadoDetalle from "./EmpleadoDetalle";
 import BotonEditarTrabajo from "./EditarTrabajo";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 class TrabajoTarjeta extends React.Component {
     constructor(props) {
         super(props);
@@ -59,6 +72,12 @@ class TrabajoTarjeta extends React.Component {
             postulado: this.props.postulado,
             indexAgregando: this.props.trabajoid,
             trabajoAgregando: this.props.trabajoAgregando,
+            checkedMetodoPago: true,
+            checkedPago: true,
+            checkedMetodoPagoEmpleado: true,
+            checkedPagoEmpleado: true,
+            openSeguroPuntuarEmpleado: false,
+            openSeguroPuntuarEmpleador: false,
         }
         this.actualizarEventosPost = this.actualizarEventosPost.bind(this);
         this.mostrarMensajeExitoPost = this.mostrarMensajeExitoPost.bind(this);
@@ -79,59 +98,72 @@ class TrabajoTarjeta extends React.Component {
         });
     }
     eliminarTrabajo = () => {
-        this.setState({ openCortina: true })
-        var trabajo = this.state.trabajo;
-        var evento = this.state.evento;
-        var cantTrabajos = this.state.cantTrabajos;
-        Eliminar.eliminarTrabajo(trabajo);
-        Editar.restarTrabajo(evento, cantTrabajos);
-        setTimeout(() => {
-            this.props.mostrarMensajeExito("Trabajo Eliminado Correctamente.", "success");
-            this.props.actualizarEventos();
-        }, 1100);
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExito("No puedes Eliminar trabajo, su cuenta se encuentra suspendida.", "error");
+        } else {
+            this.setState({ openCortina: true })
+            var trabajo = this.state.trabajo;
+            var evento = this.state.evento;
+            var cantTrabajos = this.state.cantTrabajos;
+            Eliminar.eliminarTrabajo(trabajo);
+            Editar.restarTrabajo(evento, cantTrabajos);
+            setTimeout(() => {
+                this.props.mostrarMensajeExito("Trabajo Eliminado Correctamente.", "success");
+                this.props.actualizarEventos();
+            }, 1100);
+        }
+
     }
     duplicar = () => {
-        this.setState({ openCortina: true })
-        var evento = this.state.evento;
-        var mail = this.state.mailDueño;
-        var rol = this.state.rol;
-        var descripcion = this.state.descripcion;
-        var dateComienzo = this.state.dateComienzo;
-        var timeComienzo = this.state.timeComienzo;
-        var dateFinaliza = this.state.dateFinaliza;
-        var timeFinaliza = this.state.timeFinaliza;
-        var metodopago = this.state.metodopago;
-        var pago = this.state.pago;
-        var periodo = this.state.periodo;
-        var categoria = this.state.categoria;
-        var cantTrabajos = this.state.cantTrabajos;
-        Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago, pago, periodo, categoria);
-        Editar.sumarTrabajo(evento, cantTrabajos);
-        setTimeout(() => {
-            this.props.mostrarMensajeExito("Trabajo Duplicado Correctamente.", "success");
-            this.props.actualizarEventos();
-        }, 1100);
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExito("No puedes Duplicar trabajo, su cuenta se encuentra suspendida.", "error");
+        } else {
+            this.setState({ openCortina: true })
+            var evento = this.state.evento;
+            var mail = this.state.mailDueño;
+            var rol = this.state.rol;
+            var descripcion = this.state.descripcion;
+            var dateComienzo = this.state.dateComienzo;
+            var timeComienzo = this.state.timeComienzo;
+            var dateFinaliza = this.state.dateFinaliza;
+            var timeFinaliza = this.state.timeFinaliza;
+            var metodopago = this.state.metodopago;
+            var pago = this.state.pago;
+            var periodo = this.state.periodo;
+            var categoria = this.state.categoria;
+            var cantTrabajos = this.state.cantTrabajos;
+            Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago, pago, periodo, categoria);
+            Editar.sumarTrabajo(evento, cantTrabajos);
+            setTimeout(() => {
+                this.props.mostrarMensajeExito("Trabajo Duplicado Correctamente.", "success");
+                this.props.actualizarEventos();
+            }, 1100);
+        }
     }
     postularse = () => {
-        if (this.state.usuario.cuil === "") {
-            this.props.mostrarMensajeExito("Necesitas un CUIL antes de postularte.", "error");
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExito("No puedes postularte, su cuenta se encuentra suspendida.", "error");
         } else {
-            if (this.state.usuario.cuilValidado === "N") {
-                this.props.mostrarMensajeExito("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
+            if (this.state.usuario.cuil === "") {
+                this.props.mostrarMensajeExito("Necesitas un CUIL antes de postularte.", "error");
             } else {
-                this.setState({ openCortina: true })
-                var mail = this.state.usuario.email;
-                var trabajo = this.state.trabajo;
-                var evento = this.state.evento;
-                var cantPost = this.state.cantPost + 1;
-                var cantPostEvento = this.state.cantPostEvento + 1;
-                Agregar.agregarPostulacion(mail, trabajo, evento);
-                Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
-                Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
-                setTimeout(() => {
-                    this.props.mostrarMensajeExito("Postulado Correctamente.", "success");
-                    this.props.actualizarEventos();
-                }, 1000);
+                if (this.state.usuario.cuilValidado === "N") {
+                    this.props.mostrarMensajeExito("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
+                } else {
+                    this.setState({ openCortina: true })
+                    var mail = this.state.usuario.email;
+                    var trabajo = this.state.trabajo;
+                    var evento = this.state.evento;
+                    var cantPost = this.state.cantPost + 1;
+                    var cantPostEvento = this.state.cantPostEvento + 1;
+                    Agregar.agregarPostulacion(mail, trabajo, evento);
+                    Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
+                    Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
+                    setTimeout(() => {
+                        this.props.mostrarMensajeExito("Postulado Correctamente.", "success");
+                        this.props.actualizarEventos();
+                    }, 1000);
+                }
             }
         }
     }
@@ -238,6 +270,92 @@ class TrabajoTarjeta extends React.Component {
             this.setState({ openDetalleAsignado: true });
         }, 1000);
     }
+    handleChangeMP = () => {
+        if (this.state.checkedMetodoPago === true) {
+            this.setState({ checkedMetodoPago: false });
+        } else {
+            this.setState({ checkedMetodoPago: true });
+        }
+    };
+    handleChangePago = () => {
+        if (this.state.checkedPago === true) {
+            this.setState({ checkedPago: false });
+        } else {
+            this.setState({ checkedPago: true });
+        }
+    };
+    handleChangeMPEmpleado = () => {
+        if (this.state.checkedMetodoPagoEmpleado === true) {
+            this.setState({ checkedMetodoPagoEmpleado: false });
+        } else {
+            this.setState({ checkedMetodoPagoEmpleado: true });
+        }
+    };
+    validarChequeadosEmpleador = () => {
+        if (this.state.checkedMetodoPagoEmpleado && this.state.checkedPagoEmpleado) {
+            var opinion = document.getElementById("opinionEmpleado").value;
+            var puntuacion = -1;
+            for (var i = 0; i < document.getElementsByName('estrellasEmpleado').length; i++) {
+                if (document.getElementsByName('estrellasEmpleado')[i].checked === true) {
+                    puntuacion = document.getElementsByName('estrellasEmpleado')[i].value;
+                    break;
+                }
+            }
+            if (opinion === "") {
+                this.props.mostrarMensajeExito("Debe ingresar un comentario.", "error");
+            } else {
+                if (puntuacion === -1) {
+                    this.props.mostrarMensajeExito("Debe puntuar para dejar su comentario.", "error");
+                } else {
+                    this.puntuarEmpleador();
+                }
+            }
+        } else {
+            this.handleOpenSeguroPuntuarEmpleador();
+        }
+    }
+    validarChequeadosEmpleado = () => {
+        var opinion = document.getElementById("nombre").value;
+        var puntuacion = -1;
+        for (var i = 0; i < document.getElementsByName('estrellas').length; i++) {
+            if (document.getElementsByName('estrellas')[i].checked === true) {
+                puntuacion = document.getElementsByName('estrellas')[i].value;
+                break;
+            }
+        }
+        if (opinion === "") {
+            this.props.mostrarMensajeExito("Debe ingresar un comentario.", "error");
+        } else {
+            if (puntuacion === -1) {
+                this.props.mostrarMensajeExito("Debe puntuar para dejar su comentario.", "error");
+            } else {
+                if (this.state.checkedMetodoPago && this.state.checkedPago) {
+                    this.puntuarEmpleado();
+                } else {
+                    this.handleOpenSeguroPuntuarEmpleado();
+                }
+            }
+        }
+    }
+    handleOpenSeguroPuntuarEmpleado = () => {
+        this.setState({ openSeguroPuntuarEmpleado: true })
+    }
+    handleCloseSeguroPuntuarEmpleado = () => {
+        this.setState({ openSeguroPuntuarEmpleado: false })
+    }
+    handleOpenSeguroPuntuarEmpleador = () => {
+        this.setState({ openSeguroPuntuarEmpleador: true })
+    }
+    handleCloseSeguroPuntuarEmpleador = () => {
+        this.setState({ openSeguroPuntuarEmpleador: false })
+    }
+    handleChangePagoEmpleado = () => {
+        if (this.state.checkedPagoEmpleado === true) {
+            this.setState({ checkedPagoEmpleado: false });
+        } else {
+            this.setState({ checkedPagoEmpleado: true });
+        }
+    };
     handleOpenPuntuacion = () => {
         var docRef = db.collection("usuarios").doc(this.state.asignado);
         let component = this;
@@ -251,6 +369,8 @@ class TrabajoTarjeta extends React.Component {
             console.log(error);
             alert("Ha ocurrido un error. Actualice la página.");
         });
+        this.setState({ checkedMetodoPago: true });
+        this.setState({ checkedPago: true });
         this.setState({ openPuntuacion: true });
     }
     handleOpenPuntuacionEmpleado = () => {
@@ -267,9 +387,23 @@ class TrabajoTarjeta extends React.Component {
             console.log(error);
             alert("Ha ocurrido un error. Actualice la página.");
         });
+        this.setState({ checkedMetodoPagoEmpleado: true });
+        this.setState({ checkedPagoEmpleado: true });
         this.setState({ openPuntuacionEmpleado: true });
     }
+    suspenderYpuntuarEmpleado = () => {
+        var mail_susp = this.state.asignado;
+        Editar.suspenderUsuario(mail_susp);
+        this.puntuarEmpleado();
+    }
+    suspenderYpuntuarEmpleador = () => {
+        var mail_susp = this.state.mailDueño;
+        Editar.suspenderUsuario(mail_susp);
+        this.puntuarEmpleador();
+    }
     puntuarEmpleado = () => {
+        this.setState({ openSeguroPuntuarEmpleado: false });
+        this.setState({ openCortina: true });
         var opinion = document.getElementById("nombre").value;
         var puntuacion = -1;
         for (var i = 0; i < document.getElementsByName('estrellas').length; i++) {
@@ -278,34 +412,27 @@ class TrabajoTarjeta extends React.Component {
                 break;
             }
         }
-        if (opinion === "") {
-            this.props.mostrarMensajeExito("Debe ingresar un comentario.", "error");
-        } else {
-            if (puntuacion === -1) {
-                this.props.mostrarMensajeExito("Debe puntuar para dejar su comentario.", "error");
-            } else {
-                this.setState({ openCortina: true })
-                var mail_comentado = this.state.asignado;
-                var mail_comentador = this.state.usuario.email;
-                var nombre_comentador = this.state.usuario.fullname;
-                var foto = this.state.usuario.urlFoto;
-                var trabajo = this.state.trabajo;
-                Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "CaE");
-                Editar.trabajoPuntuadoPorEmpleador(trabajo);
-                if (this.state.puntuadoEmpleado === "Y") {
-                    var puntuados = this.state.cantPuntEvento;
-                    var evento = this.state.evento;
-                    Editar.agregarPuntuadoEvento(evento, puntuados)
-                }
-                setTimeout(() => {
-                    this.props.mostrarMensajeExito("Comentario Agregado Correctamente.", "success");
-                    this.props.actualizarEventos();
-                    this.setState({ openPuntuacion: false });
-                }, 1000);
-            }
+        var mail_comentado = this.state.asignado;
+        var mail_comentador = this.state.usuario.email;
+        var nombre_comentador = this.state.usuario.fullname;
+        var foto = this.state.usuario.urlFoto;
+        var trabajo = this.state.trabajo;
+        Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "CaE");
+        Editar.trabajoPuntuadoPorEmpleador(trabajo);
+        if (this.state.puntuadoEmpleado === "Y") {
+            var puntuados = this.state.cantPuntEvento;
+            var evento = this.state.evento;
+            Editar.agregarPuntuadoEvento(evento, puntuados)
         }
+        setTimeout(() => {
+            this.props.mostrarMensajeExito("Comentario Agregado Correctamente.", "success");
+            this.props.actualizarEventos();
+            this.setState({ openPuntuacion: false });
+        }, 1000);
     }
     puntuarEmpleador = () => {
+        this.setState({ openSeguroPuntuarEmpleador: false });
+        this.setState({ openCortina: true });
         var opinion = document.getElementById("opinionEmpleado").value;
         var puntuacion = -1;
         for (var i = 0; i < document.getElementsByName('estrellasEmpleado').length; i++) {
@@ -314,32 +441,23 @@ class TrabajoTarjeta extends React.Component {
                 break;
             }
         }
-        if (opinion === "") {
-            this.props.mostrarMensajeExito("Debe ingresar un comentario.", "error");
-        } else {
-            if (puntuacion === -1) {
-                this.props.mostrarMensajeExito("Debe puntuar para dejar su comentario.", "error");
-            } else {
-                this.setState({ openCortina: true })
-                var mail_comentado = this.state.mailDueño;
-                var mail_comentador = this.state.usuario.email;
-                var nombre_comentador = this.state.usuario.fullname;
-                var foto = this.state.usuario.urlFoto;
-                var trabajo = this.state.trabajo;
-                Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "EaC");
-                Editar.trabajoPuntuadoPorEmpleado(trabajo);
-                if (this.state.puntuadoEmpleador === "Y") {
-                    var puntuados = this.state.cantPuntEvento;
-                    var evento = this.state.evento;
-                    Editar.agregarPuntuadoEvento(evento, puntuados)
-                }
-                setTimeout(() => {
-                    this.props.mostrarMensajeExito("Comentario Agregado Correctamente.", "success");
-                    this.props.actualizarEventos();
-                    this.setState({ openPuntuacionEmpleado: false });
-                }, 1000);
-            }
+        var mail_comentado = this.state.mailDueño;
+        var mail_comentador = this.state.usuario.email;
+        var nombre_comentador = this.state.usuario.fullname;
+        var foto = this.state.usuario.urlFoto;
+        var trabajo = this.state.trabajo;
+        Agregar.agregarComentario(mail_comentador, nombre_comentador, foto, mail_comentado, opinion, puntuacion, "EaC");
+        Editar.trabajoPuntuadoPorEmpleado(trabajo);
+        if (this.state.puntuadoEmpleador === "Y") {
+            var puntuados = this.state.cantPuntEvento;
+            var evento = this.state.evento;
+            Editar.agregarPuntuadoEvento(evento, puntuados)
         }
+        setTimeout(() => {
+            this.props.mostrarMensajeExito("Comentario Agregado Correctamente.", "success");
+            this.props.actualizarEventos();
+            this.setState({ openPuntuacionEmpleado: false });
+        }, 1000);
     }
     eliminarEnAgregando = () => {
         this.props.eliminarTrabajoAgregando(this.state.indexAgregando)
@@ -426,7 +544,7 @@ class TrabajoTarjeta extends React.Component {
                 } else {
                     botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarTrabajo}>Eliminar</button>
                         {/*<button className='editar-btn' onClick="">Editar</button>*/}
-                        <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} actualizarTrabajosEdit={this.actualizarTrabajos} estado={this.state.estadoEvento} trabajo={this.state.trabajo} />
+                        <BotonEditarTrabajo usuario={this.state.usuario} mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} actualizarTrabajosEdit={this.actualizarTrabajos} estado={this.state.estadoEvento} trabajo={this.state.trabajo} />
                         <button className='editar-btn' onClick={this.duplicar}>Duplicar</button>
                     </div>
                 }
@@ -474,7 +592,7 @@ class TrabajoTarjeta extends React.Component {
                                 } else {
                                     if (this.state.estadoEvento === "agregando") {
                                         botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarEnAgregando}>Eliminar</button>
-                                            <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} estado={this.state.estadoEvento} trabajoObjeto={this.state.trabajoAgregando} editarEnAgregando={this.editarEnAgregando}/>
+                                            <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} estado={this.state.estadoEvento} trabajoObjeto={this.state.trabajoAgregando} editarEnAgregando={this.editarEnAgregando} />
                                             <button className='editar-btn' onClick={this.duplicarEnAgregando}>Duplicar</button>
                                         </div>
                                     }
@@ -529,7 +647,7 @@ class TrabajoTarjeta extends React.Component {
                         <h3>{this.props.descripcion}</h3>
                         {/*<h3>Comienza: {this.state.datecomienzotrab} - {this.state.timecomienzotrab}   Finaliza: {this.state.datefintrab} - {this.state.timefintrab}</h3>*/}
                         <p className="esp text-react">{this.state.pago}$ por {this.state.periodo} - Metodo de Pago: {this.state.metodopago}</p>
-                      </div>
+                    </div>
                 </div>
                 <Dialog
                     open={this.state.openPostulados}
@@ -589,12 +707,20 @@ class TrabajoTarjeta extends React.Component {
                                 <label for="radio10">★</label>
                             </p>
                         </form>
+                        <FormControlLabel
+                            control={<GreenCheckbox checked={this.state.checkedMetodoPago} onChange={this.handleChangeMP} name="checkedMP" />}
+                            label="¿Cumplió con el metodo de pago acordado?"
+                        />
+                        <FormControlLabel
+                            control={<GreenCheckbox checked={this.state.checkedPago} onChange={this.handleChangePago} name="checkedPago" />}
+                            label="¿Cumplió con el pago acordado?"
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button autoFocus onClick={this.handleClosePuntuacion} color="primary">
                             CANCELAR
                          </Button>
-                        <Button onClick={this.puntuarEmpleado} color="primary">
+                        <Button onClick={this.validarChequeadosEmpleado} color="primary">
                             COMENTAR
                          </Button>
                     </DialogActions>
@@ -639,12 +765,20 @@ class TrabajoTarjeta extends React.Component {
                                 <label for="radio10">★</label>
                             </p>
                         </form>
+                        <FormControlLabel
+                            control={<GreenCheckbox checked={this.state.checkedMetodoPagoEmpleado} onChange={this.handleChangeMPEmpleado} name="checkedMPEmpleado" />}
+                            label="¿Cumplió con el metodo de pago acordado?"
+                        />
+                        <FormControlLabel
+                            control={<GreenCheckbox checked={this.state.checkedPagoEmpleado} onChange={this.handleChangePagoEmpleado} name="checkedPagoEmpleado" />}
+                            label="¿Cumplió con el pago acordado?"
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button autoFocus onClick={this.handleClosePuntuacionEmpleado} color="primary">
                             CANCELAR
                          </Button>
-                        <Button onClick={this.puntuarEmpleador} color="primary">
+                        <Button onClick={this.validarChequeadosEmpleador} color="primary">
                             COMENTAR
                          </Button>
                     </DialogActions>
@@ -664,6 +798,44 @@ class TrabajoTarjeta extends React.Component {
                     <DialogActions>
                         <Button onClick={this.handleCloseDetalleAsignado} color="primary">
                             CERRAR
+                 </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openSeguroPuntuarEmpleado}
+                    onClose={this.handleCloseSeguroPuntuarEmpleado}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">¿Algo no se cumplió? </DialogTitle>
+                    <DialogContent dividers>
+                        Estas declarando que el prestador no cumplió con el metodo de pago o el pago. Esto suspenderá la cuenta del prestador temporalmente. ¿Estas seguro que deseas denunciar?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseSeguroPuntuarEmpleado} color="primary">
+                            NO
+                 </Button>
+                        <Button onClick={this.suspenderYpuntuarEmpleado} color="primary">
+                            SI
+                 </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.openSeguroPuntuarEmpleador}
+                    onClose={this.handleCloseSeguroPuntuarEmpleador}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">¿Algo no se cumplió? </DialogTitle>
+                    <DialogContent dividers>
+                        Estas declarando que el empleador no cumplió con el metodo de pago o el pago. Esto suspenderá la cuenta del empleador temporalmente. ¿Estas seguro que deseas denunciar?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseSeguroPuntuarEmpleador} color="primary">
+                            NO
+                 </Button>
+                        <Button onClick={this.suspenderYpuntuarEmpleador} color="primary">
+                            SI
                  </Button>
                     </DialogActions>
                 </Dialog>

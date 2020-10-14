@@ -139,7 +139,11 @@ export default class AgregarEvento extends React.Component {
         this.setState({ ciudades: [] });
     };
     handleOpenEvento = () => {
-        this.setState({ openEvento: true });
+        if(this.state.usuario.suspendido){
+            this.props.mostrarMensajeExito("No puedes Crear evento, su cuenta se encuentra suspendida.", "error");
+        }else{
+            this.setState({ openEvento: true });
+        }
     };
     handleCloseLista = () => {
         this.setState({ openLista: false });

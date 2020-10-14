@@ -82,6 +82,7 @@ class EditarTrabajo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            usuario: this.props.usuario,
             openCortina: false,
             openTrabajo: false,
             estado: this.props.estado,
@@ -108,55 +109,58 @@ class EditarTrabajo extends React.Component {
         this.setState({ openTrabajo: false });
     };
     handleOpenTrabajo = () => {
-        this.setState({ openCortina: true });
-        var rol = "";
-        var descripcion = "";
-        var pago = "";
-        var periodo = "";
-        var categoria = "";
-        var metodopago = "";
-        if (this.state.estado !== "agregando") {
-            db.collection("trabajos").doc(this.state.trabajoid).get().then(function (doc) {
-                if (doc.exists) {
-                    rol = doc.data().rol;
-                    descripcion = doc.data().descripcion;
-                    metodopago = doc.data().metodopago;
-                    pago = doc.data().pago;
-                    periodo = doc.data().periodo;
-                    categoria = doc.data().categoria;
-                    console.log("Document data:", doc.data());
-                } else {
+        if (this.state.usuario.suspendido) {
+            this.props.mostrarMensajeExitoEdit("No puedes Editar un trabajo, su cuenta se encuentra suspendida.", "error");
+        } else {
+            this.setState({ openCortina: true });
+            var rol = "";
+            var descripcion = "";
+            var pago = "";
+            var periodo = "";
+            var categoria = "";
+            var metodopago = "";
+            if (this.state.estado !== "agregando") {
+                db.collection("trabajos").doc(this.state.trabajoid).get().then(function (doc) {
+                    if (doc.exists) {
+                        rol = doc.data().rol;
+                        descripcion = doc.data().descripcion;
+                        metodopago = doc.data().metodopago;
+                        pago = doc.data().pago;
+                        periodo = doc.data().periodo;
+                        categoria = doc.data().categoria;
+                        console.log("Document data:", doc.data());
+                    } else {
+                        alert("Ha ocurrido un error. Actualice la página.");
+                    }
+                }).catch(function (error) {
+                    console.log(error);
                     alert("Ha ocurrido un error. Actualice la página.");
-                }
-            }).catch(function (error) {
-                console.log(error);
-                alert("Ha ocurrido un error. Actualice la página.");
-            });
-            setTimeout(() => {
-                this.setState({ rol: rol });
-                this.setState({ descripcion: descripcion });
-                this.setState({ pago: pago });
-                if (metodopago === "" || metodopago === undefined) {
-                    this.setState({ metodopagoDisplay: 'A Definir' });
-                } else {
-                    this.setState({ metodopagoDisplay: metodopago });
-                }
-                this.setState({ periodoDisplay: periodo });
-                this.setState({ categoriaDisplay: categoria });
+                });
+                setTimeout(() => {
+                    this.setState({ rol: rol });
+                    this.setState({ descripcion: descripcion });
+                    this.setState({ pago: pago });
+                    if (metodopago === "" || metodopago === undefined) {
+                        this.setState({ metodopagoDisplay: 'A Definir' });
+                    } else {
+                        this.setState({ metodopagoDisplay: metodopago });
+                    }
+                    this.setState({ periodoDisplay: periodo });
+                    this.setState({ categoriaDisplay: categoria });
+                    this.setState({ openCortina: false });
+                    this.setState({ openTrabajo: true });
+                }, 1100);
+            } else {
+                this.setState({ rol: this.state.trabajoObjeto.rol });
+                this.setState({ descripcion: this.state.trabajoObjeto.descripciontrab });
+                this.setState({ pago: this.state.trabajoObjeto.pago });
+                this.setState({ metodopagoDisplay: this.state.trabajoObjeto.metodopago });
+                this.setState({ periodoDisplay: this.state.trabajoObjeto.periodo });
+                this.setState({ categoriaDisplay: this.state.trabajoObjeto.categoria });
                 this.setState({ openCortina: false });
                 this.setState({ openTrabajo: true });
-            }, 1100);
-        } else {
-            this.setState({ rol: this.state.trabajoObjeto.rol });
-            this.setState({ descripcion: this.state.trabajoObjeto.descripciontrab });
-            this.setState({ pago: this.state.trabajoObjeto.pago });
-            this.setState({ metodopagoDisplay: this.state.trabajoObjeto.metodopago });
-            this.setState({ periodoDisplay: this.state.trabajoObjeto.periodo });
-            this.setState({ categoriaDisplay: this.state.trabajoObjeto.categoria });
-            this.setState({ openCortina: false });
-            this.setState({ openTrabajo: true });
+            }
         }
-
     };
     handleEditarTrabajo = () => {
         const rol = document.getElementById("rol").value;
