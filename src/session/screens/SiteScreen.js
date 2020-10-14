@@ -56,7 +56,7 @@ class SiteScreen extends React.Component {
                 <img className="foto-trabajo" src={buscar} alt="persona" />
                 <div className="content-tarea">
                   <h2>1. Buscar Trabajo</h2>
-                  <h3>Podras buscar el trabajo al que deseas postularte.</h3>
+                  <h3>Podrás buscar el trabajo al que deseas postularte.</h3>
                 </div>
               </div>
             </li>
@@ -74,7 +74,7 @@ class SiteScreen extends React.Component {
                 <img className="foto-trabajo" src={valorar} alt="persona" />
                 <div className="content-tarea">
                   <h2>3. Puntuar a tu empleador</h2>
-                  <h3>Podras colocar puntuación sobre el  trato recibido por tu empleador.</h3>
+                  <h3>Podrás colocar puntuación sobre el trato recibido por tu empleador.</h3>
                 </div>
               </div>
             </li>
@@ -97,7 +97,7 @@ class SiteScreen extends React.Component {
                 <img className="foto-trabajo" src={esperar} alt="persona" />
                 <div className="content-tarea">
                   <h2>2. Esperar postulantes</h2>
-                  <h3>Momento de esperar a quienes quieran colaborar en tus eventos.</h3>
+                  <h3>Momento de esperar a quienes quieran trabajar en tus eventos.</h3>
                 </div>
               </div>
             </li>
@@ -115,7 +115,7 @@ class SiteScreen extends React.Component {
                 <img className="foto-trabajo" src={valorar} alt="persona" />
                 <div className="content-tarea">
                   <h2>4. Puntuar </h2>
-                  <h3>Una vez que el trabajo se ha consumado, podras puntuar al trabajador.</h3>
+                  <h3>Una vez que el trabajo se ha consumado, podrás puntuar al trabajador.</h3>
                 </div>
               </div>
             </li>
