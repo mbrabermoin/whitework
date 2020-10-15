@@ -503,7 +503,7 @@ class PerfilEmpleado extends React.Component {
             ))}
         </div>
         var panelCV = "";
-        if (this.state.usuario.CV === "") {
+        if (this.state.usuario.CV === "" || this.state.usuario.CV === undefined) {
             panelCV = <div style={{ margin: 20, height: 20 }}>
                 <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
                 Cargar CV
