@@ -30,6 +30,33 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  modificarCVUsuario = (CV, email)=> {
+    db.collection("usuarios").doc(email).update({
+      CV: CV,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  modificarMatriculaUsuario = (matricula, email)=> {
+    db.collection("usuarios").doc(email).update({
+      Matricula: matricula,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
+  modificarLicenciaConducirUsuario = (licencia, email)=> {
+    db.collection("usuarios").doc(email).update({
+      LicenciaConducir: licencia,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   modificarOcupacionUsuario = (ocupacion, email) => {
     db.collection("usuarios").doc(email).update({
       ocupacion: ocupacion,

@@ -58,7 +58,8 @@ class PerfilEmpleado extends React.Component {
             avatar: "",
             isUploading: false,
             progress: 0,
-            avatarURL: ""
+            avatarURL: "",
+            cv: "",
         }
         this.guardarFacebook = this.guardarFacebook.bind(this)
         this.guardarInstagram = this.guardarInstagram.bind(this)
@@ -141,7 +142,7 @@ class PerfilEmpleado extends React.Component {
         }, 2000);
     }
     //Files
-    handleUploadSuccess = filename => {
+    handleUploadSuccessFoto = filename => {
         this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         this.setState({ avatar: filename, progress: 100, isUploading: false });
@@ -149,10 +150,49 @@ class PerfilEmpleado extends React.Component {
             this.setState({ avatarURL: url }));
         firebase.storage().ref("images").child(filename).getDownloadURL().then(url =>
             Modificar.modificarFotoUsuario(url, email));
-            setTimeout(() => {
-                this.refrescarUsuario();
-                this.setState({ openCortina: false });
-            }, 1000);
+        setTimeout(() => {
+            this.refrescarUsuario();
+            this.setState({ openCortina: false });
+        }, 1000);
+    };
+    handleUploadSuccessCV = filename => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        this.setState({ cv: filename, progress: 100, isUploading: false });
+        firebase.storage().ref("CV").child(filename).getDownloadURL().then(url =>
+            this.setState({ cv: url }));
+        firebase.storage().ref("CV").child(filename).getDownloadURL().then(url =>
+            Modificar.modificarCVUsuario(url, email));
+        setTimeout(() => {
+            this.refrescarUsuario();
+            this.setState({ openCortina: false });
+        }, 3000);
+    };
+    handleUploadSuccessMatricula = filename => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        this.setState({ matricula: filename, progress: 100, isUploading: false });
+        firebase.storage().ref("Matricula").child(filename).getDownloadURL().then(url =>
+            this.setState({ matricula: url }));
+        firebase.storage().ref("Matricula").child(filename).getDownloadURL().then(url =>
+            Modificar.modificarMatriculaUsuario(url, email));
+        setTimeout(() => {
+            this.refrescarUsuario();
+            this.setState({ openCortina: false });
+        }, 3000);
+    };
+    handleUploadSuccessLicenciaConducir = filename => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        this.setState({ licenciaConducir: filename, progress: 100, isUploading: false });
+        firebase.storage().ref("LicenciaConducir").child(filename).getDownloadURL().then(url =>
+            this.setState({ matricula: url }));
+        firebase.storage().ref("LicenciaConducir").child(filename).getDownloadURL().then(url =>
+            Modificar.modificarLicenciaConducirUsuario(url, email));
+        setTimeout(() => {
+            this.refrescarUsuario();
+            this.setState({ openCortina: false });
+        }, 3000);
     };
     handleCerrarNombre = () => {
         this.setState({ openModalNombre: false });
@@ -462,26 +502,134 @@ class PerfilEmpleado extends React.Component {
                 </article>
             ))}
         </div>
+        var panelCV = "";
+        if (this.state.usuario.CV === "") {
+            panelCV = <div style={{ margin: 20, height: 20 }}>
+                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                Cargar CV
+    <FileUploader
+                        accept="pdf/*"
+                        name="avatar"
+                        randomizeFilename
+                        hidden
+                        storageRef={firebase.storage().ref("CV")}
+                        onUploadSuccess={this.handleUploadSuccessCV}
+                    />
+                </label>
+            </div>
+        } else {
+            panelCV = <div><div className="botones-files" style={{ margin: 20, height: 20 }}>
+                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                    Actualizar CV
+    <FileUploader
+                        accept="pdf/*"
+                        name="avatar"
+                        randomizeFilename
+                        hidden
+                        storageRef={firebase.storage().ref("CV")}
+                        onUploadSuccess={this.handleUploadSuccessCV}
+                    />
+                </label>
+            </div>
+                <div className="botones-files" style={{ margin: 20, height: 20 }}>
+                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                       <a href={this.state.usuario.CV}> Ver CV</a>
+                    </label>
+                </div>
+            </div>
+        }
+        var panelMatricula = "";
+        if (this.state.usuario.Matricula === "" || this.state.usuario.Matricula === undefined) {
+            panelMatricula = <div style={{ margin: 20, height: 20 }}>
+                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                    Cargar Matricula Profesional
+    <FileUploader
+                        accept="pdf/*"
+                        name="avatar"
+                        randomizeFilename
+                        hidden
+                        storageRef={firebase.storage().ref("Matricula")}
+                        onUploadSuccess={this.handleUploadSuccessMatricula}
+                    />
+                </label>
+            </div>
+        } else {
+            panelMatricula = <div><div className="botones-files" style={{ margin: 20, height: 20 }}>
+                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                    Actualizar Matricula Profesional
+    <FileUploader
+                        accept="pdf/*"
+                        name="avatar"
+                        randomizeFilename
+                        hidden
+                        storageRef={firebase.storage().ref("Matricula")}
+                        onUploadSuccess={this.handleUploadSuccessMatricula}
+                    />
+                </label>
+            </div>
+                <div className="botones-files" style={{ margin: 20, height: 20 }}>
+                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                       <a href={this.state.usuario.Matricula}> Ver Matricula Profesional</a>
+                    </label>
+                </div>
+            </div>
+        }
+        var panelLicenciaConducir = "";
+        if (this.state.usuario.LicenciaConducir === "" || this.state.usuario.LicenciaConducir === undefined) {
+            panelLicenciaConducir = <div style={{ margin: 20, height: 20 }}>
+                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                Cargar Licencia Conducir
+    <FileUploader
+                        accept="pdf/*"
+                        name="avatar"
+                        randomizeFilename
+                        hidden
+                        storageRef={firebase.storage().ref("LicenciaConducir")}
+                        onUploadSuccess={this.handleUploadSuccessLicenciaConducir}
+                    />
+                </label>
+            </div>
+        } else {
+            panelLicenciaConducir = <div><div className="botones-files" style={{ margin: 20, height: 20 }}>
+                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                    Actualizar Licencia Conducir
+    <FileUploader
+                        accept="pdf/*"
+                        name="avatar"
+                        randomizeFilename
+                        hidden
+                        storageRef={firebase.storage().ref("LicenciaConducir")}
+                        onUploadSuccess={this.handleUploadSuccessLicenciaConducir}
+                    />
+                </label>
+            </div>
+                <div className="botones-files" style={{ margin: 20, height: 20 }}>
+                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                       <a href={this.state.usuario.LicenciaConducir}> Ver Licencia Conducir</a>
+                    </label>
+                </div>
+            </div>
+        }
         return (
             <div className="wrapper1">
                 <div className="profile-card js-profile-card">
                     <div className="profile-card__img">
                         {foto}
-                        
-                    </div>                    
+
+                    </div>
                     <div className="profile-card__cnt js-profile-cnt">
-                        <div style={{height: 40}}>
-                    <label style={{backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer'}}>
-                        Cambiar foto de perfil
+                        <div style={{ height: 40 }}>
+                            <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                                Cambiar foto de perfil
                     <FileUploader
-                            accept="image/*"
-                            name="avatar"
-                            randomizeFilename
-                            hidden
-                            storageRef={firebase.storage().ref("images")}
-                            onUploadSuccess={this.handleUploadSuccess}
-                        />
-                        </label>
+                                    accept="image/*"
+                                    name="avatar"
+                                    randomizeFilename
+                                    hidden
+                                    storageRef={firebase.storage().ref("images")}
+                                    onUploadSuccess={this.handleUploadSuccessFoto}
+                                />
+                            </label>
                         </div>
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
                         <div className="profile-card-loc">
@@ -532,14 +680,15 @@ class PerfilEmpleado extends React.Component {
                                 <div className="profile-card-inf__txt">Puntuación Empleador</div>
                             </div>
                         </div>
-
+                        {panelCV}
+                        {panelMatricula}
+                        {panelLicenciaConducir}
                         <div className="profile-card-social" >
                             <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={facebook} />
                                 </span>
                             </div>
-
                             <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
                                 <span className="icon-font">
                                     <img width="80" height="80" alt="fb" src={twitter} />
@@ -556,19 +705,7 @@ class PerfilEmpleado extends React.Component {
                                 </span>
                             </div>
                         </div>
-                        {/*<div style={{margin: 20, height: 20}}>
-                        <label style={{backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer'}}>
-                        Subir CV
-                    <FileUploader
-                            accept="image/*"
-                            name="avatar"
-                            randomizeFilename
-                            hidden
-                            storageRef={firebase.storage().ref("CV")}
-                            onUploadSuccess={this.handleUploadSuccess}
-                        />
-                        </label>
-        </div>*/}
+
                         <div className="profile-card-desc">
                             <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
                                 {descripcionEmpleado}

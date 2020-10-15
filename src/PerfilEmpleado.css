@@ -478,3 +478,7 @@ a:hover {
   float: left;
   font-weight: bold;
 }
+.botones-files{
+  display: inline-block;
+  margin: 1em;
+}

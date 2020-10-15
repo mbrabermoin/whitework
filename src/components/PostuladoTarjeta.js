@@ -173,9 +173,8 @@ class PostuladoTarjeta extends React.Component {
                         </span>
                     </a>
                 </div>
-            }
+            }            
         }
-
         return (
             <div fullwidth class="card-post">
                 {foto}
@@ -201,7 +200,7 @@ class PostuladoTarjeta extends React.Component {
                     open={this.state.openDetallePostulado}
                     onClose={this.handleCloseDetallePostulado}
                     TransitionComponent={Transition}
-                    fullScreen 
+                    fullScreen
                     maxWidth={'md'}
                     aria-labelledby="form-dialog-title"
                 >
@@ -216,11 +215,11 @@ class PostuladoTarjeta extends React.Component {
                     </DialogActions>
                 </Dialog>
                 <Dialog
-          open={this.state.openCortina}
-          TransitionComponent={Transition}
-          aria-labelledby="form-dialog-title"
-        >
-        </Dialog>
+                    open={this.state.openCortina}
+                    TransitionComponent={Transition}
+                    aria-labelledby="form-dialog-title"
+                >
+                </Dialog>
             </div>
         );
     }

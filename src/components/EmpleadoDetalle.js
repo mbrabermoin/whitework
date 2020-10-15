@@ -180,6 +180,42 @@ class EmpleadoDetalle extends React.Component {
                 </article>
             ))}
         </div>
+        var panelCV = "";
+        if (this.state.usuario.CV === "" || this.state.usuario.CV === undefined) {
+            panelCV = ""
+        } else {
+            panelCV = <div>
+                <div className="botones-files" style={{ margin: 20, height: 20 }}>
+                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                        <a href={this.state.usuario.CV}> Ver CV</a>
+                    </label>
+                </div>
+            </div>
+        }
+        var panelMatricula = "";
+        if (this.state.usuario.Matricula === "" || this.state.usuario.Matricula === undefined) {
+            panelMatricula = ""
+        } else {
+            panelMatricula = <div>
+                <div className="botones-files" style={{ margin: 20, height: 20 }}>
+                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                        <a href={this.state.usuario.Matricula}> Ver Matricula Profesional</a>
+                    </label>
+                </div>
+            </div>
+        }
+        var panelLicenciaConducir = "";
+        if (this.state.usuario.LicenciaConducir === "" || this.state.usuario.LicenciaConducir === undefined) {
+            panelLicenciaConducir = "";
+        } else {
+            panelLicenciaConducir = <div>
+                <div className="botones-files" style={{ margin: 20, height: 20 }}>
+                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                        <a href={this.state.usuario.LicenciaConducir}> Ver Licencia Conducir</a>
+                    </label>
+                </div>
+            </div>
+        }
         return (
             <div className="wrapper1">
                 <div className="profile-card js-profile-card">
@@ -209,7 +245,9 @@ class EmpleadoDetalle extends React.Component {
                                 <div className="profile-card-inf__txt">Puntuación Empleado</div>
                             </div>
                         </div>
-
+                        {panelCV}
+                        {panelMatricula}
+                        {panelLicenciaConducir}
                         <div className="profile-card-social" >
                             {facebookLogo}
                             {twitterLogo}
