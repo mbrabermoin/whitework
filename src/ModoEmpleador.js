@@ -5,11 +5,24 @@ import db from './index';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import Alert from '@material-ui/lab/Alert';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import Snackbar from '@material-ui/core/Snackbar';
+import { DataGrid } from '@material-ui/data-grid';
+import Button from '@material-ui/core/Button';
+import EmpleadoDetalle from "./components/EmpleadoDetalle";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
-
+const columns = [
+  { field: 'name', headerName: 'Nombre y Apellido', width: 200 },
+  { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'ubicacion', headerName: 'Ubicación', width: 200 },
+  { field: 'telefono', headerName: 'Telefono', width: 200 },
+  { field: 'descripcion', headerName: 'Descripción', width: 200 },
+];
 class ModoEmpleador extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +35,10 @@ class ModoEmpleador extends React.Component {
       MensajeExito: "",
       openMensajeExito: false,
       modoMensaje: "success",
+      mostrarEmpleados: false,
+      rows: [],
+      empleado: null,
+      openDetalleEmpleado: false,
     }
     this.actualizarEventosGeneral = this.actualizarEventosGeneral.bind(this);
   }
@@ -93,6 +110,22 @@ class ModoEmpleador extends React.Component {
     }, 1000);
 
   }
+  buscarEmpleados() {
+    var filtro = db.collection("usuarios").where("empleadoActivo","==",true)
+    filtro.onSnapshot((snapShots) => {
+      this.setState({
+        rows: snapShots.docs.map(doc => {
+          return { id: doc.id, data: doc.data(), name: doc.data().fullname,email: doc.data().email , ubicacion: doc.data().ubicacion , telefono: doc.data().telefono ,descripcion: doc.data().descripcionEmpleado  }
+     
+        })
+      })
+    }, error => {
+      console.log(error)
+    });
+    setTimeout(() => {
+      this.setState({ openCortina: false });
+    }, 1000);
+  }
   elegirEstadoPendiente = () => {
     this.setState({ openCortina: true });
     document.getElementById("pendientes-empleador").style.color = "black";
@@ -101,8 +134,10 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
+    document.getElementById("empleados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Pendientes";
     this.setState({ estadoDeEvento: "pendiente" });
+    this.setState({ mostrarEmpleados: false });
     this.buscarEventos("pendiente")
   }
   elegirEstadoPostulaciones = () => {
@@ -113,8 +148,10 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
+    document.getElementById("empleados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Postulaciones";
     this.setState({ estadoDeEvento: "postulado" });
+    this.setState({ mostrarEmpleados: false });
     this.buscarEventos("postulado")
   }
   elegirEstadoStaffCompleto = () => {
@@ -125,8 +162,10 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
+    document.getElementById("empleados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Staff Completo";
     this.setState({ estadoDeEvento: "staffCompleto" });
+    this.setState({ mostrarEmpleados: false });
     this.buscarStaffCompletos()
   }
   elegirEstadoEnProceso = () => {
@@ -137,8 +176,10 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "black";
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
+    document.getElementById("empleados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - En Proceso";
     this.setState({ estadoDeEvento: "enproceso" });
+    this.setState({ mostrarEmpleados: false });
     this.buscarEnProceso()
   }
   elegirEstadoCompletados = () => {
@@ -149,8 +190,10 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
     document.getElementById("completados-empleador").style.color = "black";
     document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
+    document.getElementById("empleados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Completados";
     this.setState({ estadoDeEvento: "completado" });
+    this.setState({ mostrarEmpleados: false });
     this.buscarCompletado()
   }
   elegirEstadoPuntuados = () => {
@@ -161,9 +204,25 @@ class ModoEmpleador extends React.Component {
     document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
     document.getElementById("completados-empleador").style.color = "#b2bbbd";
     document.getElementById("puntuados-empleador").style.color = "black";
+    document.getElementById("empleados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Puntuados";
     this.setState({ estadoDeEvento: "puntuado" });
+    this.setState({ mostrarEmpleados: false });
     this.buscarCompletado()
+  }
+  elegirEmpleados = () => {
+    this.setState({ openCortina: true });
+    document.getElementById("pendientes-empleador").style.color = "#b2bbbd";
+    document.getElementById("postulaciones-empleador").style.color = "#b2bbbd";
+    document.getElementById("staff-completo-empleador").style.color = "#b2bbbd";
+    document.getElementById("enproceso-empleador").style.color = "#b2bbbd";
+    document.getElementById("completados-empleador").style.color = "#b2bbbd";
+    document.getElementById("puntuados-empleador").style.color = "#b2bbbd";
+    document.getElementById("empleados").style.color = "black";
+    document.getElementById("temporales-titulo").textContent = "Buscar Prestadores";
+    this.setState({ estadoDeEvento: "" });
+    this.setState({ mostrarEmpleados: true });
+    this.buscarEmpleados();
   }
   actualizarEventosGeneral() {
     this.setState({ eventos: [] })
@@ -191,6 +250,29 @@ class ModoEmpleador extends React.Component {
   cerrarMensajeExito = () => {
     this.setState({ openMensajeExito: false });
   }
+  handleCloseDetalleEmpleado = () => {
+    this.setState({ openDetalleEmpleado: false });
+}
+handleOpenDetalleEmpleado = (empleadoId) => {
+  this.setState({ openCortina: true });
+  var docRef = db.collection("usuarios").doc(empleadoId);
+        let component = this;
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                console.log("Empleado:", doc.data());
+                component.setState({ empleado: doc.data() });
+            } else {
+                alert("Ha ocurrido un error. Actualice la página.");
+            }
+        }).catch(function (error) {
+            console.log(error);
+            alert("Ha ocurrido un error. Actualice la página.");
+        });
+        setTimeout(() => {
+          this.setState({ openCortina: false });
+          this.setState({ openDetalleEmpleado: true });
+        }, 1000);
+}
   render() {
     var today = new Date();
     var mes = "";
@@ -262,15 +344,25 @@ class ModoEmpleador extends React.Component {
     }
     var contenedorEventos = "";
     console.log(eventos)
-    if (eventos.length === 0) {
-      contenedorEventos = <div className="sinEventos">
-        No se han encontrado eventos.
-    </div>
-    } else {
-      contenedorEventos = <div className='library'>
-        {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} mostrarMensajeExito={this.mostrarMensajeExito} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
-        ))}
+    if (this.state.mostrarEmpleados) {
+      contenedorEventos = <div style={{ height: 400, verticalalign: 'middle', margin: 20 }}>
+        <DataGrid rows={this.state.rows} columns={columns} onSelectionChange={(data) => {
+          if (data.rows[0] !== undefined) {
+            this.handleOpenDetalleEmpleado(data.rows[0].email)
+          }
+        }} pageSize={10} disableMultipleSelection={true} hideFooterSelectedRowCount />
       </div>
+    } else {
+      if (eventos.length === 0) {
+        contenedorEventos = <div className="sinEventos">
+          No se han encontrado eventos.
+    </div>
+      } else {
+        contenedorEventos = <div className='library'>
+          {eventos.map(evento => (<EventoTarjeta key={evento.id} actualizarEventosGeneral={this.actualizarEventosGeneral} mostrarMensajeExito={this.mostrarMensajeExito} usuario={this.state.usuario} estado={this.state.estadoDeEvento} eventoid={evento.data.id_evento} titulo={evento.data.titulo} privado="no" mailDueño={evento.data.mail_dueño_evento} nombreDueño={evento.data.nombre_dueño_evento} cantTrabajos={evento.data.cantidadTrabajos} descripcion={evento.data.descripcion} datecomienzo={evento.data.dateComienzo} datefin={evento.data.dateFinaliza} timecomienzo={evento.data.timeComienzo} timefin={evento.data.timeFinaliza} provincia={evento.data.provincia} ciudad={evento.data.ciudad} direccion={evento.data.direccion} cantPostEvento={evento.data.cantPostulados} cantPuntEvento={evento.data.cantPuntuados} cantAsignados={evento.data.cantAsignados} modo="empleador" />
+          ))}
+        </div>
+      }
     }
     return (
       <div>
@@ -287,7 +379,8 @@ class ModoEmpleador extends React.Component {
             <span onClick={this.elegirEstadoEnProceso} id="enproceso-empleador">En Proceso</span>
             <span onClick={this.elegirEstadoCompletados} id="completados-empleador">Completados</span>
             <span onClick={this.elegirEstadoPuntuados} id="puntuados-empleador">Puntuados</span>
-            <div className="push-right"><AgregarEvento usuario={this.state.usuario} mostrarMensajeExito={this.mostrarMensajeExito}/></div>
+            <span onClick={this.elegirEmpleados} id="empleados">Prestadores</span>
+            <div className="push-right"><AgregarEvento usuario={this.state.usuario} mostrarMensajeExito={this.mostrarMensajeExito} /></div>
           </div>
           <div className='track'>
             <div className='top'>
@@ -296,6 +389,24 @@ class ModoEmpleador extends React.Component {
             {contenedorEventos}
           </div>
         </main>
+        <Dialog
+                    open={this.state.openDetalleEmpleado}
+                    onClose={this.handleCloseDetalleEmpleado}
+                    TransitionComponent={Transition}
+                    fullWidth={true}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Empleado</DialogTitle>
+                    <DialogContent dividers>
+                        <EmpleadoDetalle usuario={this.state.empleado} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseDetalleEmpleado} color="primary">
+                            CERRAR
+                 </Button>
+                    </DialogActions>
+                </Dialog>
         <Dialog
           open={this.state.openCortina}
           TransitionComponent={Transition}
