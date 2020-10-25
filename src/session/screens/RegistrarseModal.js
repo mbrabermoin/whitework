@@ -82,6 +82,7 @@ function createMailUser() {
                                                 email: registeredUser.user.email,
                                                 urlFoto: "",
                                                 telefono: "",
+                                                empresa: false,
                                                 fullname: nombre + " " + apellido,
                                                 facebook: "",
                                                 instagram: "",

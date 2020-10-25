@@ -8,6 +8,7 @@ import locacion from "./logos/locacion.png";
 import telefono from "./logos/whatsapp.png";
 import email from "./logos/email.png";
 import cuilvalidado from "./logos/validado.png";
+import empresavalidada from "./logos/validado.png";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -54,6 +55,7 @@ class PerfilEmpleado extends React.Component {
             openComentariosEmpleado: false,
             openComentariosEmpleador: false,
             empleadoActivo: false,
+            empresa: false,
             //Files
             avatar: "",
             isUploading: false,
@@ -82,6 +84,7 @@ class PerfilEmpleado extends React.Component {
                 console.log("Document data:", doc.data());
                 component.setState({ usuario: doc.data() });
                 component.setState({ empleadoActivo: doc.data().empleadoActivo })
+                component.setState({ empresa: doc.data().empresa })
             } else {
                 alert("Ha ocurrido un error. Actualice la página.");
             }
@@ -414,6 +417,15 @@ class PerfilEmpleado extends React.Component {
             this.setState({ openCortina: false });
         }, 1000);
     };
+    handleChangeModoEmpresa = (event) => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        this.setState({ empresa: event.target.checked });
+        Modificar.modificarEmpresaActivo(event.target.checked, email);
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+        }, 1000);
+    };
     render() {
         var foto = "";
         if (this.state.usuario.urlFoto !== "") {
@@ -506,7 +518,7 @@ class PerfilEmpleado extends React.Component {
         if (this.state.usuario.CV === "" || this.state.usuario.CV === undefined) {
             panelCV = <div style={{ margin: 20, height: 20 }}>
                 <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                Cargar CV
+                    Cargar CV
     <FileUploader
                         accept="pdf/*"
                         name="avatar"
@@ -533,7 +545,7 @@ class PerfilEmpleado extends React.Component {
             </div>
                 <div className="botones-files" style={{ margin: 20, height: 20 }}>
                     <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                       <a href={this.state.usuario.CV}> Ver CV</a>
+                        <a href={this.state.usuario.CV}> Ver CV</a>
                     </label>
                 </div>
             </div>
@@ -569,7 +581,7 @@ class PerfilEmpleado extends React.Component {
             </div>
                 <div className="botones-files" style={{ margin: 20, height: 20 }}>
                     <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                       <a href={this.state.usuario.Matricula}> Ver Matricula Profesional</a>
+                        <a href={this.state.usuario.Matricula}> Ver Matricula Profesional</a>
                     </label>
                 </div>
             </div>
@@ -578,7 +590,7 @@ class PerfilEmpleado extends React.Component {
         if (this.state.usuario.LicenciaConducir === "" || this.state.usuario.LicenciaConducir === undefined) {
             panelLicenciaConducir = <div style={{ margin: 20, height: 20 }}>
                 <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                Cargar Licencia Conducir
+                    Cargar Licencia Conducir
     <FileUploader
                         accept="pdf/*"
                         name="avatar"
@@ -605,10 +617,168 @@ class PerfilEmpleado extends React.Component {
             </div>
                 <div className="botones-files" style={{ margin: 20, height: 20 }}>
                     <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                       <a href={this.state.usuario.LicenciaConducir}> Ver Licencia Conducir</a>
+                        <a href={this.state.usuario.LicenciaConducir}> Ver Licencia Conducir</a>
                     </label>
                 </div>
             </div>
+        }
+        var perfilUsuario = "";
+        var empresaValidada = "";
+        var empresaValidadaLogo = "";
+        if(this.state.empresa===false){
+            empresaValidada = "";
+            empresaValidadaLogo = "";
+            perfilUsuario = <div>
+            <div className="profile-card-loc">
+                {cuil}
+                {cuilValidado}
+            </div>
+            <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
+            <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
+            <div className="profile-card-loc">
+                <span className="profile-card-loc__icon">
+                    <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
+                </span>
+                <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
+                    {Ubicacion}
+                </span>
+            </div>
+            <div className="profile-card-email">
+                <span className="profile-card-email__icon">
+                    <img width="60" height="60" alt="fb" src={email} />
+                </span>
+                <span className="profile-card-email__txt">
+                    {this.state.usuario.email}
+                </span>
+            </div>
+            <div className="profile-card-tel">
+                <span className="profile-card-tel__icon">
+                    <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
+                </span>
+                <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
+                    {Numerotelefono}
+                </span>
+            </div>
+            <div className="profile-card-inf">
+                <div className="profile-card-inf__item">
+                    <div className="profile-card-inf__title">{this.state.cantidadTrabajosRealizados}</div>
+                    <div className="profile-card-inf__txt">Changas realizadas</div>
+                </div>
+                <div className="profile-card-inf__item">
+                    <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
+                    <div className="profile-card-inf__txt">Puntuación Empleado</div>
+                </div>
+                <div className="profile-card-inf__item">
+                    <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
+                    <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                </div>
+                <div className="profile-card-inf__item">
+                    <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
+                    <div className="profile-card-inf__txt">Puntuación Empleador</div>
+                </div>
+            </div>
+            {panelCV}
+            {panelMatricula}
+            {panelLicenciaConducir}
+            <div className="profile-card-social" >
+                <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={facebook} />
+                    </span>
+                </div>
+                <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={twitter} />
+                    </span>
+                </div>
+                <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={instagram} />
+                    </span>
+                </div>
+                <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={linkedin} />
+                    </span>
+                </div>
+            </div>
+
+            <div className="profile-card-desc">
+                <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
+                    {descripcionEmpleado}
+                </span>
+            </div>
+            <div className="profile-card-desc">
+                <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
+                    {descripcionEmpleador}
+                </span>
+            </div>
+        </div>
+        }else{            
+            perfilUsuario = <div>
+                <div className="profile-card-loc">
+                <span className="profile-card-loc__icon">
+                    <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
+                </span>
+                <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
+                    {Ubicacion}
+                </span>
+            </div>
+            <div className="profile-card-tel">
+                <span className="profile-card-tel__icon">
+                    <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
+                </span>
+                <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
+                    {Numerotelefono}
+                </span>
+            </div>
+            <div className="profile-card-inf">
+                <div className="profile-card-inf__item">
+                    <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
+                    <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                </div>
+                <div className="profile-card-inf__item">
+                    <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
+                    <div className="profile-card-inf__txt">Puntuación Empleador</div>
+                </div>
+            </div>
+            <div className="profile-card-social" >
+                <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={facebook} />
+                    </span>
+                </div>
+                <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={twitter} />
+                    </span>
+                </div>
+                <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={instagram} />
+                    </span>
+                </div>
+                <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
+                    <span className="icon-font">
+                        <img width="80" height="80" alt="fb" src={linkedin} />
+                    </span>
+                </div>
+                <div className="profile-card-desc">
+                <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
+                    {descripcionEmpleador}
+                </span>
+            </div>
+            </div>
+            </div>;
+            if(this.state.usuario.empresaValidada){
+                empresaValidada = "(empresa validada)";
+                empresaValidadaLogo = <span className="profile-card-cuilVal__icon">
+                        <img width="20" height="20" alt="empresa validada" src={empresavalidada} />
+                    </span>
+            }else{
+                empresaValidada = "";
+                empresaValidadaLogo = "";
+            }
         }
         return (
             <div className="wrapper1">
@@ -632,91 +802,10 @@ class PerfilEmpleado extends React.Component {
                             </label>
                         </div>
                         <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
-                        <div className="profile-card-loc">
-                            {cuil}
-                            {cuilValidado}
-                        </div>
-                        <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
-                        <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
-                        <div className="profile-card-loc">
-                            <span className="profile-card-loc__icon">
-                                <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
-                            </span>
-                            <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
-                                {Ubicacion}
-                            </span>
-                        </div>
-                        <div className="profile-card-email">
-                            <span className="profile-card-email__icon">
-                                <img width="60" height="60" alt="fb" src={email} />
-                            </span>
-                            <span className="profile-card-email__txt">
-                                {this.state.usuario.email}
-                            </span>
-                        </div>
-                        <div className="profile-card-tel">
-                            <span className="profile-card-tel__icon">
-                                <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
-                            </span>
-                            <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
-                                {Numerotelefono}
-                            </span>
-                        </div>
-                        <div className="profile-card-inf">
-                            <div className="profile-card-inf__item">
-                                <div className="profile-card-inf__title">{this.state.cantidadTrabajosRealizados}</div>
-                                <div className="profile-card-inf__txt">Changas realizadas</div>
-                            </div>
-                            <div className="profile-card-inf__item">
-                                <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
-                                <div className="profile-card-inf__txt">Puntuación Empleado</div>
-                            </div>
-                            <div className="profile-card-inf__item">
-                                <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                                <div className="profile-card-inf__txt">Puntajes de Empleados</div>
-                            </div>
-                            <div className="profile-card-inf__item">
-                                <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
-                                <div className="profile-card-inf__txt">Puntuación Empleador</div>
-                            </div>
-                        </div>
-                        {panelCV}
-                        {panelMatricula}
-                        {panelLicenciaConducir}
-                        <div className="profile-card-social" >
-                            <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
-                                <span className="icon-font">
-                                    <img width="80" height="80" alt="fb" src={facebook} />
-                                </span>
-                            </div>
-                            <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
-                                <span className="icon-font">
-                                    <img width="80" height="80" alt="fb" src={twitter} />
-                                </span>
-                            </div>
-                            <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
-                                <span className="icon-font">
-                                    <img width="80" height="80" alt="fb" src={instagram} />
-                                </span>
-                            </div>
-                            <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
-                                <span className="icon-font">
-                                    <img width="80" height="80" alt="fb" src={linkedin} />
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="profile-card-desc">
-                            <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
-                                {descripcionEmpleado}
-                            </span>
-                        </div>
-                        <div className="profile-card-desc">
-                            <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
-                                {descripcionEmpleador}
-                            </span>
-                        </div>
-
+                        <div>{empresaValidada}{empresaValidadaLogo}</div>
+                        <FormControlLabel control={<Switch color="primary" checked={this.state.empresa} onChange={this.handleChangeModoEmpresa} name="empresaActivo" />} label="Modo Empresa" />
+          
+                        {perfilUsuario}
                     </div>
                 </div>
                 <Dialog

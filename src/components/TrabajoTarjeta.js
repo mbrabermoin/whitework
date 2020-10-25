@@ -141,28 +141,32 @@ class TrabajoTarjeta extends React.Component {
         }
     }
     postularse = () => {
-        if (this.state.usuario.suspendido) {
-            this.props.mostrarMensajeExito("No puedes postularte, su cuenta se encuentra suspendida.", "error");
+        if (this.state.usuario.empresa) {
+            this.props.mostrarMensajeExito("Su cuenta pertenece a una empresa, no puedes postularte.", "error");
         } else {
-            if (this.state.usuario.cuil === "") {
-                this.props.mostrarMensajeExito("Necesitas un CUIL antes de postularte.", "error");
+            if (this.state.usuario.suspendido) {
+                this.props.mostrarMensajeExito("No puedes postularte, su cuenta se encuentra suspendida.", "error");
             } else {
-                if (this.state.usuario.cuilValidado === "N") {
-                    this.props.mostrarMensajeExito("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
+                if (this.state.usuario.cuil === "") {
+                    this.props.mostrarMensajeExito("Necesitas un CUIL antes de postularte.", "error");
                 } else {
-                    this.setState({ openCortina: true })
-                    var mail = this.state.usuario.email;
-                    var trabajo = this.state.trabajo;
-                    var evento = this.state.evento;
-                    var cantPost = this.state.cantPost + 1;
-                    var cantPostEvento = this.state.cantPostEvento + 1;
-                    Agregar.agregarPostulacion(mail, trabajo, evento);
-                    Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
-                    Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
-                    setTimeout(() => {
-                        this.props.mostrarMensajeExito("Postulado Correctamente.", "success");
-                        this.props.actualizarEventos();
-                    }, 1000);
+                    if (this.state.usuario.cuilValidado === "N") {
+                        this.props.mostrarMensajeExito("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
+                    } else {
+                        this.setState({ openCortina: true })
+                        var mail = this.state.usuario.email;
+                        var trabajo = this.state.trabajo;
+                        var evento = this.state.evento;
+                        var cantPost = this.state.cantPost + 1;
+                        var cantPostEvento = this.state.cantPostEvento + 1;
+                        Agregar.agregarPostulacion(mail, trabajo, evento);
+                        Editar.agregarPostulacionEvento(evento, cantPostEvento, "postulado");
+                        Editar.agregarPostulacionTrabajo(trabajo, "postulado", cantPost);
+                        setTimeout(() => {
+                            this.props.mostrarMensajeExito("Postulado Correctamente.", "success");
+                            this.props.actualizarEventos();
+                        }, 1000);
+                    }
                 }
             }
         }
