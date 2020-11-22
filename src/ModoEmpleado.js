@@ -38,6 +38,54 @@ if (month.toString().length < 2) {
   month = "0" + month
 }
 const fechaProximoMes = year + "-" + month + "-" + day;
+const categorias = [
+  {
+    value: '',
+    label: '',
+  },
+  {
+    value: 'Diversion',
+    label: 'Diversion',
+  },
+  {
+    value: 'Electricidad',
+    label: 'Electricidad',
+  },
+  {
+    value: 'Plomeria',
+    label: 'Plomeria',
+  },
+  {
+    value: 'Gasista',
+    label: 'Gasista',
+  },
+  {
+    value: 'Seguridad',
+    label: 'Seguridad',
+  },
+  {
+    value: 'Otros',
+    label: 'Otros',
+  },
+];
+const periodos = [
+  {
+    value: 'Hora',
+    label: 'Hora',
+  },
+  {
+    value: 'Jornada',
+    label: 'Jornada',
+  },
+  {
+    value: 'Semana',
+    label: 'Semana',
+  },
+  {
+    value: 'Total',
+    label: 'Total',
+  },
+];
 export default class ModoEmpleado extends React.Component {
   constructor(props) {
     super(props);
@@ -56,6 +104,8 @@ export default class ModoEmpleado extends React.Component {
       MensajeExito: "",
       openMensajeExito: false,
       modoMensaje: "success",
+      periodoDisplay: "Total",
+      categoriaDisplay: "",
     }
     this.actualizarEventosGeneral = this.actualizarEventosGeneral.bind(this);
   }
@@ -78,6 +128,12 @@ export default class ModoEmpleado extends React.Component {
       this.setState({ openCortina: false });
     }, 1000);
   }
+  handleCambiarPeriodo = name => event => {
+    this.setState({ periodoDisplay: event.target.value });
+  }
+  handleCambiarCategoria = name => event => {
+    this.setState({ categoriaDisplay: event.target.value });
+  }
   buscarEventos(estado) {
     var filtro = db.collection("eventos").where("estado", "==", estado)
     filtro.onSnapshot((snapShots) => {
@@ -96,7 +152,16 @@ export default class ModoEmpleado extends React.Component {
   busquedaAbierta() {
     var post = [];
     var events = [];
+    var eventosFiltrados = [];
     var mailUsuario = this.state.usuario.email;
+    var pago = "";
+    var periodo = "";
+    var tipoTrabajo = "";
+    if (this.state.filtroActivo) {
+      pago = document.getElementById("pago").value;
+      periodo = this.state.periodoDisplay;
+      tipoTrabajo = this.state.categoriaDisplay;
+    }
     db.collection("postulaciones").where("mail_postulante", "==", mailUsuario).get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
@@ -115,21 +180,91 @@ export default class ModoEmpleado extends React.Component {
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-    db.collection("eventos").get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          const found = post.find(element => element === doc.data().id_evento);
-          if (found !== doc.data().id_evento) {
-            return events.push({ id: doc.id, data: doc.data() });
-          }
+    if (this.state.filtroActivo) {
+      if (tipoTrabajo !== "") {
+        if (pago !== "") {
+          db.collection("trabajos").where("categoria", "==", tipoTrabajo).where("periodo", "==", periodo).get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (doc) {
+                if (parseFloat(doc.data().pago) >= parseFloat(pago)) {
+                  eventosFiltrados.push(doc.data().id_evento);
+                }
+              });
+            })
+            .catch(function (error) {
+              console.log("Error getting documents: ", error);
+            });
+        } else {
+          db.collection("trabajos").where("categoria", "==", tipoTrabajo).get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (doc) {
+                eventosFiltrados.push(doc.data().id_evento);
+              });
+            })
+            .catch(function (error) {
+              console.log("Error getting documents: ", error);
+            });
+        }
+      } else {
+        if (pago !== "") {
+          db.collection("trabajos").where("periodo", "==", periodo).get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (doc) {
+                if (parseFloat(doc.data().pago) >= parseFloat(pago)) {
+                  eventosFiltrados.push(doc.data().id_evento);
+                }
+              });
+            })
+            .catch(function (error) {
+              console.log("Error getting documents: ", error);
+            });
+        } else {
+          db.collection("trabajos").get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (doc) {
+                eventosFiltrados.push(doc.data().id_evento);
+              });
+            })
+            .catch(function (error) {
+              console.log("Error getting documents: ", error);
+            });
+        }
+      }
+
+    }
+    if (this.state.filtroActivo) {
+      db.collection("eventos").get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            const found = post.find(element => element === doc.data().id_evento);
+            const trabajofiltradoencontrado = eventosFiltrados.find(element => element === doc.data().id_evento);
+            if (found !== doc.data().id_evento) {
+              if (trabajofiltradoencontrado === doc.data().id_evento) {
+                return events.push({ id: doc.id, data: doc.data() });
+              }
+            }
+          });
+        })
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
         });
-      })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
-      });
+    } else {
+      db.collection("eventos").get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            const found = post.find(element => element === doc.data().id_evento);
+            if (found !== doc.data().id_evento) {
+              return events.push({ id: doc.id, data: doc.data() });
+            }
+
+          });
+        })
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
+        });
+    }
     setTimeout(() => {
       if (this.state.filtroActivo) {
-
         this.aplicarFiltros(events);
       } else {
         this.setState({ eventos: events })
@@ -358,8 +493,11 @@ export default class ModoEmpleado extends React.Component {
   }
   limpiarFiltros = () => {
     this.setState({ provinciaDisplay: "" });
+    this.setState({ periodoDisplay: "" });
+    this.setState({ categoriaDisplay: "" });
     this.setState({ ciudad: "" });
     this.setState({ provincia: "" });
+    document.getElementById("pago").value = "";
     document.getElementById("dueño").value = "";
     document.getElementById("desde").value = materialDateInput;
     document.getElementById("hasta").value = fechaProximoMes;
@@ -440,13 +578,20 @@ export default class ModoEmpleado extends React.Component {
           <label>Dueño: </label>
           <input id="dueño" type="" text="Dueño" className="filtro-busqueda" />
           <br></br>
-          <div className="filtros-inline">
-            <div className="prov-filter">
-              <TextField id="provincia" select value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" style={{ width: 200, }} >
-                {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
-              </TextField>
-            </div>
+          <div >
+            <TextField id="provincia" select value={this.state.provinciaDisplay} onChange={this.handleCambiarProvincia('provinciaDisplay')} label="Provincia" style={{ width: 200, marginRight: 20, }} >
+              {provincias.map(option => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
+            </TextField>
             {ciudadesMostrar}
+          </div>
+          <div>
+            <TextField id="pago" label="Pago minimo" style={{ width: 200, marginLeft: 20, }} />
+            <TextField id="periodo" select value={this.state.periodoDisplay} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo" style={{ width: 200, marginLeft: 20, }} >
+              {periodos.map(option => <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>)}
+            </TextField>
+            <TextField id="tipo" select value={this.state.categoriaDisplay} onChange={this.handleCambiarCategoria('categoriaDisplay')} label="Categoria" style={{ width: 200, marginLeft: 20, }} >
+              {categorias.map(option => <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>)}
+            </TextField>
           </div>
           <div id="filtros-activos-botones">
             <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button-activos">Buscar</button>

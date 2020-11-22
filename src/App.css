@@ -668,16 +668,12 @@ ul {
   font-size: 1rem; 
   cursor:pointer;
 }
-.prov-filter{
-  margin-right: 40px;
-}
 .filtros-inline{
   display: flex;
   margin-left: 20px;
 }
 #filtros-activos-botones{
-margin-left: 650px;
-margin-top: -35px;
+margin-top: 40px;
 }
 .task-list{
   padding: 50px;

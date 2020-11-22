@@ -148,10 +148,10 @@ class TrabajoTarjeta extends React.Component {
                 this.props.mostrarMensajeExito("No puedes postularte, su cuenta se encuentra suspendida.", "error");
             } else {
                 if (this.state.usuario.cuil === "") {
-                    this.props.mostrarMensajeExito("Necesitas un CUIL antes de postularte.", "error");
+                    this.props.mostrarMensajeExito("Necesitas un CUIT antes de postularte.", "error");
                 } else {
                     if (this.state.usuario.cuilValidado === "N") {
-                        this.props.mostrarMensajeExito("Se necesita tener el CUIL Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
+                        this.props.mostrarMensajeExito("Se necesita tener el CUIT Validado para poder postularse a un trabajo. Aguarde a que un administrador lo valide.", "error");
                     } else {
                         this.setState({ openCortina: true })
                         var mail = this.state.usuario.email;

@@ -454,14 +454,14 @@ class PerfilEmpleado extends React.Component {
         var cuil = "";
         var cuilValidado = "";
         if (this.state.usuario.cuil === "" || this.state.usuario.cuil === null) {
-            cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>Ingresar CUIL </strong> </div>
+            cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>Ingresar CUIT </strong> </div>
             cuilValidado = "";
         } else {
             if (this.state.usuario.cuilValidado === "N") {
-                cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>CUIL: {this.state.usuario.cuil} </strong> </div>
+                cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>CUIT: {this.state.usuario.cuil} </strong> </div>
                 cuilValidado = ""
             } else {
-                cuil = <div onClick="" className="profile-card__txt"><strong>CUIL: {this.state.usuario.cuil} </strong> </div>
+                cuil = <div onClick="" className="profile-card__txt"><strong>CUIT: {this.state.usuario.cuil} </strong> </div>
                 cuilValidado = <span className="profile-card-cuilVal__icon">
                     <img width="20" height="20" alt="fb" src={cuilvalidado} />
                 </span>
@@ -816,9 +816,9 @@ class PerfilEmpleado extends React.Component {
                     maxWidth={'md'}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="confirmation-dialog-title">CUIL:</DialogTitle>
+                    <DialogTitle id="confirmation-dialog-title">CUIT:</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="cuil" autoFocus margin="dense" label="CUIL (Debera esperar la validación del sistema)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
+                        <TextField id="cuil" autoFocus margin="dense" label="CUIT (Debera esperar la validación del sistema)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseCUIL} color="primary">
