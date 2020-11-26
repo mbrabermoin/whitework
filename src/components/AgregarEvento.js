@@ -55,6 +55,24 @@ const metodopago = [
         label: 'MercadoPago',
     },
 ];
+const facturacion = [
+    {
+        value: 'A Definir',
+        label: 'A Definir',
+    },
+    {
+        value: 'Factura A',
+        label: 'Factura A',
+    },
+    {
+        value: 'Factura B',
+        label: 'Factura B',
+    },
+    {
+        value: 'Factura C',
+        label: 'Factura C',
+    },
+];
 const categorias = [
     {
         value: '',
@@ -117,6 +135,7 @@ export default class AgregarEvento extends React.Component {
             cantTrabajos: 0,
             periodoDisplay: "Hora",
             metodopagoDisplay: "A Definir",
+            facturacionDisplay: "A Definir",
             categoriaDisplay: "",
             provinciaDisplay: "",
             ciudadDisplay: "",
@@ -158,6 +177,7 @@ export default class AgregarEvento extends React.Component {
         this.setState({ openTrabajo: true });
         this.setState({ periodoDisplay: "Hora" });
         this.setState({ metodopagoDisplay: "A Definir" });
+        this.setState({ facturacionDisplay: "A Definir"})
         this.setState({ categoriaDisplay: "" });
     };
     handleAgregarEvento = () => {
@@ -206,10 +226,11 @@ export default class AgregarEvento extends React.Component {
                                             const descripciontrab = this.state.arrayTrabajos[t].descripciontrab;
                                             const pago = this.state.arrayTrabajos[t].pago;
                                             const metodopago = this.state.arrayTrabajos[t].metodopago;
+                                            const facturacion = this.state.arrayTrabajos[t].facturacion;
                                             const periodo = this.state.arrayTrabajos[t].periodo;
                                             const categoria = this.state.arrayTrabajos[t].categoria;
                                             setTimeout(function () {
-                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago, pago, periodo, categoria);
+                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago,facturacion, pago, periodo, categoria);
                                             }, t * 1100);
                                         }
                                         this.props.mostrarMensajeExito("Evento Agregado Correctamente.", "success");
@@ -272,8 +293,9 @@ export default class AgregarEvento extends React.Component {
                         this.props.mostrarMensajeExito("Periodo es Requerido.", "error");
                     } else {
                         const metodopago = this.state.metodopagoDisplay;
+                        const facturacion = this.state.facturacionDisplay;
                         const categoria = this.state.categoriaDisplay;
-                        const job = { rol: rol, descripciontrab: descripciontrab,metodopago: metodopago, pago: pago, periodo: periodo, categoria: categoria };
+                        const job = { rol: rol, descripciontrab: descripciontrab,metodopago: metodopago,facturacion: facturacion, pago: pago, periodo: periodo, categoria: categoria };
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -286,6 +308,9 @@ export default class AgregarEvento extends React.Component {
     }
     handleCambiarMetodopago = name => event => {
         this.setState({ metodopagoDisplay: event.target.value });
+    }
+    handleCambiarFacturacion = name => event => {
+        this.setState({ facturacionDisplay: event.target.value });
     }
     handleCambiarPeriodo = name => event => {
         this.setState({ periodoDisplay: event.target.value });
@@ -325,7 +350,7 @@ export default class AgregarEvento extends React.Component {
         this.setState({ openCortina: true });
         var trabajos = [];
         trabajos = this.state.arrayTrabajos;
-        const job = { rol: trabajo.rol, descripciontrab: trabajo.descripciontrab, pago: trabajo.pago, periodo: trabajo.periodo, categoria: trabajo.categoria };
+        const job = { rol: trabajo.rol, descripciontrab: trabajo.descripciontrab, pago: trabajo.pago,metodopago: trabajo.metodopago, facturacion: trabajo.facturacion, periodo: trabajo.periodo, categoria: trabajo.categoria };
         this.state.arrayTrabajos.splice(index, 0, job);
         this.setState({ openLista: false });
         setTimeout(() => {
@@ -337,12 +362,13 @@ export default class AgregarEvento extends React.Component {
             this.setState({ openCortina: false });
         }, 300);
     }
-    editarTrabajoAgregando(index, rol, descripciontrab, metodopago, pago, periodo, categoria){
+    editarTrabajoAgregando(index, rol, descripciontrab, metodopago,facturacion, pago, periodo, categoria){
         this.setState({ openCortina: true });
         var trabajos = this.state.arrayTrabajos;
         trabajos[index].rol = rol;
         trabajos[index].descripciontrab = descripciontrab;
         trabajos[index].metodopago = metodopago;
+        trabajos[index].facturacion = facturacion;
         trabajos[index].pago = pago;
         trabajos[index].periodo = periodo;
         trabajos[index].categoria = categoria;
@@ -371,7 +397,7 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} metodopago={trabajo.metodopago} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
+                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} metodopago={trabajo.metodopago} facturacion={trabajo.facturacion} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
                 ))}
             </div>
         } else {
@@ -464,6 +490,9 @@ export default class AgregarEvento extends React.Component {
                         <TextField id="descripcion-trab" required multiline rows="2" margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
                         <TextField id="metodopago" select required margin="dense" value={this.state.metodopagoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarMetodopago('metodopagoDisplay')} label="Metodo de Pago" fullWidth>
                             {metodopago.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
+                        </TextField>
+                        <TextField id="facturacion" select required margin="dense" value={this.state.facturacionDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarFacturacion('facturacionDisplay')} label="Facturación" fullWidth>
+                            {facturacion.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
                         <TextField id="pago" required margin="dense" label="Pago" type="number" fullWidth />
                         <TextField id="periodo" select required margin="dense" value={this.state.periodoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo de Pago" fullWidth>

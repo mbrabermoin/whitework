@@ -48,6 +48,24 @@ const metodopago = [
         label: 'MercadoPago',
     },
 ];
+const facturacion = [
+    {
+        value: 'A Definir',
+        label: 'A Definir',
+    },
+    {
+        value: 'Factura A',
+        label: 'Factura A',
+    },
+    {
+        value: 'Factura B',
+        label: 'Factura B',
+    },
+    {
+        value: 'Factura C',
+        label: 'Factura C',
+    },
+];
 const categorias = [
     {
         value: '',
@@ -91,6 +109,7 @@ class EditarTrabajo extends React.Component {
             descripcion: "",
             pago: "",
             metodopagoDisplay: "",
+            facturacionDisplay: "",
             periodoDisplay: "",
             categoriaDisplay: "",
             trabajoObjeto: this.props.trabajoObjeto,
@@ -98,6 +117,9 @@ class EditarTrabajo extends React.Component {
     }
     handleCambiarMetodopago = name => event => {
         this.setState({ metodopagoDisplay: event.target.value });
+    }
+    handleCambiarFacturacion = name => event => {
+        this.setState({ facturacionDisplay: event.target.value });
     }
     handleCambiarPeriodo = name => event => {
         this.setState({ periodoDisplay: event.target.value });
@@ -119,12 +141,14 @@ class EditarTrabajo extends React.Component {
             var periodo = "";
             var categoria = "";
             var metodopago = "";
+            var facturacion = "";
             if (this.state.estado !== "agregando") {
                 db.collection("trabajos").doc(this.state.trabajoid).get().then(function (doc) {
                     if (doc.exists) {
                         rol = doc.data().rol;
                         descripcion = doc.data().descripcion;
                         metodopago = doc.data().metodopago;
+                        facturacion = doc.data().facturacion;
                         pago = doc.data().pago;
                         periodo = doc.data().periodo;
                         categoria = doc.data().categoria;
@@ -145,6 +169,11 @@ class EditarTrabajo extends React.Component {
                     } else {
                         this.setState({ metodopagoDisplay: metodopago });
                     }
+                    if (facturacion === "" || facturacion === undefined) {
+                        this.setState({ facturacionDisplay: 'A Definir' });
+                    } else {
+                        this.setState({ facturacionDisplay: facturacion });
+                    }
                     this.setState({ periodoDisplay: periodo });
                     this.setState({ categoriaDisplay: categoria });
                     this.setState({ openCortina: false });
@@ -155,6 +184,7 @@ class EditarTrabajo extends React.Component {
                 this.setState({ descripcion: this.state.trabajoObjeto.descripciontrab });
                 this.setState({ pago: this.state.trabajoObjeto.pago });
                 this.setState({ metodopagoDisplay: this.state.trabajoObjeto.metodopago });
+                this.setState({ facturacionDisplay: this.state.trabajoObjeto.facturacion });
                 this.setState({ periodoDisplay: this.state.trabajoObjeto.periodo });
                 this.setState({ categoriaDisplay: this.state.trabajoObjeto.categoria });
                 this.setState({ openCortina: false });
@@ -181,10 +211,11 @@ class EditarTrabajo extends React.Component {
                     } else {
                         const trabajoid = this.state.trabajoid;
                         const metodopago = this.state.metodopagoDisplay;
+                        const facturacion = this.state.facturacionDisplay;
                         const categoria = this.state.categoriaDisplay;
                         if (this.state.estado !== "agregando") {
                             this.setState({ openCortina: true });
-                            Editar.modificarTrabajo(trabajoid, rol, descripciontrab, metodopago, pago, periodo, categoria)
+                            Editar.modificarTrabajo(trabajoid, rol, descripciontrab, metodopago,facturacion, pago, periodo, categoria)
                             setTimeout(() => {
                                 this.props.actualizarTrabajosEdit();
                                 this.props.mostrarMensajeExitoEdit("Trabajo Actualizado Correctamente.", "success");
@@ -192,7 +223,7 @@ class EditarTrabajo extends React.Component {
                                 this.setState({ openTrabajo: false });
                             }, 1000);
                         } else {
-                            this.props.editarEnAgregando(rol, descripciontrab, metodopago, pago, periodo, categoria)
+                            this.props.editarEnAgregando(rol, descripciontrab, metodopago,facturacion, pago, periodo, categoria)
                             this.setState({ openCortina: false });
                             this.setState({ openTrabajo: false });
                         }
@@ -218,6 +249,9 @@ class EditarTrabajo extends React.Component {
                         <TextField id="descripcion-trab" required multiline rows="2" defaultValue={this.state.descripcion} margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
                         <TextField id="metodopago" select required margin="dense" defaultValue={this.state.metodopagoDisplay} value={this.state.metodopagoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarMetodopago('metodopagoDisplay')} label="Metodo de Pago" fullWidth>
                             {metodopago.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
+                        </TextField>
+                        <TextField id="facturacion" select required margin="dense" defaultValue={this.state.facturacionDisplay} value={this.state.facturacionDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarFacturacion('facturacionDisplay')} label="Facturación" fullWidth>
+                            {facturacion.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
                         </TextField>
                         <TextField id="pago" required margin="dense" defaultValue={this.state.pago} label="Pago" type="number" fullWidth />
                         <TextField id="periodo" select required margin="dense" defaultValue={this.state.periodoDisplay} value={this.state.periodoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarPeriodo('periodoDisplay')} label="Periodo de Pago" fullWidth>

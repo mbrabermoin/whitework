@@ -249,11 +249,12 @@ class EventoTarjeta extends React.Component {
                         const rolT = trab[t].rol;
                         const descripciontrab = trab[t].descripcion;
                         const metodopago = trab[t].metodopago;
+                        const facturacion = trab[t].facturacion;
                         const pago = trab[t].pago;
                         const periodo = trab[t].periodo;
                         const categoria = trab[t].categoria;
                         setTimeout(function () {
-                            Agregar.agregarTrabajo(nuevoEvento, mailDueño, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago, pago, periodo, categoria);
+                            Agregar.agregarTrabajo(nuevoEvento, mailDueño, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago,facturacion, pago, periodo, categoria);
                         }, t * 1100);
                     }
                 }, 1100);
@@ -369,7 +370,7 @@ class EventoTarjeta extends React.Component {
         }
         var trabajos = this.state.trabajos;
         var contenedorTrabajos = <div>
-            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} actualizarEventos={this.actualizarEventos} actualizarTrabajos={this.actualizarTrabajos} mostrarMensajeExito={this.mostrarMensajeExito} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} metodopago={trabajo.data.metodopago} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzo={trabajo.data.dateComienzo} datefin={trabajo.data.dateFinaliza} timecomienzo={trabajo.data.timeComienzo} timefin={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo} />
+            {trabajos.map(trabajo => (<TrabajoTarjeta key={trabajo.id} actualizarEventos={this.actualizarEventos} actualizarTrabajos={this.actualizarTrabajos} mostrarMensajeExito={this.mostrarMensajeExito} postulado={trabajo.postulado} usuario={this.state.usuario} estadoEvento={this.state.estadoEvento} rol={trabajo.data.rol} descripcion={trabajo.data.descripcion} evento={trabajo.data.id_evento} trabajo={trabajo.data.id_trabajo} cantTrabajos={this.state.cantTrabajos} metodopago={trabajo.data.metodopago} facturacion={trabajo.data.facturacion} pago={trabajo.data.pago} periodo={trabajo.data.periodo} datecomienzo={trabajo.data.dateComienzo} datefin={trabajo.data.dateFinaliza} timecomienzo={trabajo.data.timeComienzo} timefin={trabajo.data.timeFinaliza} categoria={trabajo.data.categoria} cantPost={trabajo.data.cantPostulados} cantPostEvento={this.state.cantPostEvento} cantPuntEvento={this.state.cantPuntEvento} cantAsignados={this.state.cantAsignados} asignado={trabajo.data.mail_trabajador} puntuadoEmpleado={trabajo.data.puntuadoEmpleado} puntuadoEmpleador={trabajo.data.puntuadoEmpleador} dueño={this.state.mailDueño} modo={this.state.modo} />
             ))}
         </div>
         var ciudadesMostrar = ""

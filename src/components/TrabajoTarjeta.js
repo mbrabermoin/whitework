@@ -51,6 +51,7 @@ class TrabajoTarjeta extends React.Component {
             descripcion: this.props.descripcion,
             cantTrabajos: this.props.cantTrabajos,
             metodopago: this.props.metodopago,
+            facturacion: this.props.facturacion,
             pago: this.props.pago,
             periodo: this.props.periodo,
             categoria: this.props.categoria,
@@ -128,11 +129,12 @@ class TrabajoTarjeta extends React.Component {
             var dateFinaliza = this.state.dateFinaliza;
             var timeFinaliza = this.state.timeFinaliza;
             var metodopago = this.state.metodopago;
+            var facturacion = this.state.facturacion;
             var pago = this.state.pago;
             var periodo = this.state.periodo;
             var categoria = this.state.categoria;
             var cantTrabajos = this.state.cantTrabajos;
-            Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago, pago, periodo, categoria);
+            Agregar.agregarTrabajo(evento, mail, rol, descripcion, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago,facturacion, pago, periodo, categoria);
             Editar.sumarTrabajo(evento, cantTrabajos);
             setTimeout(() => {
                 this.props.mostrarMensajeExito("Trabajo Duplicado Correctamente.", "success");
@@ -469,8 +471,8 @@ class TrabajoTarjeta extends React.Component {
     duplicarEnAgregando = () => {
         this.props.duplicarTrabajoAgregando(this.state.indexAgregando, this.state.trabajoAgregando)
     }
-    editarEnAgregando = (rol, descripciontrab, metodopago, pago, periodo, categoria) => {
-        this.props.editarTrabajoAgregando(this.state.indexAgregando, rol, descripciontrab, metodopago, pago, periodo, categoria)
+    editarEnAgregando = (rol, descripciontrab, metodopago,facturacion, pago, periodo, categoria) => {
+        this.props.editarTrabajoAgregando(this.state.indexAgregando, rol, descripciontrab, metodopago,facturacion, pago, periodo, categoria)
     }
     actualizarEventosPost() {
         this.props.actualizarEventos();
@@ -596,7 +598,7 @@ class TrabajoTarjeta extends React.Component {
                                 } else {
                                     if (this.state.estadoEvento === "agregando") {
                                         botones = <div><button className='eliminartrabajo-btn' onClick={this.eliminarEnAgregando}>Eliminar</button>
-                                            <BotonEditarTrabajo mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} estado={this.state.estadoEvento} trabajoObjeto={this.state.trabajoAgregando} editarEnAgregando={this.editarEnAgregando} />
+                                            <BotonEditarTrabajo usuario={this.state.usuario} mostrarMensajeExitoEdit={this.mostrarMensajeExitoEdit} estado={this.state.estadoEvento} trabajoObjeto={this.state.trabajoAgregando} editarEnAgregando={this.editarEnAgregando} />
                                             <button className='editar-btn' onClick={this.duplicarEnAgregando}>Duplicar</button>
                                         </div>
                                     }
@@ -639,6 +641,14 @@ class TrabajoTarjeta extends React.Component {
                 </div>
             }
         }
+        var metododepago = "A Definir";
+        if(this.state.metodopago !== null && this.state.metodopago !== undefined && this.state.metodopago !== ""){
+            metododepago=this.state.metodopago;
+        }
+        var facturacionAMostrar = "A Definir";
+        if(this.state.facturacion !== null && this.state.facturacion !== undefined && this.state.facturacion !== ""){
+            facturacionAMostrar=this.state.facturacion;
+        }
         return (
             <div>
                 <div fullwidth className="card-trabajo">
@@ -650,7 +660,8 @@ class TrabajoTarjeta extends React.Component {
                         </div>
                         <h3>{this.props.descripcion}</h3>
                         {/*<h3>Comienza: {this.state.datecomienzotrab} - {this.state.timecomienzotrab}   Finaliza: {this.state.datefintrab} - {this.state.timefintrab}</h3>*/}
-                        <p className="esp text-react">{this.state.pago}$ por {this.state.periodo} - Metodo de Pago: {this.state.metodopago}</p>
+                        <p className="esp text-react">{this.state.pago}$ por {this.state.periodo}</p>
+                        <p className="esp text-react">Metodo de Pago: {metododepago} - Facturación: {facturacionAMostrar}</p>
                     </div>
                 </div>
                 <Dialog
