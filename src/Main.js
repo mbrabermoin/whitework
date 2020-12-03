@@ -98,9 +98,9 @@ class Main extends React.Component {
                 <nav className='navbar'>
                     <ul className="left-ui">
                         <li><div id="logo"><img className='logo' alt="log" src={wwsp} /></div></li>
-                        <li className='home headers-main'>WHITEWORK</li>
-                        <li id="empleado-li" className="headers-main" onClick={this.abrirEmpleado}>Modo Prestador</li>
-                        <li id="empleador-li" className="headers-main" onClick={this.abrirEmpleador}>Modo Empleador</li>
+                        <li className='home'>WHITEWORK</li>
+                        <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Prestador</li>
+                        <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
                     <ul className='right-ui nombre-usuario'>
                         <li className='points' id="profileTitle" onClick={this.abrirPerfil}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>

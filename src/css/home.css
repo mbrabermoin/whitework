@@ -1,0 +1,26 @@
+
+.panel-login {
+    border: 1px solid #3e474f;
+    border-radius: 5px; 
+    margin-top: 20px;
+    height: auto;
+    min-height: 300px;
+    padding: 0px!important;
+}
+
+.header-login {
+    font-size: 20px;
+    background-color: #3e474f;
+    color: #b2bbbd
+}
+
+.active {
+    color: #495057;
+    background-color: #e9ecec!important;
+    border-color: #dee2e6 #dee2e6 #e9ecec!important;
+}
+
+.btn-secondary{
+    color: #fff!important;
+    background-color: #3e474f!important;
+}
