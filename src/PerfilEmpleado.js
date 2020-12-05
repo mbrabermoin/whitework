@@ -23,6 +23,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import FileUploader from "react-firebase-file-uploader";
 import firebase from "firebase";
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -56,6 +58,9 @@ class PerfilEmpleado extends React.Component {
             openComentariosEmpleador: false,
             empleadoActivo: false,
             empresa: false,
+            MensajeExito: "",
+            openMensajeExito: false,
+            modoMensaje: "success",
             //Files
             avatar: "",
             isUploading: false,
@@ -298,13 +303,56 @@ class PerfilEmpleado extends React.Component {
         this.setState({ openCortina: true });
         const email = this.state.usuario.email;
         const cuil = document.getElementById("cuil").value;
-        Modificar.modificarCUILUsuario(cuil, email);
-        this.refrescarUsuario();
-        this.setState({ openModalCUIL: false });
-        setTimeout(() => {
+        var error = this.validarCUIT(cuil);
+        if (error === "OK") {
+            Modificar.modificarCUILUsuario(cuil, email);
+            this.refrescarUsuario();
+            this.setState({ openModalCUIL: false });
+            setTimeout(() => {
+                this.setState({ openCortina: false });
+            }, 1000);
+        } else {
+            this.mostrarMensajeExito(error,"error")
             this.setState({ openCortina: false });
-        }, 1000);
+        }
     }
+    validarCUIT(CUIT) {
+        if (CUIT.length === 11) {
+            if (isNaN(CUIT)) {
+                return "El CUIT debe ser numerico.";
+            } else {
+                if (CUIT.slice(0, 2) === "20" || CUIT.slice(0, 2) === "23" || CUIT.slice(0, 2) === "24" || CUIT.slice(0, 2) === "27") {
+                    var base = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+                    var suma = 0;
+                    for (var i = 0; i < 10; i++) {
+                        suma = suma + (CUIT.slice(i, i + 1) * base[i]);
+                    }
+                    var mod = suma % 11;
+                    var verificador = 11 - mod;
+                    if (mod === 0) {
+                        verificador = 0;
+                    }
+                    if (verificador.toString() === CUIT.slice(10, 11)) {
+                        return "OK"
+                    } else {
+                        return "CUIT Invalido."
+                    }
+                } else {
+                    return "El CUIT debe comenzar con 20, 23, 24 o 27 para pertenecer a una persona fisica."
+                }
+            }
+        } else {
+            return "El CUIT debe poseer 11 numeros.";
+        }
+    }
+    mostrarMensajeExito = (mensaje, modo) => {
+        this.setState({ modoMensaje: modo });
+        this.setState({ MensajeExito: mensaje });
+        this.setState({ openMensajeExito: true });
+      }
+      cerrarMensajeExito = () => {
+        this.setState({ openMensajeExito: false });
+      }
     guardarOcupacion() {
         this.setState({ openCortina: true });
         const email = this.state.usuario.email;
@@ -625,482 +673,489 @@ class PerfilEmpleado extends React.Component {
         var perfilUsuario = "";
         var empresaValidada = "";
         var empresaValidadaLogo = "";
-        if(this.state.empresa===false){
+        if (this.state.empresa === false) {
             empresaValidada = "";
             empresaValidadaLogo = "";
             perfilUsuario = <div>
-            <div className="profile-card-loc">
-                {cuil}
-                {cuilValidado}
-            </div>
-            <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
-            <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
-            <div className="profile-card-loc">
-                <span className="profile-card-loc__icon">
-                    <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
-                </span>
-                <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
-                    {Ubicacion}
-                </span>
-            </div>
-            <div className="profile-card-email">
-                <span className="profile-card-email__icon">
-                    <img width="60" height="60" alt="fb" src={email} />
-                </span>
-                <span className="profile-card-email__txt">
-                    {this.state.usuario.email}
-                </span>
-            </div>
-            <div className="profile-card-tel">
-                <span className="profile-card-tel__icon">
-                    <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
-                </span>
-                <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
-                    {Numerotelefono}
-                </span>
-            </div>
-            <div className="profile-card-inf">
-                <div className="profile-card-inf__item">
-                    <div className="profile-card-inf__title">{this.state.cantidadTrabajosRealizados}</div>
-                    <div className="profile-card-inf__txt">Changas realizadas</div>
-                </div>
-                <div className="profile-card-inf__item">
-                    <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
-                    <div className="profile-card-inf__txt">Puntuación Empleado</div>
-                </div>
-                <div className="profile-card-inf__item">
-                    <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                    <div className="profile-card-inf__txt">Puntajes de Empleados</div>
-                </div>
-                <div className="profile-card-inf__item">
-                    <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
-                    <div className="profile-card-inf__txt">Puntuación Empleador</div>
-                </div>
-            </div>
-            {panelCV}
-            {panelMatricula}
-            {panelLicenciaConducir}
-            <div className="profile-card-social" >
-                <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={facebook} />
-                    </span>
-                </div>
-                <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={twitter} />
-                    </span>
-                </div>
-                <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={instagram} />
-                    </span>
-                </div>
-                <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={linkedin} />
-                    </span>
-                </div>
-            </div>
-
-            <div className="profile-card-desc">
-                <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
-                    {descripcionEmpleado}
-                </span>
-            </div>
-            <div className="profile-card-desc">
-                <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
-                    {descripcionEmpleador}
-                </span>
-            </div>
-        </div>
-        }else{            
-            perfilUsuario = <div>
                 <div className="profile-card-loc">
-                <span className="profile-card-loc__icon">
-                    <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
-                </span>
-                <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
-                    {Ubicacion}
-                </span>
-            </div>
-            <div className="profile-card-tel">
-                <span className="profile-card-tel__icon">
-                    <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
-                </span>
-                <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
-                    {Numerotelefono}
-                </span>
-            </div>
-            <div className="profile-card-inf">
-                <div className="profile-card-inf__item">
-                    <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                    <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                    {cuil}
+                    {cuilValidado}
                 </div>
-                <div className="profile-card-inf__item">
-                    <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
-                    <div className="profile-card-inf__txt">Puntuación Empleador</div>
-                </div>
-            </div>
-            <div className="profile-card-social" >
-                <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={facebook} />
+                <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
+                <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
+                <div className="profile-card-loc">
+                    <span className="profile-card-loc__icon">
+                        <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
+                    </span>
+                    <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
+                        {Ubicacion}
                     </span>
                 </div>
-                <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={twitter} />
+                <div className="profile-card-email">
+                    <span className="profile-card-email__icon">
+                        <img width="60" height="60" alt="fb" src={email} />
+                    </span>
+                    <span className="profile-card-email__txt">
+                        {this.state.usuario.email}
                     </span>
                 </div>
-                <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={instagram} />
+                <div className="profile-card-tel">
+                    <span className="profile-card-tel__icon">
+                        <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
+                    </span>
+                    <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
+                        {Numerotelefono}
                     </span>
                 </div>
-                <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
-                    <span className="icon-font">
-                        <img width="80" height="80" alt="fb" src={linkedin} />
+                <div className="profile-card-inf">
+                    <div className="profile-card-inf__item">
+                        <div className="profile-card-inf__title">{this.state.cantidadTrabajosRealizados}</div>
+                        <div className="profile-card-inf__txt">Changas realizadas</div>
+                    </div>
+                    <div className="profile-card-inf__item">
+                        <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
+                        <div className="profile-card-inf__txt">Puntuación Empleado</div>
+                    </div>
+                    <div className="profile-card-inf__item">
+                        <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
+                        <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                    </div>
+                    <div className="profile-card-inf__item">
+                        <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
+                        <div className="profile-card-inf__txt">Puntuación Empleador</div>
+                    </div>
+                </div>
+                {panelCV}
+                {panelMatricula}
+                {panelLicenciaConducir}
+                <div className="profile-card-social" >
+                    <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={facebook} />
+                        </span>
+                    </div>
+                    <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={twitter} />
+                        </span>
+                    </div>
+                    <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={instagram} />
+                        </span>
+                    </div>
+                    <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={linkedin} />
+                        </span>
+                    </div>
+                </div>
+
+                <div className="profile-card-desc">
+                    <span onClick={this.handleAbrirDescripcionEmpleado} className="profile-card-desc__txt">
+                        {descripcionEmpleado}
                     </span>
                 </div>
                 <div className="profile-card-desc">
-                <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
-                    {descripcionEmpleador}
-                </span>
+                    <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
+                        {descripcionEmpleador}
+                    </span>
+                </div>
             </div>
-            </div>
+        } else {
+            perfilUsuario = <div>
+                <div className="profile-card-loc">
+                    <span className="profile-card-loc__icon">
+                        <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
+                    </span>
+                    <span onClick={this.handleAbrirUbicacion} className="profile-card-loc__txt">
+                        {Ubicacion}
+                    </span>
+                </div>
+                <div className="profile-card-tel">
+                    <span className="profile-card-tel__icon">
+                        <img onClick={this.handleAbrirTelefono} width="60" height="60" alt="fb" src={telefono} />
+                    </span>
+                    <span onClick={this.handleAbrirTelefono} className="profile-card-tel__txt">
+                        {Numerotelefono}
+                    </span>
+                </div>
+                <div className="profile-card-inf">
+                    <div className="profile-card-inf__item">
+                        <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
+                        <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                    </div>
+                    <div className="profile-card-inf__item">
+                        <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
+                        <div className="profile-card-inf__txt">Puntuación Empleador</div>
+                    </div>
+                </div>
+                <div className="profile-card-social" >
+                    <div onClick={this.handleAbrirFacebook} className="profile-card-social__item facebook">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={facebook} />
+                        </span>
+                    </div>
+                    <div onClick={this.handleAbrirTwitter} className="profile-card-social__item twitter">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={twitter} />
+                        </span>
+                    </div>
+                    <div onClick={this.handleAbrirInstagram} className="profile-card-social__item instagram">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={instagram} />
+                        </span>
+                    </div>
+                    <div onClick={this.handleAbrirLinkedIn} className="profile-card-social__item linkedin">
+                        <span className="icon-font">
+                            <img width="80" height="80" alt="fb" src={linkedin} />
+                        </span>
+                    </div>
+                    <div className="profile-card-desc">
+                        <span onClick={this.handleAbrirDescripcionEmpleador} className="profile-card-desc__txt">
+                            {descripcionEmpleador}
+                        </span>
+                    </div>
+                </div>
             </div>;
-            if(this.state.usuario.empresaValidada){
+            if (this.state.usuario.empresaValidada) {
                 empresaValidada = "(empresa validada)";
                 empresaValidadaLogo = <span className="profile-card-cuilVal__icon">
-                        <img width="20" height="20" alt="empresa validada" src={empresavalidada} />
-                    </span>
-            }else{
+                    <img width="20" height="20" alt="empresa validada" src={empresavalidada} />
+                </span>
+            } else {
                 empresaValidada = "";
                 empresaValidadaLogo = "";
             }
         }
         return (
-            <div className="wrapper1">
-                <div className="profile-card js-profile-card">
-                    <div className="profile-card__img">
-                        {foto}
+            <div>
+                <Snackbar open={this.state.openMensajeExito} autoHideDuration={2000} onClose={this.cerrarMensajeExito}>
+                    <Alert variant="filled" onClose={this.cerrarMensajeExito} severity={this.state.modoMensaje}>
+                        {this.state.MensajeExito}
+                    </Alert>
+                </Snackbar>
+                <div className="wrapper1">
+                    <div className="profile-card js-profile-card">
+                        <div className="profile-card__img">
+                            {foto}
 
-                    </div>
-                    <div className="profile-card__cnt js-profile-cnt">
-                        <div style={{ height: 40 }}>
-                            <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                                Cambiar foto de perfil
+                        </div>
+                        <div className="profile-card__cnt js-profile-cnt">
+                            <div style={{ height: 40 }}>
+                                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                                    Cambiar foto de perfil
                     <FileUploader
-                                    accept="image/*"
-                                    name="avatar"
-                                    randomizeFilename
-                                    hidden
-                                    storageRef={firebase.storage().ref("images")}
-                                    onUploadSuccess={this.handleUploadSuccessFoto}
-                                />
-                            </label>
+                                        accept="image/*"
+                                        name="avatar"
+                                        randomizeFilename
+                                        hidden
+                                        storageRef={firebase.storage().ref("images")}
+                                        onUploadSuccess={this.handleUploadSuccessFoto}
+                                    />
+                                </label>
+                            </div>
+                            <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
+                            <div>{empresaValidada}{empresaValidadaLogo}</div>
+                            <FormControlLabel control={<Switch color="primary" checked={this.state.empresa} onChange={this.handleChangeModoEmpresa} name="empresaActivo" />} label="Modo Empresa" />
+
+                            {perfilUsuario}
                         </div>
-                        <div onClick={this.handleAbrirNombre} className="profile-card__name">{this.state.usuario.fullname}</div>
-                        <div>{empresaValidada}{empresaValidadaLogo}</div>
-                        <FormControlLabel control={<Switch color="primary" checked={this.state.empresa} onChange={this.handleChangeModoEmpresa} name="empresaActivo" />} label="Modo Empresa" />
-          
-                        {perfilUsuario}
                     </div>
+                    <Dialog
+                        open={this.state.openModalCUIL}
+                        onClose={this.handleCloseCUIL}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">CUIT:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="cuil" autoFocus margin="dense" label="CUIT (Debera esperar la validación del sistema)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCloseCUIL} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarCUIL} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {/*Facebook*/}
+                    <Dialog
+                        open={this.state.openModalFacebook}
+                        onClose={this.handleCerrarFacebook}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Facebook:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="facebookURL" autoFocus margin="dense" label="URL Facebook" defaultValue={this.state.usuario.facebook} type="facebook" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarFacebook} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarFacebook} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {/*Twitter*/}
+                    <Dialog
+                        open={this.state.openModalTwitter}
+                        onClose={this.handleCerrarTwitter}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Twitter:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="twitterURL" autoFocus margin="dense" label="URL Twitter" defaultValue={this.state.usuario.twitter} type="twitter" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarTwitter} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarTwitter} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {/*Instagram*/}
+                    <Dialog
+                        open={this.state.openModalInstagram}
+                        onClose={this.handleCerrarInstagram}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Instagram:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="instagramURL" autoFocus margin="dense" label="URL Instagram" defaultValue={this.state.usuario.instagram} type="instagram" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarInstagram} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarInstagram} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {/*LinkedIn*/}
+                    <Dialog
+                        open={this.state.openModalLinkedIn}
+                        onClose={this.handleCerrarLinkedIn}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">LinkedIn:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="linkedinURL" autoFocus margin="dense" label="URL LinkedIn" defaultValue={this.state.usuario.linkedin} type="LinkedIn" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarLinkedIn} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarLinkedIn} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {/*Nombre*/}
+                    <Dialog
+                        open={this.state.openModalNombre}
+                        onClose={this.handleCerrarNombre}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Nombre:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="fullname" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.fullname} type="fullname" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarNombre} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarNombre} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {/*Telefono*/}
+                    <Dialog
+                        open={this.state.openModalTelefono}
+                        onClose={this.handleCerrarTelefono}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Telefono:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="telefono" autoFocus margin="dense" label="Telefono" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarTelefono} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarTelefono} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openModalOcupacion}
+                        onClose={this.handleCerrarOcupacion}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Ocupación:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="ocupacion" autoFocus margin="dense" label="Ocupación" defaultValue={this.state.usuario.ocupacion} type="ocupacion" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarOcupacion} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarOcupacion} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openModalUbicacion}
+                        onClose={this.handleCerrarUbicacion}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Ubicación:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="ubicacion" autoFocus margin="dense" label="Ubicación" defaultValue={this.state.usuario.ubicacion} type="ubicacion" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarUbicacion} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarUbicacion} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openCortina}
+                        TransitionComponent={Transition}
+                        aria-labelledby="form-dialog-title"
+                    >
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openModalDescripcionEmpleador}
+                        onClose={this.handleCerrarDescripcionEmpleador}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleador:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="descripcionEmpleador" autoFocus margin="dense" label="Descripción como empleador" defaultValue={this.state.usuario.descripcionEmpleador} type="descripcionEmpleador" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarDescripcionEmpleador} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarDescripcionEmpleador} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openModalDescripcionEmpleado}
+                        onClose={this.handleCerrarDescripcionEmpleado}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleado:</DialogTitle>
+                        <DialogContent dividers>
+                            <TextField id="descripcionEmpleado" autoFocus margin="dense" label="Descripción como empleado" defaultValue={this.state.usuario.descripcionEmpleado} type="descripcionEmpleado" fullWidth />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarDescripcionEmpleado} color="primary">
+                                Cancel
+                         </Button>
+                            <Button onClick={this.guardarDescripcionEmpleado} color="primary">
+                                Ok
+                         </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openCortina}
+                        TransitionComponent={Transition}
+                        aria-labelledby="form-dialog-title"
+                    >
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openComentariosEmpleado}
+                        onClose={this.handleCloseComentariosEmpleado}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Comentarios de Empleadores:</DialogTitle>
+                        <DialogContent dividers>
+                            <div className="comentarios-container">
+                                <div className="comments-list">
+                                    {ComentariosEmpleadoDisplay}
+                                </div>
+                            </div>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCloseComentariosEmpleado} color="primary">
+                                CERRAR
+                 </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openComentariosEmpleador}
+                        onClose={this.handleCloseComentariosEmpleador}
+                        TransitionComponent={Transition}
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Comentarios de Empleados:</DialogTitle>
+                        <DialogContent dividers>
+                            <div className="comentarios-container">
+                                <div className="comments-list">
+                                    {ComentariosEmpleadorDisplay}
+                                </div>
+                            </div>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCloseComentariosEmpleador} color="primary">
+                                CERRAR
+                 </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
-                <Dialog
-                    open={this.state.openModalCUIL}
-                    onClose={this.handleCloseCUIL}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">CUIT:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="cuil" autoFocus margin="dense" label="CUIT (Debera esperar la validación del sistema)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCloseCUIL} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarCUIL} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*Facebook*/}
-                <Dialog
-                    open={this.state.openModalFacebook}
-                    onClose={this.handleCerrarFacebook}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Facebook:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="facebookURL" autoFocus margin="dense" label="URL Facebook" defaultValue={this.state.usuario.facebook} type="facebook" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarFacebook} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarFacebook} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*Twitter*/}
-                <Dialog
-                    open={this.state.openModalTwitter}
-                    onClose={this.handleCerrarTwitter}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Twitter:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="twitterURL" autoFocus margin="dense" label="URL Twitter" defaultValue={this.state.usuario.twitter} type="twitter" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarTwitter} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarTwitter} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*Instagram*/}
-                <Dialog
-                    open={this.state.openModalInstagram}
-                    onClose={this.handleCerrarInstagram}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Instagram:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="instagramURL" autoFocus margin="dense" label="URL Instagram" defaultValue={this.state.usuario.instagram} type="instagram" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarInstagram} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarInstagram} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*LinkedIn*/}
-                <Dialog
-                    open={this.state.openModalLinkedIn}
-                    onClose={this.handleCerrarLinkedIn}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">LinkedIn:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="linkedinURL" autoFocus margin="dense" label="URL LinkedIn" defaultValue={this.state.usuario.linkedin} type="LinkedIn" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarLinkedIn} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarLinkedIn} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*Nombre*/}
-                <Dialog
-                    open={this.state.openModalNombre}
-                    onClose={this.handleCerrarNombre}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Nombre:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="fullname" autoFocus margin="dense" label="Nombre" defaultValue={this.state.usuario.fullname} type="fullname" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarNombre} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarNombre} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*Telefono*/}
-                <Dialog
-                    open={this.state.openModalTelefono}
-                    onClose={this.handleCerrarTelefono}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Telefono:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="telefono" autoFocus margin="dense" label="Telefono" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarTelefono} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarTelefono} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.openModalOcupacion}
-                    onClose={this.handleCerrarOcupacion}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Ocupación:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="ocupacion" autoFocus margin="dense" label="Ocupación" defaultValue={this.state.usuario.ocupacion} type="ocupacion" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarOcupacion} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarOcupacion} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.openModalUbicacion}
-                    onClose={this.handleCerrarUbicacion}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Ubicación:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="ubicacion" autoFocus margin="dense" label="Ubicación" defaultValue={this.state.usuario.ubicacion} type="ubicacion" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarUbicacion} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarUbicacion} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.openCortina}
-                    TransitionComponent={Transition}
-                    aria-labelledby="form-dialog-title"
-                >
-                </Dialog>
-                <Dialog
-                    open={this.state.openModalDescripcionEmpleador}
-                    onClose={this.handleCerrarDescripcionEmpleador}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleador:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="descripcionEmpleador" autoFocus margin="dense" label="Descripción como empleador" defaultValue={this.state.usuario.descripcionEmpleador} type="descripcionEmpleador" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarDescripcionEmpleador} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarDescripcionEmpleador} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.openModalDescripcionEmpleado}
-                    onClose={this.handleCerrarDescripcionEmpleado}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleado:</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField id="descripcionEmpleado" autoFocus margin="dense" label="Descripción como empleado" defaultValue={this.state.usuario.descripcionEmpleado} type="descripcionEmpleado" fullWidth />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCerrarDescripcionEmpleado} color="primary">
-                            Cancel
-                         </Button>
-                        <Button onClick={this.guardarDescripcionEmpleado} color="primary">
-                            Ok
-                         </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.openCortina}
-                    TransitionComponent={Transition}
-                    aria-labelledby="form-dialog-title"
-                >
-                </Dialog>
-                <Dialog
-                    open={this.state.openComentariosEmpleado}
-                    onClose={this.handleCloseComentariosEmpleado}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Comentarios de Empleadores:</DialogTitle>
-                    <DialogContent dividers>
-                        <div className="comentarios-container">
-                            <div className="comments-list">
-                                {ComentariosEmpleadoDisplay}
-                            </div>
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCloseComentariosEmpleado} color="primary">
-                            CERRAR
-                 </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.openComentariosEmpleador}
-                    onClose={this.handleCloseComentariosEmpleador}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Comentarios de Empleados:</DialogTitle>
-                    <DialogContent dividers>
-                        <div className="comentarios-container">
-                            <div className="comments-list">
-                                {ComentariosEmpleadorDisplay}
-                            </div>
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCloseComentariosEmpleador} color="primary">
-                            CERRAR
-                 </Button>
-                    </DialogActions>
-                </Dialog>
             </div>);
     }
 }

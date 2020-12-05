@@ -346,7 +346,7 @@ handleOpenDetalleEmpleado = (empleadoId) => {
     console.log(eventos)
     if (this.state.mostrarEmpleados) {
       contenedorEventos = <div style={{ height: 400, verticalalign: 'middle', margin: 20 }}>
-        <DataGrid rows={this.state.rows} columns={columns} onSelectionChange={(data) => {
+        <DataGrid rows={this.state.rows} hideFooterRowCount="true" columns={columns} onSelectionChange={(data) => {
           if (data.rows[0] !== undefined) {
             this.handleOpenDetalleEmpleado(data.rows[0].email)
           }
