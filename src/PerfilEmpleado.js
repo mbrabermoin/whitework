@@ -105,7 +105,7 @@ class PerfilEmpleado extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleado = puntajeEmpleado + parseInt(doc.data().puntaje);
                     cantidadPuntajes = cantidadPuntajes + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto, id_comentario: doc.data().id_comentario, fecha: doc.data().id_comentario.slice(7,9)+"-"+doc.data().id_comentario.slice(5,7)+"-"+doc.data().id_comentario.slice(1,5) }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto, id_comentario: doc.data().id_comentario, fecha: doc.data().id_comentario.slice(7, 9) + "-" + doc.data().id_comentario.slice(5, 7) + "-" + doc.data().id_comentario.slice(1, 5) }
                     comments.push(comentario);
                 });
             })
@@ -120,7 +120,7 @@ class PerfilEmpleado extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleador = puntajeEmpleador + parseInt(doc.data().puntaje);
                     cantidadPuntajesEmpleador = cantidadPuntajesEmpleador + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto, id_comentario: doc.data().id_comentario, fecha: doc.data().id_comentario.slice(7,9)+"-"+doc.data().id_comentario.slice(5,7)+"-"+doc.data().id_comentario.slice(1,5) }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto, id_comentario: doc.data().id_comentario, fecha: doc.data().id_comentario.slice(7, 9) + "-" + doc.data().id_comentario.slice(5, 7) + "-" + doc.data().id_comentario.slice(1, 5) }
                     commentsEmpleador.push(comentario);
                 });
             })
@@ -312,7 +312,7 @@ class PerfilEmpleado extends React.Component {
                 this.setState({ openCortina: false });
             }, 1000);
         } else {
-            this.mostrarMensajeExito(error,"error")
+            this.mostrarMensajeExito(error, "error")
             this.setState({ openCortina: false });
         }
     }
@@ -349,10 +349,10 @@ class PerfilEmpleado extends React.Component {
         this.setState({ modoMensaje: modo });
         this.setState({ MensajeExito: mensaje });
         this.setState({ openMensajeExito: true });
-      }
-      cerrarMensajeExito = () => {
+    }
+    cerrarMensajeExito = () => {
         this.setState({ openMensajeExito: false });
-      }
+    }
     guardarOcupacion() {
         this.setState({ openCortina: true });
         const email = this.state.usuario.email;
@@ -519,13 +519,13 @@ class PerfilEmpleado extends React.Component {
         if (this.state.usuario.descripcionEmpleador === "" || this.state.usuario.descripcionEmpleador === null) {
             descripcionEmpleador = "Ingresar Breve Descripción como Empleador"
         } else {
-            descripcionEmpleador = "Descripción como empleador: " + this.state.usuario.descripcionEmpleador
+            descripcionEmpleador = "Descripción como Empleador: " + this.state.usuario.descripcionEmpleador
         }
         var descripcionEmpleado = "";
         if (this.state.usuario.descripcionEmpleado === "" || this.state.usuario.descripcionEmpleado === null) {
-            descripcionEmpleado = "Ingresar Breve Descripción como Empleado"
+            descripcionEmpleado = "Ingresar Breve Descripción como Prestador"
         } else {
-            descripcionEmpleado = "Descripción como empleado: " + this.state.usuario.descripcionEmpleado
+            descripcionEmpleado = "Descripción como Prestador: " + this.state.usuario.descripcionEmpleado
         }
         var comentariosEmpleado = this.state.comentariosEmpleado;
         var ComentariosEmpleadoDisplay = <div className="content">
@@ -677,12 +677,12 @@ class PerfilEmpleado extends React.Component {
             empresaValidada = "";
             empresaValidadaLogo = "";
             perfilUsuario = <div>
+                <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Prestador Activo" />
                 <div className="profile-card-loc">
                     {cuil}
                     {cuilValidado}
                 </div>
                 <div onClick={this.handleAbrirOcupacion} className="profile-card__txt"><strong>{ocupacion} </strong> </div>
-                <FormControlLabel control={<Switch color="primary" checked={this.state.empleadoActivo} onChange={this.handleChange} name="empleadoActivo" />} label="Empleado Activo" />
                 <div className="profile-card-loc">
                     <span className="profile-card-loc__icon">
                         <img onClick={this.handleAbrirUbicacion} width="60" height="60" alt="fb" src={locacion} />
@@ -714,11 +714,11 @@ class PerfilEmpleado extends React.Component {
                     </div>
                     <div className="profile-card-inf__item">
                         <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
-                        <div className="profile-card-inf__txt">Puntuación Empleado</div>
+                        <div className="profile-card-inf__txt">Puntuación Prestador</div>
                     </div>
                     <div className="profile-card-inf__item">
                         <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                        <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                        <div className="profile-card-inf__txt">Puntajes de Prestadores</div>
                     </div>
                     <div className="profile-card-inf__item">
                         <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
@@ -783,7 +783,7 @@ class PerfilEmpleado extends React.Component {
                 <div className="profile-card-inf">
                     <div className="profile-card-inf__item">
                         <div className="profile-card-inf__title">{this.state.cantidadTrabajosContratados}</div>
-                        <div className="profile-card-inf__txt">Puntajes de Empleados</div>
+                        <div className="profile-card-inf__txt">Puntajes de Prestadores</div>
                     </div>
                     <div className="profile-card-inf__item">
                         <div onClick={this.handleAbrirComentariosEmpleador} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleador}/10</div>
@@ -1092,9 +1092,9 @@ class PerfilEmpleado extends React.Component {
                         maxWidth={'md'}
                         aria-labelledby="form-dialog-title"
                     >
-                        <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Empleado:</DialogTitle>
+                        <DialogTitle id="confirmation-dialog-title">Definase en pocas palabras como Prestador:</DialogTitle>
                         <DialogContent dividers>
-                            <TextField id="descripcionEmpleado" autoFocus margin="dense" label="Descripción como empleado" defaultValue={this.state.usuario.descripcionEmpleado} type="descripcionEmpleado" fullWidth />
+                            <TextField id="descripcionEmpleado" autoFocus margin="dense" label="Descripción como Prestador" defaultValue={this.state.usuario.descripcionEmpleado} type="descripcionEmpleado" fullWidth />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={this.handleCerrarDescripcionEmpleado} color="primary">
@@ -1141,7 +1141,7 @@ class PerfilEmpleado extends React.Component {
                         maxWidth={'md'}
                         aria-labelledby="form-dialog-title"
                     >
-                        <DialogTitle id="confirmation-dialog-title">Comentarios de Empleados:</DialogTitle>
+                        <DialogTitle id="confirmation-dialog-title">Comentarios de Prestadores:</DialogTitle>
                         <DialogContent dividers>
                             <div className="comentarios-container">
                                 <div className="comments-list">

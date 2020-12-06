@@ -125,7 +125,7 @@ export default class ModoEmpleado extends React.Component {
         console.log(error);
         alert("Ha ocurrido un error. Actualice la página.");
       });
-      this.setState({ openCortina: false });
+      this.iniciarBusqueda();
     }, 1000);
   }
   handleCambiarPeriodo = name => event => {
@@ -134,26 +134,12 @@ export default class ModoEmpleado extends React.Component {
   handleCambiarCategoria = name => event => {
     this.setState({ categoriaDisplay: event.target.value });
   }
-  buscarEventos(estado) {
-    var filtro = db.collection("eventos").where("estado", "==", estado)
-    filtro.onSnapshot((snapShots) => {
-      this.setState({
-        eventos: snapShots.docs.map(doc => {
-          return { id: doc.id, data: doc.data() }
-        })
-      })
-    }, error => {
-      console.log(error)
-    });
-    setTimeout(() => {
-      this.setState({ openCortina: false });
-    }, 1000);
-  }
   busquedaAbierta() {
     var post = [];
     var events = [];
     var eventosFiltrados = [];
-    var mailUsuario = this.state.usuario.email;
+    var user = auth.currentUser;
+    var mailUsuario = user.email;
     var pago = "";
     var periodo = "";
     var tipoTrabajo = "";
@@ -375,6 +361,9 @@ export default class ModoEmpleado extends React.Component {
     document.getElementById("puntuados").style.color = "#b2bbbd";
     document.getElementById("temporales-titulo").textContent = "Eventos Temporales - Búsqueda";
     this.setState({ estadoDeEvento: "pendiente" });
+    if (!this.state.filtroActivo) {
+      this.iniciarBusqueda();
+    }
   }
   elegirEstadoPostulaciones = () => {
     this.setState({ openCortina: true });
@@ -493,7 +482,7 @@ export default class ModoEmpleado extends React.Component {
   }
   limpiarFiltros = () => {
     this.setState({ provinciaDisplay: "" });
-    this.setState({ periodoDisplay: "" });
+    this.setState({ periodoDisplay: "Total" });
     this.setState({ categoriaDisplay: "" });
     this.setState({ ciudad: "" });
     this.setState({ provincia: "" });
