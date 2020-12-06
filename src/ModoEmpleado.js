@@ -594,9 +594,9 @@ export default class ModoEmpleado extends React.Component {
             </TextField>
           </div>
           <div id="filtros-activos-botones">
-            <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button-activos">Buscar</button>
             <button id="filter_button" onClick={this.cerrarFiltros} className="filter-button-cerrar"> Cerrar Filtros</button>
             <button id="filter_button" onClick={this.limpiarFiltros} className="filter-button-cerrar"> Limpiar Filtros</button>
+            <button id="filter_button" onClick={this.iniciarBusqueda} className="filter-button-activos">Buscar</button>
           </div>
         </div>
       } else {

@@ -241,7 +241,6 @@ ul {
 .ux {
   font-size: 25px;
   color: #3e474f;
-  padding-left: 20px;
 }
 
 .track-btn {
@@ -625,7 +624,7 @@ ul {
   width:8rem; 
   border-radius:20px; 
   height:2.5rem; 
-  background-color:#003773; 
+  background-color: #06203c; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -639,7 +638,7 @@ ul {
   border-radius:20px; 
   margin-left: 10px;
   height:2.5rem;
-  background-color:#003773; 
+  background-color:#3e474f; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -650,7 +649,7 @@ ul {
   border-radius:20px; 
   margin-left: 10px;
   height:2.5rem;
-  background-color:#003773; 
+  background-color:#06203c; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -661,7 +660,7 @@ ul {
   border-radius:20px; 
   margin-right: 10px;
   height:2.5rem;
-  background-color:#003773; 
+  background-color:#3e474f; 
   border:none; 
   color:white; 
   font-size: 1rem; 
