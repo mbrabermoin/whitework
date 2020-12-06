@@ -341,7 +341,7 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 90px;
-  background-color:  #3659a2;
+  background-color:  #0F9D58;
   border-radius: 5px;
 }
 .duplicar-btn:hover {
@@ -372,7 +372,7 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 150px;
-  background-color:  #3659a2;
+  background-color:  #0F9D58;
   border-radius: 5px;
 }
 .agregarEvento-btn:hover{
@@ -728,4 +728,21 @@ margin-top: 25px;
 .columnStyle{
   background-color: #DDDDDD;
   height: 40px;
+}
+
+#profileTitle{
+  color: #fff!important;
+}
+
+.MuiFormLabel-root.Mui-disabled {
+  color: black!important;
+}
+
+.MuiInputBase-input.Mui-disabled{
+  color: #707880!important;
+}
+
+.MuiTypography-colorTextSecondary{
+  color: black!important;
+  font-size: 22px!important;
 }

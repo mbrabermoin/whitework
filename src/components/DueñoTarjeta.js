@@ -175,14 +175,16 @@ class DueñoTarjeta extends React.Component {
                     </div>
                     <h1>{nombre}</h1>
                     <h3>{email}</h3><br></br>
-                    <div>{empresaValidada}{empresaValidadaLogo}</div><br></br>
-                    <div onClick={this.handleAbrirComentariosEmpleador} >Puntaje recibido: {this.state.puntajeEmpleador}  <br></br>
+                    <div>{empresaValidada}{empresaValidadaLogo}</div>
+                    <div onClick={this.handleAbrirComentariosEmpleador} >
+                    Puntaje recibido: {this.state.puntajeEmpleador}  
+                    <br></br>
                     Trabajos Contratados: {this.state.cantidadTrabajosContratados}
                     </div>
-                    <br></br><br></br>
                     <div class="desc-dueño">
                         {descripcion}
-                    </div><br></br>
+                    </div>
+                    <br></br>
                     <p class="esp text-react">Ubicación: {ubicacion}</p>
                     <p class="esp text-react">Telefono: {telefono}</p>
                 </div>
