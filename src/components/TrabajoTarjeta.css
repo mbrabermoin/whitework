@@ -79,14 +79,14 @@
     cursor: pointer;
     height: 40px;
     width: 100px;
-    background-color:  #3659a2;
+    background-color:  #06203c;
     border-radius: 5px;
     float:right;
   }
   .postularse-btn:hover {
     cursor: pointer;
     background-color: #eee; 
-    color: #3659a2;
+    color: #06203c;
   }
   .editar-btn {
     margin-top: 10px;
@@ -97,14 +97,14 @@
     cursor: pointer;
     height: 40px;
     width: 100px;
-    background-color:  #3659a2;
+    background-color:  #06203c;
     border-radius: 5px;
     float:right;
   }
   .editar-btn:hover {
     cursor: pointer;
     background-color: #eee; 
-    color: #3659a2;
+    color: #06203c;
   }
   .puntuar-btn {
     margin-top: 10px;
@@ -114,14 +114,14 @@
     cursor: pointer;
     height: 40px;
     width: 100px;
-    background-color:  #3659a2;
+    background-color:  #06203c;
     border-radius: 5px;
     float:right;
   }
   .puntuar-btn:hover {
     cursor: pointer;
     background-color: #eee; 
-    color: #3659a2;
+    color: #06203c;
   }
   .AsignadoFoto {
     width: 150px;
@@ -167,14 +167,14 @@
     cursor: pointer;
     height: 40px;
     width: 100px;
-    background-color:  #3659a2;
+    background-color:  #06203c;
     border-radius: 5px;
     float:right;
   }
   .aceptar-btn:hover {
     cursor: pointer;
     background-color: #eee; 
-    color: #3659a2;
+    color: #06203c;
   }
   .rechazar-btn {
     margin-top: 10px;

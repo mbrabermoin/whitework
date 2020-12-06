@@ -406,10 +406,14 @@ class EventoTarjeta extends React.Component {
                 <TextField id="time2" type="time" defaultValue={this.state.timefin} label=" " />
             </div>
         } else {
-            tituloEventoDisplay = <DialogContentText>
+            tituloEventoDisplay =
+            <div>
+            <DialogContentText>
                 {this.state.titulo}
             </DialogContentText>
-            camposDelEvento = <div>
+            </div> 
+            camposDelEvento = 
+            <div>
                 <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
                 <TextField id="provincia" margin="dense" disabled label="Provincia" type="provincia" value={this.state.provincia} fullWidth />
                 <TextField id="ciudad" margin="dense" disabled label="Ciudad" type="ciudad" value={this.state.ciudad} fullWidth />
@@ -422,12 +426,14 @@ class EventoTarjeta extends React.Component {
             <div>
                 <div className='card'>
                     <div className='top-library'>
-                        <i className="fas fa-book-open book">{this.state.titulo}</i>
+                        <span className="fas fa-book-open book">{this.state.provincia} - {this.state.ciudad}</span>
                         <i className="fas fa-book-open book">{this.state.cantAsignados}/{this.state.cantTrabajos}</i>
                     </div>
                     <div className='middle-library'>
-                        <h3 className='job-name'>{this.state.provincia} - {this.state.ciudad}</h3>
+                        <h3 className='job-name'>{this.state.titulo}</h3>
                         <p className='desc'>{this.state.descripcion}</p>
+                    </div>
+                    <div className="col-12">
                         <button className='resume-btn' onClick={this.handleOpenDetalle}>Ver Detalle</button>
                         {botonEliminarEvento}
                         {botonDuplicarEvento}
@@ -450,9 +456,8 @@ class EventoTarjeta extends React.Component {
                             justify="center"
                             alignItems="center"
                         >
-                            <div style={{ marginRight: 4 + 'em' }}>
-                                <Button variant="outlined" size="large" onClick={this.handleOpenTrabajos}>{this.state.cantTrabajos} Trabajos</Button>
-
+                            <div style={{ marginRight: 4 + 'em',backgroundColor: '#0F9D58' }}>
+                                <Button variant="outlined" size="large" onClick={this.handleOpenTrabajos}>Ver Trabajos ({this.state.cantTrabajos})</Button>
                             </div>
                             {dueño}
                         </Grid>

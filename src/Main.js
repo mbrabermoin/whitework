@@ -93,12 +93,12 @@ class Main extends React.Component {
                         <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
                     <ul className='right-ui nombre-usuario'>
-                        <li id="profileTitle" onClick={this.abrirPerfil} style={{color: '#fff'}}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
+                        <li id="profileTitle" onClick={this.abrirPerfil} >{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
                         <li className="dropdown">
                             <a href="#login" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i>{fotoPerfil}</i><span className="caret"></span></a>
                             <ul className="dropdown-menu" role="menu" style={{left: '-85px'}}>
                                 <li onClick={this.abrirPerfil} style={{color: 'black'}}>Mi Perfil</li>
-                                <div class="dropdown-divider"></div>
+                                <div className="dropdown-divider"></div>
                                 <li onClick={authApi.signOut} style={{color: 'black'}}>Cerrar Sesión</li>
                             </ul>
                         </li>

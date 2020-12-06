@@ -239,10 +239,8 @@ ul {
 }
 
 .ux {
-  font-size: 19px;
-  color: #4a4290;
-  padding-left: 20px;
-  cursor: pointer;
+  font-size: 25px;
+  color: #3e474f;
 }
 
 .track-btn {
@@ -326,7 +324,7 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 90px;
-  background-color:  #3659a2;
+  background-color:  #06203c;
   border-radius: 5px;
 }
 .resume-btn:hover {
@@ -343,7 +341,7 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 90px;
-  background-color:  #3659a2;
+  background-color:  #0F9D58;
   border-radius: 5px;
 }
 .duplicar-btn:hover {
@@ -374,7 +372,7 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 150px;
-  background-color:  #3659a2;
+  background-color:  #0F9D58;
   border-radius: 5px;
 }
 .agregarEvento-btn:hover{
@@ -442,7 +440,7 @@ ul {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 30px;
-  margin-top: 0;
+  margin: 0 10px 20px 10px;
 }
 .sinEventos{
   margin: 40px;
@@ -466,12 +464,13 @@ ul {
   text-align: left;
   border-radius: 5px;
   box-shadow: 2px 2px 2px 2px #b2bbbd;
+  min-height: 250px;
 }
 .card:hover {
   transform: scale(1.05);
 }
 .card .top-library {
-  background-color: black;
+  background-color: #06203c;
 }
 .card .top-library .dots {
   font-size: 30px;
@@ -482,13 +481,14 @@ ul {
 }
 .middle-library {
   padding: 15px 15px;
+  min-height: 140px;
 }
 .desc {
-  color: #b2bbbd;
+  color: #757c7d;
 }
 
 .type {
-  color: #b2bbbd;
+  color: #757c7d;
 }
 
 .grid {
@@ -624,7 +624,7 @@ ul {
   width:8rem; 
   border-radius:20px; 
   height:2.5rem; 
-  background-color:#003773; 
+  background-color: #06203c; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -638,7 +638,7 @@ ul {
   border-radius:20px; 
   margin-left: 10px;
   height:2.5rem;
-  background-color:#003773; 
+  background-color:#3e474f; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -649,7 +649,7 @@ ul {
   border-radius:20px; 
   margin-left: 10px;
   height:2.5rem;
-  background-color:#003773; 
+  background-color:#06203c; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -660,7 +660,7 @@ ul {
   border-radius:20px; 
   margin-right: 10px;
   height:2.5rem;
-  background-color:#003773; 
+  background-color:#3e474f; 
   border:none; 
   color:white; 
   font-size: 1rem; 
@@ -728,4 +728,21 @@ margin-top: 25px;
 .columnStyle{
   background-color: #DDDDDD;
   height: 40px;
+}
+
+#profileTitle{
+  color: #fff!important;
+}
+
+.MuiFormLabel-root.Mui-disabled {
+  color: black!important;
+}
+
+.MuiInputBase-input.Mui-disabled{
+  color: #707880!important;
+}
+
+.MuiTypography-colorTextSecondary{
+  color: black!important;
+  font-size: 22px!important;
 }
