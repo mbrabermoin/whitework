@@ -239,10 +239,9 @@ ul {
 }
 
 .ux {
-  font-size: 19px;
-  color: #4a4290;
+  font-size: 25px;
+  color: #3e474f;
   padding-left: 20px;
-  cursor: pointer;
 }
 
 .track-btn {
@@ -326,7 +325,7 @@ ul {
   cursor: pointer;
   height: 40px;
   width: 90px;
-  background-color:  #3659a2;
+  background-color:  #06203c;
   border-radius: 5px;
 }
 .resume-btn:hover {
@@ -442,7 +441,7 @@ ul {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 30px;
-  margin-top: 0;
+  margin: 0 10px 20px 10px;
 }
 .sinEventos{
   margin: 40px;
@@ -466,12 +465,13 @@ ul {
   text-align: left;
   border-radius: 5px;
   box-shadow: 2px 2px 2px 2px #b2bbbd;
+  min-height: 250px;
 }
 .card:hover {
   transform: scale(1.05);
 }
 .card .top-library {
-  background-color: black;
+  background-color: #06203c;
 }
 .card .top-library .dots {
   font-size: 30px;
@@ -482,13 +482,14 @@ ul {
 }
 .middle-library {
   padding: 15px 15px;
+  min-height: 140px;
 }
 .desc {
-  color: #b2bbbd;
+  color: #757c7d;
 }
 
 .type {
-  color: #b2bbbd;
+  color: #757c7d;
 }
 
 .grid {

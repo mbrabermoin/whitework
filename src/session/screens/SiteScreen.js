@@ -243,6 +243,7 @@ class SiteScreen extends React.Component {
               <div className="left social-login">
                 Ingresá con
                 <i onClick={authApi.signInGoogle} className="fa fa-fw fa-lg fa-google" style={{cursor: 'pointer'}}></i>
+                <i onClick={authApi.signInFacebook} className="fa fa-fw fa-lg fa-facebook" style={{cursor: 'pointer'}}></i>
               </div>
             </div>
           </div>

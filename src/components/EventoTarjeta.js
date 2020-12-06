@@ -422,12 +422,14 @@ class EventoTarjeta extends React.Component {
             <div>
                 <div className='card'>
                     <div className='top-library'>
-                        <i className="fas fa-book-open book">{this.state.titulo}</i>
+                        <span className="fas fa-book-open book">{this.state.provincia} - {this.state.ciudad}</span>
                         <i className="fas fa-book-open book">{this.state.cantAsignados}/{this.state.cantTrabajos}</i>
                     </div>
                     <div className='middle-library'>
-                        <h3 className='job-name'>{this.state.provincia} - {this.state.ciudad}</h3>
+                        <h3 className='job-name'>{this.state.titulo}</h3>
                         <p className='desc'>{this.state.descripcion}</p>
+                    </div>
+                    <div className="col-12">
                         <button className='resume-btn' onClick={this.handleOpenDetalle}>Ver Detalle</button>
                         {botonEliminarEvento}
                         {botonDuplicarEvento}

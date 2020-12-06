@@ -98,7 +98,7 @@ class Main extends React.Component {
                             <a href="#login" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i>{fotoPerfil}</i><span className="caret"></span></a>
                             <ul className="dropdown-menu" role="menu" style={{left: '-85px'}}>
                                 <li onClick={this.abrirPerfil} style={{color: 'black'}}>Mi Perfil</li>
-                                <div class="dropdown-divider"></div>
+                                <div className="dropdown-divider"></div>
                                 <li onClick={authApi.signOut} style={{color: 'black'}}>Cerrar Sesión</li>
                             </ul>
                         </li>
