@@ -381,7 +381,7 @@ class ModoEmpleador extends React.Component {
           </Alert>
         </Snackbar>
         <main className='grid'>
-          <div className='progress-bar'>
+          <div className='progress-bar-custom'>
             <span onClick={this.elegirEstadoPendiente} id="pendientes-empleador">Pendientes</span>
             <span onClick={this.elegirEstadoPostulaciones} id="postulaciones-empleador">Postulaciones</span>
             <span onClick={this.elegirEstadoStaffCompleto} id="staff-completo-empleador">Staff Completo</span>

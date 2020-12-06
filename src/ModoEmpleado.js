@@ -655,7 +655,7 @@ export default class ModoEmpleado extends React.Component {
           </Alert>
         </Snackbar>
         <main className='grid'>
-          <div className='progress-bar'>
+          <div className='progress-bar-custom'>
             <span onClick={this.elegirEstadoBusqueda} className="estados" id="busqueda">Búsqueda</span>
             <span onClick={this.elegirEstadoPostulaciones} className="estados" id="postulaciones">Postulaciones</span>
             <span onClick={this.elegirEstadoAceptado} className="estados" id="aceptados">Aceptados</span>
