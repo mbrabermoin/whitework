@@ -49,7 +49,7 @@ class DueñoTarjeta extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleador = puntajeEmpleador + parseInt(doc.data().puntaje);
                     cantidadPuntajesEmpleador = cantidadPuntajesEmpleador + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto,id_comentario: doc.data().id_comentario, fecha: doc.data().id_comentario.slice(7,9)+"-"+doc.data().id_comentario.slice(5,7)+"-"+doc.data().id_comentario.slice(1,5)  }
                     commentsEmpleador.push(comentario);
                 });
             })
@@ -154,7 +154,7 @@ class DueñoTarjeta extends React.Component {
                         </object>
                     </div>
                     <div className="tweet-body">
-                        <span className="userName">{comentarioEmpleador.nombreComentador}</span>
+                        <span className="userName">{comentarioEmpleador.nombreComentador} - {comentarioEmpleador.fecha}</span>
                         <p className="message">{comentarioEmpleador.comentario}</p><br></br>
                         <p className="message">Puntaje: {comentarioEmpleador.puntaje}</p>
                     </div>
@@ -194,7 +194,7 @@ class DueñoTarjeta extends React.Component {
                     maxWidth={'md'}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="confirmation-dialog-title">Comentarios de Empleados:</DialogTitle>
+                    <DialogTitle id="confirmation-dialog-title">Comentarios de Prestadores:</DialogTitle>
                     <DialogContent dividers>
                         <div className="comentarios-container">
                             <div className="comments-list">

@@ -9,7 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Snackbar from '@material-ui/core/Snackbar';
-import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
 import EmpleadoDetalle from "./components/EmpleadoDetalle";
 import { DataTable } from 'primereact/datatable';
@@ -18,13 +17,6 @@ import { Column } from 'primereact/column';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
-const columns = [
-  { field: 'name', headerName: 'Nombre y Apellido', width: 200 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'ubicacion', headerName: 'Ubicación', width: 200 },
-  { field: 'telefono', headerName: 'Telefono', width: 200 },
-  { field: 'descripcion', headerName: 'Descripción', width: 200 },
-];
 class ModoEmpleador extends React.Component {
   constructor(props) {
     super(props);

@@ -245,7 +245,7 @@ class EditarTrabajo extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Editar Trabajo</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="rol" required autoFocus margin="dense" defaultValue={this.state.rol} label="Rol del trabajador" type="rol" fullWidth />
+                        <TextField id="rol" required autoFocus margin="dense" defaultValue={this.state.rol} label="Rol a cumplir" type="rol" fullWidth />
                         <TextField id="descripcion-trab" required multiline rows="2" defaultValue={this.state.descripcion} margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
                         <TextField id="metodopago" select required margin="dense" defaultValue={this.state.metodopagoDisplay} value={this.state.metodopagoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarMetodopago('metodopagoDisplay')} label="Metodo de Pago" fullWidth>
                             {metodopago.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}

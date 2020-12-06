@@ -1,5 +1,4 @@
 import React from 'react';
-//import './PerfilEmpleado.css';
 import facebook from "../logos/facebook.png";
 import twitter from "../logos/twitter.png";
 import instagram from "../logos/instagram.png";
@@ -42,7 +41,7 @@ class EmpleadoDetalle extends React.Component {
                 querySnapshot.forEach(function (doc) {
                     puntajeEmpleado = puntajeEmpleado + parseInt(doc.data().puntaje);
                     cantidadPuntajes = cantidadPuntajes + 1;
-                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto }
+                    const comentario = { comentador: doc.data().comentador, comentario: doc.data().comentario, puntaje: doc.data().puntaje, nombreComentador: doc.data().nombreComentador, foto: doc.data().foto,id_comentario: doc.data().id_comentario, fecha: doc.data().id_comentario.slice(7,9)+"-"+doc.data().id_comentario.slice(5,7)+"-"+doc.data().id_comentario.slice(1,5) }
                     comments.push(comentario);
                 });
             })
@@ -173,7 +172,7 @@ class EmpleadoDetalle extends React.Component {
                     </div>
 
                     <div className="tweet-body">
-                        <span className="userName">{comentarioEmpleado.nombreComentador}</span>
+                        <span className="userName">{comentarioEmpleado.nombreComentador}  - {comentarioEmpleado.fecha} </span>
                         <p className="message">{comentarioEmpleado.comentario}</p><br></br>
                         <p className="message">Puntaje: {comentarioEmpleado.puntaje}</p>
                     </div>
@@ -242,7 +241,7 @@ class EmpleadoDetalle extends React.Component {
                             </div>
                             <div className="profile-card-inf__item">
                                 <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
-                                <div className="profile-card-inf__txt">Puntuación Empleado</div>
+                                <div className="profile-card-inf__txt">Puntuación promedio</div>
                             </div>
                         </div>
                         {panelCV}

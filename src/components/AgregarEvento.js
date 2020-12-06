@@ -486,7 +486,7 @@ export default class AgregarEvento extends React.Component {
                 >
                     <DialogTitle id="confirmation-dialog-title">Nuevo Trabajo</DialogTitle>
                     <DialogContent dividers>
-                        <TextField id="rol" required autoFocus margin="dense" label="Rol del trabajador" type="rol" fullWidth />
+                        <TextField id="rol" required autoFocus margin="dense" label="Rol a cumplir" type="rol" fullWidth />
                         <TextField id="descripcion-trab" required multiline rows="2" margin="dense" label="Descripción del trabajo" type="descripcion" fullWidth />
                         <TextField id="metodopago" select required margin="dense" value={this.state.metodopagoDisplay} SelectProps={{ native: true, }} onChange={this.handleCambiarMetodopago('metodopagoDisplay')} label="Metodo de Pago" fullWidth>
                             {metodopago.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
