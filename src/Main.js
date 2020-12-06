@@ -9,20 +9,11 @@ import db from "./index";
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import wwsp from './logos/wwsp.png';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
-let show = false;
-// show/hide dropdown menu
-function userOptions() {
-    if (show === false) {
-        document.getElementById("drop-container-id").style.display = "block";
-        show = true;
-    } else {
-        document.getElementById("drop-container-id").style.display = "none";
-        show = false;
-    }
-};
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -73,7 +64,6 @@ class Main extends React.Component {
         document.getElementById("empleador-li").style.color = "#b2bbbd";
         document.getElementById("empleado-li").style.color = "#b2bbbd";
         document.getElementById("profileTitle").style.color = "#eeeeee";
-        show = false;
         document.getElementById("drop-container-id").style.display = "none";
         this.setState({ modo: "perfil" });
     }
@@ -98,19 +88,26 @@ class Main extends React.Component {
                 <nav className='navbar'>
                     <ul className="left-ui">
                         <li><div id="logo"><img className='logo' alt="log" src={wwsp} /></div></li>
-                        <li className='home headers-main'>WHITEWORK</li>
-                        <li id="empleado-li" className="headers-main" onClick={this.abrirEmpleado}>Modo Prestador</li>
-                        <li id="empleador-li" className="headers-main" onClick={this.abrirEmpleador}>Modo Empleador</li>
+                        <li className='home'>WHITEWORK</li>
+                        <li id="empleado-li" onClick={this.abrirEmpleado}>Modo Prestador</li>
+                        <li id="empleador-li" onClick={this.abrirEmpleador}>Modo Empleador</li>
                     </ul>
                     <ul className='right-ui nombre-usuario'>
-                        <li className='points' id="profileTitle" onClick={this.abrirPerfil}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
-                        <div className='profile' onClick={userOptions}><div className='background'><i className="fas fa-user">{fotoPerfil}</i></div></div>
-                        <li><i className="fas fa-bell bell"></i></li>
+                        <li id="profileTitle" onClick={this.abrirPerfil} style={{color: '#fff'}}>{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
+                        <li className="dropdown">
+                            <a href="#login" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i>{fotoPerfil}</i><span className="caret"></span></a>
+                            <ul className="dropdown-menu" role="menu" style={{left: '-85px'}}>
+                                <li onClick={this.abrirPerfil} style={{color: 'black'}}>Mi Perfil</li>
+                                <div class="dropdown-divider"></div>
+                                <li onClick={authApi.signOut} style={{color: 'black'}}>Cerrar Sesión</li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
+
                 <div id='drop-container-id' className='drop-container'>
                     <i className="fas fa-caret-up caret"></i>
-                    <ul className='dropdown'>
+                    <ul className='dropdown-custom'>
                         <li onClick={this.abrirPerfil}>Mi Perfil</li>
                         <li onClick={authApi.signOut}>Cerrar Sesión</li>
                     </ul>
