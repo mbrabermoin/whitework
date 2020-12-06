@@ -68,6 +68,7 @@ ul {
 .home {
   border-right: 1px solid #b2bbbd;
   padding-right: 30px;
+  color: #fff!important;
 }
 
 .work {
@@ -125,11 +126,8 @@ ul {
   font-size: 28px;
 }
 
-.dropdown {
-  list-style: none;
+.dropdown-custom {
   background-color: #e9ecec;
-  position: relative;
-  left: 1770px;
   bottom: 5px;
   width: 180px;
   height: 100%;
@@ -138,39 +136,39 @@ ul {
   border: 1px solid #b2bbbd;
 }
 @media (max-width: 1366px) {
-  .dropdown {
+  .dropdown-custom {
     left: 1100px;
   } 
 }
 @media (max-width: 1280px) {
-  .dropdown {
+  .dropdown-custom {
     left: 1000px;
   } 
 }
 @media (max-width: 1024px) {
-  .dropdown {
+  .dropdown-custom {
     left: 750px;
   } 
 }
-.dropdown li:first-child {
+.dropdown-custom li:first-child {
   background-color: white;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.dropdown li:last-child {
+.dropdown-custom li:last-child {
   background-color: white;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
-.dropdown li {
+.dropdown-custom li {
   font-size: 15px;
   color: #3e474f;
   border-bottom: 1px solid #b2bbbd;
   padding: 15px 20px 15px 15px;
   transition: background-color .5s;
 }
-.dropdown li:hover {
+.dropdown-custom li:hover {
   cursor: pointer;
   background-color: white;
   transition: background-color .5s;

@@ -5,6 +5,9 @@ import buscar from "../../logos/buscar-evento.png";
 import valorar from "../../logos/valorar-trabajo.png";
 import esperar from "../../logos/esperar.png";
 import ww from '../../logos/wwsp.png';
+import wwblack from "../../logos/whiteWork-black.png";
+import homeSlide1 from "../../logos/home slide 1.jpg";
+import homeSlide3 from "../../logos/home slide 3.jpg";
 import '../../css/home.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -144,10 +147,72 @@ class SiteScreen extends React.Component {
     var tareas = "";
 
     if (this.state.display === "main") {
-      display = 
-      <div id="foto-institucional">
-        <img alt="trabajadores" src="https://controlpublicidad.com/uploads/2019/09/empleados-contentos-120254.jpg"></img>
-      </div>
+      display =
+      <div>
+      <div className="col-12 row" style={{padding: 0}}>
+         <div id="carouselExampleControls" class="carousel slide col-8" data-ride="carousel" style={{minHeight: '527px', paddingLeft: '0px'}}>
+            <div class="carousel-inner" style={{height: '527px'}}>
+              <div class="carousel-item active">
+                <img alt="trabajadores" src={homeSlide3}></img>
+              </div>
+              <div class="carousel-item">
+                <img alt="..." src={homeSlide1}></img>
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="container col-4" style={{marginBottom: '20px'}}>
+              <div class="row">
+                <div class="col-sm-4" style={{marginTop: '36%'}}>
+                    <div class="first-block">
+                      <i class="fa fa-fw fa-lg fa-hourglass-half" style={{cursor: 'pointer', fontSize: '40px', marginBottom: '16px', color: '#3e474f'}}></i>
+                      <div class="h4-height">
+                        <h4 class="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Inmediatez</h4>
+                      </div>
+                        <p>Comenzá a trabajar en pocos minutos</p>
+                    </div>
+                </div>
+                <div class="col-sm-4" style={{marginTop: '10%'}}>
+                    <div class="second-block">
+                      <div class="h4-height">
+                        <h4 class="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Sin intermediarios</h4>
+                      </div>
+                        <p>Contactate directamente con la contraparte</p>
+                    </div>
+                      <i class="fa fa-fw fa-lg fa-handshake-o" style={{cursor: 'pointer', fontSize: '40px', color: '#3e474f'}}></i>
+                </div>
+                <div class="col-sm-4" style={{marginTop: '36%'}}>
+                    <div class="first-block">
+                      <i class="fa fa-fw fa-lg fa-users" style={{cursor: 'pointer', fontSize: '40px', marginBottom: '16px', color: '#3e474f'}}></i>
+                      <div class="h4-height">
+                        <h4 class="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Seguridad</h4>
+                      </div>
+                        <p>Encontrá empleados de confianza para tus eventos</p>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-12">
+                    <a href="#login" class="btn btn-secondary" onClick={this.mostrarLogin}>Unite a WhiteWork</a>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div className="col-sm-12">
+          <img alt="logo" src={wwblack} style={{margin: '30px 0 30px 0', width: '250px'}}></img>
+        </div>
+        <div className="offset-md-4 col-sm-4">
+          <p style={{fontWeight: 'bold'}}>¿Qué es WhiteWork?</p>
+          <p style={{textAlign: 'justify'}}>Somos una plataforma que busca facilitar la conexión y comunicación entre personas que realicen un evento y necesitan personal temporal de confianza para trabajar en el mismo, con los trabajadores capacitados y que quieran participar de estos. </p>
+        </div>
+        </div> 
     }     
 
     if (this.state.display === "login") {
@@ -204,36 +269,6 @@ class SiteScreen extends React.Component {
           </div>
         </div>
       </div>
-
-      // <div>
-      //   <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
-      //   <link href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/67239/animate.min.css" rel="stylesheet" />
-      //   <div className="ui-panel login-panel">
-      //     <header>
-      //       <div className="left logo">
-      //         <a href="#logo"><span>WhiteWork</span></a>
-      //       </div>
-      //     </header>
-
-      //     <div className="login-form">
-      //       <div className="subtitle">Ingresar o <a href="#register" onClick={this.props.registrarseModal} className="ui-button inactive register">Registrarse</a></div>
-      //       <input type="text" id="email" placeholder="Usuario/email" />
-      //       <input id="password" type="password" placeholder="Contraseña" />
-      //     </div>
-
-      //     <footer>
-      //       <div className="right form-actions">
-      //         <a href="#password" onClick={this.props.resetModal} className="ui-button inactive login">¿Olvidó su contraseña?</a>
-      //         {/* <a href="#login" onClick={signInMail} className="ui-button inactive register">Login</a> */}
-      //       </div>
-      //       <div className="left social-login">
-      //         Ingresá con
-      //         <i onClick={this.props.signInFacebook} className="fa fa-fw fa-lg fa-facebook" style={{cursor: 'pointer'}}></i>
-      //         <i onClick={this.props.signInGoogle} className="fa fa-fw fa-lg fa-google" style={{cursor: 'pointer'}}></i>
-      //       </div>
-      //     </footer>
-      //   </div>
-      // </div>
     }
 
     if (this.state.display === "institucionalEmpleado") {
@@ -241,29 +276,29 @@ class SiteScreen extends React.Component {
       <div className="col">
         <ul className="task-list" id="empleado-tareas">
           <li>
-            <div className="tarjeta">
+            <div className="mx-auto tarjeta">
               <img className="foto-trabajo" src={buscar} alt="persona" />
               <div className="content-tarea">
-                <h2>1. Buscar Trabajo</h2>
-                <h3>Podrás buscar el trabajo al que deseas postularte.</h3>
+                <h3>1. Buscar Trabajo</h3>
+                <h5>Podrás buscar el trabajo al que deseas postularte.</h5>
               </div>
             </div>
           </li>
           <li>
-            <div className="tarjeta">
+            <div className="mx-auto tarjeta">
               <img className="foto-trabajo" src={esperar} alt="persona" />
               <div className="content-tarea">
-                <h2>2. Esperar aceptación</h2>
-                <h3>Momento de esperar a que tu postulación sea aceptada.</h3>
+                <h3>2. Esperar aceptación</h3>
+                <h5>Momento de esperar a que tu postulación sea aceptada.</h5>
               </div>
             </div>
           </li>
           <li>
-            <div className="tarjeta">
+            <div className="mx-auto tarjeta">
               <img className="foto-trabajo" src={valorar} alt="persona" />
               <div className="content-tarea">
-                <h2>3. Puntuar a tu empleador</h2>
-                <h3>Podrás colocar puntuación sobre el trato recibido por tu empleador.</h3>
+                <h3>3. Puntuar a tu empleador</h3>
+                <h5>Podrás colocar puntuación sobre el trato recibido por tu empleador.</h5>
               </div>
             </div>
           </li>
@@ -276,38 +311,38 @@ class SiteScreen extends React.Component {
       <div className="col">
           <ul className="task-list" id="empleador-tareas">
             <li>
-              <div className="tarjeta">
+              <div className="mx-auto tarjeta">
                 <img className="foto-trabajo" src={crear} alt="persona" />
                 <div className="content-tarea">
-                  <h2>1. Crear Evento</h2>
-                  <h3>Definir fecha, trabajo y pagos.</h3>
+                  <h3>1. Crear Evento</h3>
+                  <h5>Definir fecha, trabajo y pagos.</h5>
                 </div>
               </div>
             </li>
             <li>
-              <div className="tarjeta">
+              <div className="mx-auto tarjeta">
                 <img className="foto-trabajo" src={esperar} alt="persona" />
                 <div className="content-tarea">
-                  <h2>2. Esperar postulantes</h2>
-                  <h3>Momento de esperar a quienes quieran trabajar en tus eventos.</h3>
+                  <h3>2. Esperar postulantes</h3>
+                  <h5>Momento de esperar a quienes quieran trabajar en tus eventos.</h5>
                 </div>
               </div>
             </li>
             <li>
-              <div className="tarjeta">
+              <div className="mx-auto tarjeta">
                 <img className="foto-trabajo" src={aceptar} alt="persona" />
                 <div className="content-tarea">
-                  <h2>3. Aceptar postulantes</h2>
-                  <h3>Aceptar o rechazar a los postulantes.</h3>
+                  <h3>3. Aceptar postulantes</h3>
+                  <h5>Aceptar o rechazar a los postulantes.</h5>
                 </div>
               </div>
             </li>
             <li>
-              <div className="tarjeta">
+              <div className="mx-auto tarjeta">
                 <img className="foto-trabajo" src={valorar} alt="persona" />
                 <div className="content-tarea">
-                  <h2>4. Puntuar </h2>
-                  <h3>Una vez que el trabajo se ha consumado, podrás puntuar al trabajador.</h3>
+                  <h3>4. Puntuar </h3>
+                  <h5>Una vez que el trabajo se ha consumado, podrás puntuar al trabajador.</h5>
                 </div>
               </div>
             </li>
@@ -316,27 +351,29 @@ class SiteScreen extends React.Component {
     }
     
     return (
-      <div className="App">
-        {/* HEADER */}
-        <div className='navbar'>
-          <ul className="left-ui">
-            <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
-            <li className='home' onClick={this.mostrarMain}>WHITEWORK</li>
-            <li id="prestadores-li" onClick={this.mostrarInstitucionalEmpleado}>Modo Prestador</li>
-            <li id="usuarios-li" onClick={this.mostrarInstitucionalEmpleador}>Modo Empleador</li>
-          </ul>
-          <ul className='right-ui nombre-usuario'>
-            <li id="ingresar-li" onClick={this.mostrarLogin}>Ingresar</li>
-            <li id="registrate-li" onClick={this.mostrarLogin}>Registrate</li>
-          </ul>
-        </div>
-        {/* HEADER */}
+      <div>
+        <div className="App">
+          {/* HEADER */}
+          <div className='navbar col-12'>
+            <ul className="left-ui">
+              <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
+              <li className='home' onClick={this.mostrarMain}>WHITEWORK</li>
+              <li id="prestadores-li" onClick={this.mostrarInstitucionalEmpleado}>Busco trabajar</li>
+              <li id="usuarios-li" onClick={this.mostrarInstitucionalEmpleador}>Busco contratar</li>
+            </ul>
+            <ul className='right-ui nombre-usuario'>
+              <li onClick={this.mostrarLogin} style={{color:'#fff'}}>Ingresar</li>
+              <li onClick={this.mostrarLogin} style={{color:'#fff'}}>Registrate</li>
+            </ul>
+          </div>
+          {/* HEADER */}
 
-        <div className="col-sm-12">
-          {display}
+          <div className="col-sm-12" style={{padding: 0}}>
+            {display}
+            {tareas}
+          </div>
         </div>
-        
-        </div>
+      </div>
     );
   }
 }

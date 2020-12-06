@@ -4,13 +4,34 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <meta name="description" content="WhiteWork"/>
+    <style>
+
+      .footer-custom{
+          background-color: #3e474f;
+          height: 150px;
+      }
+
+      #page-container {
+        position: relative;
+        min-height: 100vh;
+      }
+
+      #root {
+        padding-bottom: 150px;    /* Footer height */
+      }
+
+      #footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 150px;            /* Footer height */
+      }     
+    </style>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -28,14 +49,23 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <div id="page-container">
+      <div id="root"></div>
+      <footer id="footer" class="footer-custom">
+        <div class="row" style="color: white;">
+          <div class="col-4">
+            <p style="font-size: 18px;">SEGUINOS</p>
+            <i class="fa fa-fw fa-lg fa-facebook" style="cursor: pointer; font-size: 27px;" onclick="window.open('https://www.facebook.com/WhiteWork-104637174751216', '_blank');"></i>
+            <i class="fa fa-fw fa-lg fa-twitter" style="cursor: pointer; font-size: 27px;" onclick="window.open('https://twitter.com/WhiteWork2', '_blank');"></i>
+            <i class="fa fa-fw fa-lg fa-instagram" style="cursor: pointer; font-size: 27px;" onclick="window.open('https://twitter.com/WhiteWork2', '_blank');"></i>
+          </div>
+          <div class="col-7">
+          </div>
+          <div class="col-1">
+            <p style="text-align: end;position: absolute;bottom: 0;">@WhiteWork 2020</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
