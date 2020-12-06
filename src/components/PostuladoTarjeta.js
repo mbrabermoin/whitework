@@ -135,9 +135,6 @@ class PostuladoTarjeta extends React.Component {
             if (this.state.usuario.telefono !== null && this.state.usuario.telefono !== "") {
                 telefono = "Telefono: " + this.state.usuario.telefono;
             }
-            /*if (this.state.usuario.descripcionEmpleado !== null && this.state.usuario.descripcionEmpleado !== "") {
-                descripcion = this.state.usuario.descripcionEmpleado;
-            }*/
             if (this.state.usuario.facebook !== "") {
                 facebookpanel = <div className="profile-card-social__post">
                     <a target="_blank" rel="noopener noreferrer" href={this.state.usuario.facebook}>

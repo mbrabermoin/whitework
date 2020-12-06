@@ -237,7 +237,7 @@ class TrabajoTarjeta extends React.Component {
         Editar.desasignarEmpleado(trabajo);
         Editar.desasignarEmpleadoAEvento(evento, nuevaCantAsignado);
         setTimeout(() => {
-            this.props.mostrarMensajeExito("Empleado Rechazado Correctamente.", "success");
+            this.props.mostrarMensajeExito("Prestador Rechazado Correctamente.", "success");
             this.props.actualizarEventos();
         }, 1000);
     }
@@ -581,7 +581,7 @@ class TrabajoTarjeta extends React.Component {
                                             <button disable className='asignado-btn'>Ya Puntuado</button>
                                         </div>
                                     } else {
-                                        botones = <button className='editar-btn' onClick={this.handleOpenPuntuacion}>Valorar Empleado</button>
+                                        botones = <button className='editar-btn' onClick={this.handleOpenPuntuacion}>Valorar Prestador</button>
                                     }
                                 } else {
                                     botones = "";

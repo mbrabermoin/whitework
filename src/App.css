@@ -714,3 +714,18 @@ margin-top: 40px;
 #foto-institucional{
 margin-top: 25px;
 }
+.filterHeader{
+  border: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  height: 30px;
+}
+.prestadoresHeader{
+  background-color: grey;
+  border-radius: 2px;
+  height: 50px;
+}
+.columnStyle{
+  background-color: #DDDDDD;
+  height: 40px;
+}

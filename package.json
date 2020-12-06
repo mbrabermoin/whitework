@@ -19,6 +19,8 @@
     "firebase": "^7.14.2",
     "jquery": "^3.5.1",
     "node-env-file": "^0.1.8",
+    "primeicons": "^4.1.0",
+    "primereact": "^5.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebase-file-uploader": "^2.4.3",

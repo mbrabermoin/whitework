@@ -9,20 +9,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Snackbar from '@material-ui/core/Snackbar';
-import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
 import EmpleadoDetalle from "./components/EmpleadoDetalle";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
-const columns = [
-  { field: 'name', headerName: 'Nombre y Apellido', width: 200 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'ubicacion', headerName: 'Ubicación', width: 200 },
-  { field: 'telefono', headerName: 'Telefono', width: 200 },
-  { field: 'descripcion', headerName: 'Descripción', width: 200 },
-];
 class ModoEmpleador extends React.Component {
   constructor(props) {
     super(props);
@@ -111,12 +105,12 @@ class ModoEmpleador extends React.Component {
 
   }
   buscarEmpleados() {
-    var filtro = db.collection("usuarios").where("empleadoActivo","==",true)
+    var filtro = db.collection("usuarios").where("empleadoActivo", "==", true)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         rows: snapShots.docs.map(doc => {
-          return { id: doc.id, data: doc.data(), name: doc.data().fullname,email: doc.data().email , ubicacion: doc.data().ubicacion , telefono: doc.data().telefono ,descripcion: doc.data().descripcionEmpleado  }
-     
+          return { id: doc.id, data: doc.data(), name: doc.data().fullname, email: doc.data().email, ubicacion: doc.data().ubicacion, telefono: doc.data().telefono, descripcion: doc.data().descripcionEmpleado }
+
         })
       })
     }, error => {
@@ -252,27 +246,27 @@ class ModoEmpleador extends React.Component {
   }
   handleCloseDetalleEmpleado = () => {
     this.setState({ openDetalleEmpleado: false });
-}
-handleOpenDetalleEmpleado = (empleadoId) => {
-  this.setState({ openCortina: true });
-  var docRef = db.collection("usuarios").doc(empleadoId);
-        let component = this;
-        docRef.get().then(function (doc) {
-            if (doc.exists) {
-                console.log("Empleado:", doc.data());
-                component.setState({ empleado: doc.data() });
-            } else {
-                alert("Ha ocurrido un error. Actualice la página.");
-            }
-        }).catch(function (error) {
-            console.log(error);
-            alert("Ha ocurrido un error. Actualice la página.");
-        });
-        setTimeout(() => {
-          this.setState({ openCortina: false });
-          this.setState({ openDetalleEmpleado: true });
-        }, 1000);
-}
+  }
+  handleOpenDetalleEmpleado = (empleadoId) => {
+    this.setState({ openCortina: true });
+    var docRef = db.collection("usuarios").doc(empleadoId);
+    let component = this;
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        console.log("Empleado:", doc.data());
+        component.setState({ empleado: doc.data() });
+      } else {
+        alert("Ha ocurrido un error. Actualice la página.");
+      }
+    }).catch(function (error) {
+      console.log(error);
+      alert("Ha ocurrido un error. Actualice la página.");
+    });
+    setTimeout(() => {
+      this.setState({ openCortina: false });
+      this.setState({ openDetalleEmpleado: true });
+    }, 1000);
+  }
   render() {
     var today = new Date();
     var mes = "";
@@ -346,11 +340,26 @@ handleOpenDetalleEmpleado = (empleadoId) => {
     console.log(eventos)
     if (this.state.mostrarEmpleados) {
       contenedorEventos = <div style={{ height: 400, verticalalign: 'middle', margin: 20 }}>
-        <DataGrid rows={this.state.rows} columns={columns} onSelectionChange={(data) => {
-          if (data.rows[0] !== undefined) {
-            this.handleOpenDetalleEmpleado(data.rows[0].email)
-          }
-        }} pageSize={10} disableMultipleSelection={true} hideFooterSelectedRowCount />
+        <div className="datatable-doc-demo">
+          <div className="card1">
+            <DataTable ref={(el) => this.dt = el} value={this.state.rows} selectionMode="single"
+              rowHover
+              onSelectionChange={(data) => {
+                if (data.value !== undefined) {
+                  this.handleOpenDetalleEmpleado(data.value.email)
+                }
+              }}
+              
+              paginator rows={10} emptyMessage="No hay Prestadores para mostrar." currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} Prestadores"
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport" >
+              <Column field="name" style={{ width: '20%' }} sortable filter filterPlaceholder="Filtrar" filterHeaderClassName="filterHeader" headerClassName="prestadoresHeader" className="columnStyle" filterMatchMode="contains" header="Nombre y Apellido"></Column>
+              <Column field="email" style={{ width: '15%' }} sortable filter filterPlaceholder="Filtrar" filterHeaderClassName="filterHeader" headerClassName="prestadoresHeader" className="columnStyle" filterMatchMode="contains" header="Email"></Column>
+              <Column field="ubicacion" style={{ width: '15%' }} sortable filter filterPlaceholder="Filtrar" filterHeaderClassName="filterHeader" headerClassName="prestadoresHeader" className="columnStyle" filterMatchMode="contains" header="Ubicación"></Column>
+              <Column field="telefono" style={{ width: '10%' }} sortable filter filterPlaceholder="Filtrar" filterHeaderClassName="filterHeader" headerClassName="prestadoresHeader" className="columnStyle" filterMatchMode="contains" header="Telefono"></Column>
+              <Column field="descripcion" style={{ width: '40%' }} sortable filter filterPlaceholder="Filtrar" filterHeaderClassName="filterHeader" headerClassName="prestadoresHeader" className="columnStyle" filterMatchMode="contains" header="Descripción"></Column>
+            </DataTable>
+          </div>
+        </div>
       </div>
     } else {
       if (eventos.length === 0) {
@@ -390,23 +399,23 @@ handleOpenDetalleEmpleado = (empleadoId) => {
           </div>
         </main>
         <Dialog
-                    open={this.state.openDetalleEmpleado}
-                    onClose={this.handleCloseDetalleEmpleado}
-                    TransitionComponent={Transition}
-                    fullWidth={true}
-                    maxWidth={'md'}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="confirmation-dialog-title">Empleado</DialogTitle>
-                    <DialogContent dividers>
-                        <EmpleadoDetalle usuario={this.state.empleado} />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCloseDetalleEmpleado} color="primary">
-                            CERRAR
+          open={this.state.openDetalleEmpleado}
+          onClose={this.handleCloseDetalleEmpleado}
+          TransitionComponent={Transition}
+          fullWidth={true}
+          maxWidth={'md'}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="confirmation-dialog-title">Empleado</DialogTitle>
+          <DialogContent dividers>
+            <EmpleadoDetalle usuario={this.state.empleado} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseDetalleEmpleado} color="primary">
+              CERRAR
                  </Button>
-                    </DialogActions>
-                </Dialog>
+          </DialogActions>
+        </Dialog>
         <Dialog
           open={this.state.openCortina}
           TransitionComponent={Transition}
