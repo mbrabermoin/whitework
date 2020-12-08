@@ -16,6 +16,11 @@ import Agregar from './DB/Agregar';
 import Editar from './DB/Editar';
 import * as provinciasjson from './JSONs/Provincias.json';
 import * as ciudadesjson from './JSONs/Ciudades.json';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Person from '@material-ui/icons/Person';
 import { MenuItem } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -72,9 +77,30 @@ class EventoTarjeta extends React.Component {
             ciudades: [],
             provinciaNueva: "",
             ciudadNueva: "",
+            trabajosEnTarjeta: [],
         }
         this.actualizarEventos = this.actualizarEventos.bind(this);
         this.mostrarMensajeExito = this.mostrarMensajeExito.bind(this);
+    }
+    componentDidMount() {
+        var trabajosVistaPrevia = [];
+        db.collection("trabajos").where("id_evento", "==", this.state.eventoid).get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    if(doc.data().mail_trabajador === ""){
+                        return trabajosVistaPrevia.push({ id: doc.id, data: doc.data(), estado: "Disponible" });
+                    }else{
+                    return trabajosVistaPrevia.push({ id: doc.id, data: doc.data(), estado: "Ya Asignado" });
+                    }
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            this.setState({ trabajosEnTarjeta: trabajosVistaPrevia })
+        }, 1000);
     }
     buscarTrabajos(evento) {
         var trab = [];
@@ -254,7 +280,7 @@ class EventoTarjeta extends React.Component {
                         const periodo = trab[t].periodo;
                         const categoria = trab[t].categoria;
                         setTimeout(function () {
-                            Agregar.agregarTrabajo(nuevoEvento, mailDueño, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago,facturacion, pago, periodo, categoria);
+                            Agregar.agregarTrabajo(nuevoEvento, mailDueño, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago, facturacion, pago, periodo, categoria);
                         }, t * 1100);
                     }
                 }, 1100);
@@ -407,19 +433,39 @@ class EventoTarjeta extends React.Component {
             </div>
         } else {
             tituloEventoDisplay =
-            <div>
-            <DialogContentText>
-                {this.state.titulo}
-            </DialogContentText>
-            </div> 
-            camposDelEvento = 
-            <div>
-                <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
-                <TextField id="provincia" margin="dense" disabled label="Provincia" type="provincia" value={this.state.provincia} fullWidth />
-                <TextField id="ciudad" margin="dense" disabled label="Ciudad" type="ciudad" value={this.state.ciudad} fullWidth />
-                <TextField id="direccion" margin="dense" disabled label="Dirección" type="direccion" value={this.state.direccion} fullWidth />
-                <TextField id="comienza" margin="dense" disabled label="Comienza" type="" value={inicioDateTime} fullWidth />
-                <TextField id="finaliza" margin="dense" disabled label="Finaliza" type="" value={finDateTime} fullWidth />
+                <div>
+                    <DialogContentText>
+                        {this.state.titulo}
+                    </DialogContentText>
+                </div>
+            camposDelEvento =
+                <div>
+                    <TextField id="descripcion" margin="dense" disabled label="Descripción" type="descripcion" value={this.state.descripcion} fullWidth />
+                    <TextField id="provincia" margin="dense" disabled label="Provincia" type="provincia" value={this.state.provincia} fullWidth />
+                    <TextField id="ciudad" margin="dense" disabled label="Ciudad" type="ciudad" value={this.state.ciudad} fullWidth />
+                    <TextField id="direccion" margin="dense" disabled label="Dirección" type="direccion" value={this.state.direccion} fullWidth />
+                    <TextField id="comienza" margin="dense" disabled label="Comienza" type="" value={inicioDateTime} fullWidth />
+                    <TextField id="finaliza" margin="dense" disabled label="Finaliza" type="" value={finDateTime} fullWidth />
+                </div>
+        }
+        var listaPreviaTrabajos = "";
+        console.log(this.state.trabajosEnTarjeta)
+        if (this.state.trabajosEnTarjeta !== []) {
+            var trabajosEnTarjetaPrevia = this.state.trabajosEnTarjeta;
+            listaPreviaTrabajos = <div style={{ height: 100 }}><List style={{
+                position: 'relative',
+                overflow: 'auto',
+                maxHeight: 100,
+            }}>
+                {trabajosEnTarjetaPrevia.map(job => (
+                    <ListItem>
+                        <ListItemIcon>
+                            <Person />
+                        </ListItemIcon>
+                        <ListItemText primary={job.data.rol} secondary={job.estado} />
+                    </ListItem>
+          ))}
+        </List>
             </div>
         }
         return (
@@ -427,12 +473,14 @@ class EventoTarjeta extends React.Component {
                 <div className='card'>
                     <div className='top-library'>
                         <span className="fas fa-book-open book">{this.state.provincia} - {this.state.ciudad}</span>
-                        <i className="fas fa-book-open book">{this.state.cantAsignados}/{this.state.cantTrabajos}</i>
+                        <i className="fas fa-book-open book">{this.state.datecomienzo} {this.state.timecomienzo}</i>
                     </div>
                     <div className='middle-library'>
                         <h3 className='job-name'>{this.state.titulo}</h3>
                         <p className='desc'>{this.state.descripcion}</p>
+                        <p className='desc'>Trabajos disponibles: {this.state.cantAsignados}/{this.state.cantTrabajos}</p>
                     </div>
+                    {listaPreviaTrabajos}
                     <div className="col-12">
                         <button className='resume-btn' onClick={this.handleOpenDetalle}>Ver Detalle</button>
                         {botonEliminarEvento}
@@ -456,7 +504,7 @@ class EventoTarjeta extends React.Component {
                             justify="center"
                             alignItems="center"
                         >
-                            <div style={{ marginRight: 4 + 'em',backgroundColor: '#0F9D58' }}>
+                            <div style={{ marginRight: 4 + 'em', backgroundColor: '#0F9D58' }}>
                                 <Button variant="outlined" size="large" onClick={this.handleOpenTrabajos}>Ver Trabajos ({this.state.cantTrabajos})</Button>
                             </div>
                             {dueño}
