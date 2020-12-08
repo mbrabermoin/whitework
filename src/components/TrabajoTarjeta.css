@@ -1,6 +1,6 @@
 
 .card-trabajo {
-    height: 125px;
+    height: 150px;
     background: #fff;
     position: relative;
     overflow-x: hidden;
@@ -95,8 +95,8 @@
     font-size: 15px;
     outline: none;
     cursor: pointer;
-    height: 40px;
-    width: 100px;
+    height: 45px;
+    width: 120px;
     background-color:  #06203c;
     border-radius: 5px;
     float:right;

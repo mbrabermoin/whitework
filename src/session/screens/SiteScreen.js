@@ -124,11 +124,19 @@ class SiteScreen extends React.Component {
     this.setState({ display: "main" });
   }
   mostrarMain = () => {
+    document.getElementById("contentDiv").style.opacity = 0;
+    setTimeout(function(){
+      document.getElementById("contentDiv").style.opacity = 1;
+    }, 200);
     document.getElementById("usuarios-li").style.color = "#b2bbbd";
     document.getElementById("prestadores-li").style.color = "#b2bbbd";
     this.setState({ display: "main" });
   }
   mostrarLogin = () => {
+    document.getElementById("contentDiv").style.opacity = 0;
+    setTimeout(function(){
+      document.getElementById("contentDiv").style.opacity = 1;
+    }, 200);
     this.setState({ display: "login" });
   }
   mostrarInstitucionalEmpleado = () => {
@@ -150,57 +158,57 @@ class SiteScreen extends React.Component {
       display =
       <div>
       <div className="col-12 row" style={{padding: 0}}>
-         <div id="carouselExampleControls" class="carousel slide col-8" data-ride="carousel" style={{minHeight: '527px', paddingLeft: '0px'}}>
-            <div class="carousel-inner" style={{height: '527px'}}>
-              <div class="carousel-item active">
+         <div id="carouselExampleControls" className="carousel slide col-8" data-ride="carousel" style={{minHeight: '527px', paddingLeft: '0px'}}>
+            <div className="carousel-inner" style={{height: '527px'}}>
+              <div className="carousel-item active">
                 <img alt="trabajadores" src={homeSlide3}></img>
               </div>
-              <div class="carousel-item">
+              <div className="carousel-item">
                 <img alt="..." src={homeSlide1}></img>
               </div>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
+            <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span className="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
+            <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+              <span className="carousel-control-next-icon" aria-hidden="true"></span>
+              <span className="sr-only">Next</span>
             </a>
           </div>
-          <div class="container col-4" style={{marginBottom: '20px'}}>
-              <div class="row">
-                <div class="col-sm-4" style={{marginTop: '36%'}}>
-                    <div class="first-block">
-                      <i class="fa fa-fw fa-lg fa-hourglass-half" style={{cursor: 'pointer', fontSize: '40px', marginBottom: '16px', color: '#3e474f'}}></i>
-                      <div class="h4-height">
-                        <h4 class="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Inmediatez</h4>
+          <div className="container col-4" style={{marginBottom: '20px'}}>
+              <div className="row">
+                <div className="col-sm-4" style={{marginTop: '36%'}}>
+                    <div className="first-block">
+                      <i className="fa fa-fw fa-lg fa-hourglass-half" style={{cursor: 'pointer', fontSize: '40px', marginBottom: '16px', color: '#3e474f'}}></i>
+                      <div className="h4-height">
+                        <h4 className="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Inmediatez</h4>
                       </div>
                         <p>Comenzá a trabajar en pocos minutos</p>
                     </div>
                 </div>
-                <div class="col-sm-4" style={{marginTop: '10%'}}>
-                    <div class="second-block">
-                      <div class="h4-height">
-                        <h4 class="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Sin intermediarios</h4>
+                <div className="col-sm-4" style={{marginTop: '10%'}}>
+                    <div className="second-block">
+                      <div className="h4-height">
+                        <h4 className="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Sin intermediarios</h4>
                       </div>
                         <p>Contactate directamente con la contraparte</p>
                     </div>
-                      <i class="fa fa-fw fa-lg fa-handshake-o" style={{cursor: 'pointer', fontSize: '40px', color: '#3e474f'}}></i>
+                      <i className="fa fa-fw fa-lg fa-handshake-o" style={{cursor: 'pointer', fontSize: '40px', color: '#3e474f'}}></i>
                 </div>
-                <div class="col-sm-4" style={{marginTop: '36%'}}>
-                    <div class="first-block">
-                      <i class="fa fa-fw fa-lg fa-users" style={{cursor: 'pointer', fontSize: '40px', marginBottom: '16px', color: '#3e474f'}}></i>
-                      <div class="h4-height">
-                        <h4 class="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Seguridad</h4>
+                <div className="col-sm-4" style={{marginTop: '36%'}}>
+                    <div className="first-block">
+                      <i className="fa fa-fw fa-lg fa-users" style={{cursor: 'pointer', fontSize: '40px', marginBottom: '16px', color: '#3e474f'}}></i>
+                      <div className="h4-height">
+                        <h4 className="text-green" style={{fontSize: '20px', fontWeight: 'bold'}}>Seguridad</h4>
                       </div>
                         <p>Encontrá empleados de confianza para tus eventos</p>
                     </div>
                 </div>
               </div>
-              <div class="row">
-                  <div class="col-sm-12">
-                    <a href="#login" class="btn btn-secondary" onClick={this.mostrarLogin}>Unite a WhiteWork</a>
+              <div className="row">
+                  <div className="col-sm-12">
+                    <a href="#login" className="btn btn-secondary" onClick={this.mostrarLogin}>Unite a WhiteWork</a>
                   </div>
               </div>
             </div>
@@ -210,7 +218,7 @@ class SiteScreen extends React.Component {
         </div>
         <div className="offset-md-4 col-sm-4">
           <p style={{fontWeight: 'bold'}}>¿Qué es WhiteWork?</p>
-          <p style={{textAlign: 'justify'}}>Somos una plataforma que busca facilitar la conexión y comunicación entre personas que realicen un evento y necesitan personal temporal de confianza para trabajar en el mismo, con los trabajadores capacitados y que quieran participar de estos. </p>
+          <p style={{textAlign: 'justify'}}>Es una plataforma que busca facilitar la conexión y comunicación entre personas que realicen un evento y necesitan personal temporal para trabajar en el mismo, con trabajadores de confianza que quieran ser parte de estos. </p>
         </div>
         </div> 
     }     
@@ -357,7 +365,7 @@ class SiteScreen extends React.Component {
           {/* HEADER */}
           <div className='navbar col-12'>
             <ul className="left-ui">
-              <li><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
+              <li onClick={this.mostrarMain}><div id="logo"><img className='logo' alt="log" src={ww} /></div></li>
               <li className='home' onClick={this.mostrarMain}>WHITEWORK</li>
               <li id="prestadores-li" onClick={this.mostrarInstitucionalEmpleado}>Busco trabajar</li>
               <li id="usuarios-li" onClick={this.mostrarInstitucionalEmpleador}>Busco contratar</li>
@@ -369,7 +377,7 @@ class SiteScreen extends React.Component {
           </div>
           {/* HEADER */}
 
-          <div className="col-sm-12" style={{padding: 0}}>
+          <div id="contentDiv" className="col-sm-12" style={{padding: 0, transition: 'opacity .15s linear'}}>
             {display}
             {tareas}
           </div>

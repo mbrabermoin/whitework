@@ -695,7 +695,7 @@ class TrabajoTarjeta extends React.Component {
 
                         {photoAsignado}
                         <DialogContentText>
-                            ¿Como calificarias su trabajo?
+                            ¿Cómo calificarías su trabajo?
                     </DialogContentText>
                         <TextField id="nombre" autoFocus multiline="true" rows="6" margin="dense" label="Comentario" type="opinion" fullWidth />
                         <form>
@@ -724,11 +724,11 @@ class TrabajoTarjeta extends React.Component {
                         </form>
                         <FormControlLabel
                             control={<GreenCheckbox checked={this.state.checkedMetodoPago} onChange={this.handleChangeMP} name="checkedMP" />}
-                            label="¿Cumplió con el metodo de pago acordado?"
+                            label="¿Cumplió con el trabajo establecido en la postulación?"
                         />
                         <FormControlLabel
                             control={<GreenCheckbox checked={this.state.checkedPago} onChange={this.handleChangePago} name="checkedPago" />}
-                            label="¿Cumplió con el pago acordado?"
+                            label="¿Respetó el método de pago y el pago acordado?"
                         />
                     </DialogContent>
                     <DialogActions>
@@ -753,7 +753,7 @@ class TrabajoTarjeta extends React.Component {
 
                         {photoAsignadoDueño}
                         <DialogContentText>
-                            ¿Como calificarias su Trato?
+                            ¿Cómo calificarías a tu empleador?
                         </DialogContentText>
                         <TextField id="opinionEmpleado" autoFocus multiline="true" rows="6" margin="dense" label="Comentario" type="opinion" fullWidth />
                         <form>
