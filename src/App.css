@@ -721,9 +721,15 @@ margin-top: 25px;
   height: 30px;
 }
 .prestadoresHeader{
-  background-color: grey;
-  border-radius: 2px;
+  color: white;
+  font-weight: inherit;
+  background-color: #3e474f;
   height: 50px;
+  border: solid;
+  border-width: 1px;
+}
+.p-column-filter{
+  float: left;
 }
 .columnStyle{
   background-color: #DDDDDD;
