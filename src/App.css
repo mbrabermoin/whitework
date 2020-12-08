@@ -327,11 +327,6 @@ ul {
   background-color:  #06203c;
   border-radius: 5px;
 }
-.resume-btn:hover {
-  cursor: pointer;
-  background-color: #eee; 
-  color: #3659a2;
-}
 .duplicar-btn {
   margin-top: 10px;
   margin-left: 10px;
@@ -375,10 +370,7 @@ ul {
   background-color:  #0F9D58;
   border-radius: 5px;
 }
-.agregarEvento-btn:hover{
-  background-color: #eee; 
-  color: #3659a2;
-}
+
 .estimate {
   color: #b2bbbd;
   margin-left: 20px;
@@ -465,6 +457,7 @@ ul {
   border-radius: 5px;
   box-shadow: 2px 2px 2px 2px #b2bbbd;
   min-height: 250px;
+  cursor: pointer;
 }
 .card:hover {
   transform: scale(1.05);

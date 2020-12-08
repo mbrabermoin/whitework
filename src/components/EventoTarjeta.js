@@ -470,7 +470,7 @@ class EventoTarjeta extends React.Component {
         }
         return (
             <div>
-                <div className='card'>
+                <div className='card' onClick={this.handleOpenDetalle}>
                     <div className='top-library'>
                         <span className="fas fa-book-open book">{this.state.provincia} - {this.state.ciudad}</span>
                         <i className="fas fa-book-open book">{this.state.datecomienzo} {this.state.timecomienzo}</i>
