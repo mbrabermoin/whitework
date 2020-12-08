@@ -506,7 +506,7 @@ class PerfilEmpleado extends React.Component {
             cuilValidado = "";
         } else {
             if (this.state.usuario.cuilValidado === "N") {
-                cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>CUIT: {this.state.usuario.cuil} </strong> </div>
+                cuil = <div onClick={this.handleAbrirCUIL} className="profile-card__txt"><strong>CUIT {this.state.usuario.cuil} </strong> </div>
                 cuilValidado = ""
             } else {
                 cuil = <div onClick="" className="profile-card__txt"><strong>CUIT: {this.state.usuario.cuil} </strong> </div>
@@ -719,7 +719,7 @@ class PerfilEmpleado extends React.Component {
                 <div className="profile-card-inf">
                     <div className="profile-card-inf__item">
                         <div className="profile-card-inf__title">{this.state.cantidadTrabajosRealizados}</div>
-                        <div className="profile-card-inf__txt">Changas realizadas</div>
+                        <div className="profile-card-inf__txt">Trabajos realizados</div>
                     </div>
                     <div className="profile-card-inf__item">
                         <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
@@ -876,9 +876,10 @@ class PerfilEmpleado extends React.Component {
                         fullWidth={true}
                         maxWidth={'md'}
                         aria-labelledby="form-dialog-title">
-                        <DialogTitle id="confirmation-dialog-title">CUIT:</DialogTitle>
+                        <DialogTitle id="confirmation-dialog-title">Ingrese su CUIT*</DialogTitle>
                         <DialogContent dividers>
-                            <TextField id="cuil" autoFocus margin="dense" label="CUIT (Debera esperar la validación del sistema)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
+                            <TextField id="cuil" autoFocus margin="dense" label="CUIT (Sin espacios ni guiones)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
+                            <div className="col-sm-12" style={{paddingLeft: 0, marginTop: 10, fontSize: 12, fontStyle: 'italic'}}>*Será validado por un administrador del sitio.</div>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={this.handleCloseCUIL} color="primary">
@@ -1008,7 +1009,7 @@ class PerfilEmpleado extends React.Component {
                         maxWidth={'md'}
                         aria-labelledby="form-dialog-title"
                     >
-                        <DialogTitle id="confirmation-dialog-title">Telefono:</DialogTitle>
+                        <DialogTitle id="confirmation-dialog-title">Ingrese su número telefónico</DialogTitle>
                         <DialogContent dividers>
                             <TextField id="telefono" autoFocus margin="dense" label="Telefono" defaultValue={this.state.usuario.telefono} type="telefono" fullWidth />
                         </DialogContent>
@@ -1029,7 +1030,7 @@ class PerfilEmpleado extends React.Component {
                         maxWidth={'md'}
                         aria-labelledby="form-dialog-title"
                     >
-                        <DialogTitle id="confirmation-dialog-title">Ocupación:</DialogTitle>
+                        <DialogTitle id="confirmation-dialog-title">Ingrese su Ocupación</DialogTitle>
                         <DialogContent dividers>
                             <TextField id="ocupacion" autoFocus margin="dense" label="Ocupación" defaultValue={this.state.usuario.ocupacion} type="ocupacion" fullWidth />
                         </DialogContent>
@@ -1050,7 +1051,7 @@ class PerfilEmpleado extends React.Component {
                         maxWidth={'md'}
                         aria-labelledby="form-dialog-title"
                     >
-                        <DialogTitle id="confirmation-dialog-title">Ubicación:</DialogTitle>
+                        <DialogTitle id="confirmation-dialog-title">Ingrese su Ubicación</DialogTitle>
                         <DialogContent dividers>
                             <TextField id="ubicacion" autoFocus margin="dense" label="Ubicación" defaultValue={this.state.usuario.ubicacion} type="ubicacion" fullWidth />
                         </DialogContent>

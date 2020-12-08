@@ -237,7 +237,7 @@ class EmpleadoDetalle extends React.Component {
                         <div className="profile-card-inf">
                             <div className="profile-card-inf__item">
                                 <div className="profile-card-inf__title">{this.state.cantidadTrabajosRealizados}</div>
-                                <div className="profile-card-inf__txt">Changas realizadas</div>
+                                <div className="profile-card-inf__txt">Trabajos realizados</div>
                             </div>
                             <div className="profile-card-inf__item">
                                 <div onClick={this.handleAbrirComentariosEmpleado} className="profile-card-inf__title puntuacion">{this.state.puntajeEmpleado}/10</div>
