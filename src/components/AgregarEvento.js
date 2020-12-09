@@ -158,9 +158,9 @@ export default class AgregarEvento extends React.Component {
         this.setState({ ciudades: [] });
     };
     handleOpenEvento = () => {
-        if(this.state.usuario.suspendido){
+        if (this.state.usuario.suspendido) {
             this.props.mostrarMensajeExito("No puedes Crear evento, su cuenta se encuentra suspendida.", "error");
-        }else{
+        } else {
             this.setState({ openEvento: true });
         }
     };
@@ -177,7 +177,7 @@ export default class AgregarEvento extends React.Component {
         this.setState({ openTrabajo: true });
         this.setState({ periodoDisplay: "Hora" });
         this.setState({ metodopagoDisplay: "A Definir" });
-        this.setState({ facturacionDisplay: "A Definir"})
+        this.setState({ facturacionDisplay: "A Definir" })
         this.setState({ categoriaDisplay: "" });
     };
     handleAgregarEvento = () => {
@@ -230,7 +230,7 @@ export default class AgregarEvento extends React.Component {
                                             const periodo = this.state.arrayTrabajos[t].periodo;
                                             const categoria = this.state.arrayTrabajos[t].categoria;
                                             setTimeout(function () {
-                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza,metodopago,facturacion, pago, periodo, categoria);
+                                                Agregar.agregarTrabajo(nuevoEvento, mail_dueño_evento, rolT, descripciontrab, dateComienzo, timeComienzo, dateFinaliza, timeFinaliza, metodopago, facturacion, pago, periodo, categoria);
                                             }, t * 1100);
                                         }
                                         this.props.mostrarMensajeExito("Evento Agregado Correctamente.", "success");
@@ -295,7 +295,7 @@ export default class AgregarEvento extends React.Component {
                         const metodopago = this.state.metodopagoDisplay;
                         const facturacion = this.state.facturacionDisplay;
                         const categoria = this.state.categoriaDisplay;
-                        const job = { rol: rol, descripciontrab: descripciontrab,metodopago: metodopago,facturacion: facturacion, pago: pago, periodo: periodo, categoria: categoria };
+                        const job = { rol: rol, descripciontrab: descripciontrab, metodopago: metodopago, facturacion: facturacion, pago: pago, periodo: periodo, categoria: categoria };
                         this.state.arrayTrabajos.push(job);
                         var nuevaCantidad = this.state.cantTrabajos + 1;
                         this.setState({ cantTrabajos: nuevaCantidad });
@@ -350,7 +350,7 @@ export default class AgregarEvento extends React.Component {
         this.setState({ openCortina: true });
         var trabajos = [];
         trabajos = this.state.arrayTrabajos;
-        const job = { rol: trabajo.rol, descripciontrab: trabajo.descripciontrab, pago: trabajo.pago,metodopago: trabajo.metodopago, facturacion: trabajo.facturacion, periodo: trabajo.periodo, categoria: trabajo.categoria };
+        const job = { rol: trabajo.rol, descripciontrab: trabajo.descripciontrab, pago: trabajo.pago, metodopago: trabajo.metodopago, facturacion: trabajo.facturacion, periodo: trabajo.periodo, categoria: trabajo.categoria };
         this.state.arrayTrabajos.splice(index, 0, job);
         this.setState({ openLista: false });
         setTimeout(() => {
@@ -362,7 +362,7 @@ export default class AgregarEvento extends React.Component {
             this.setState({ openCortina: false });
         }, 300);
     }
-    editarTrabajoAgregando(index, rol, descripciontrab, metodopago,facturacion, pago, periodo, categoria){
+    editarTrabajoAgregando(index, rol, descripciontrab, metodopago, facturacion, pago, periodo, categoria) {
         this.setState({ openCortina: true });
         var trabajos = this.state.arrayTrabajos;
         trabajos[index].rol = rol;
@@ -374,7 +374,7 @@ export default class AgregarEvento extends React.Component {
         trabajos[index].categoria = categoria;
         this.setState({ openLista: false });
         setTimeout(() => {
-            this.setState({ arrayTrabajos: trabajos});
+            this.setState({ arrayTrabajos: trabajos });
             this.setState({ openTrabajo: false });
             this.setState({ openLista: true });
             this.setState({ openCortina: false });
@@ -397,13 +397,19 @@ export default class AgregarEvento extends React.Component {
         var trabajosDisplay = "";
         if (this.state.arrayTrabajos.length > 0) {
             trabajosDisplay = <div>
-                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} metodopago={trabajo.metodopago} facturacion={trabajo.facturacion} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" /> 
+                {this.state.arrayTrabajos.map((trabajo, index) => (<TrabajoTarjeta mostrarMensajeExito={this.mostrarMensajeExito} trabajoid={index} trabajoAgregando={trabajo} eliminarTrabajoAgregando={this.eliminarTrabajoAgregando} duplicarTrabajoAgregando={this.duplicarTrabajoAgregando} editarTrabajoAgregando={this.editarTrabajoAgregando} rol={trabajo.rol} estadoEvento="agregando" usuario={this.state.usuario} descripcion={trabajo.descripciontrab} metodopago={trabajo.metodopago} facturacion={trabajo.facturacion} pago={trabajo.pago} periodo={trabajo.periodo} categoria={trabajo.categoria} modo="empleador" />
                 ))}
             </div>
         } else {
             trabajosDisplay = <div className="sinEventos">
                 Aún no hay trabajos para este evento.
          </div>
+        }
+        var cantidadDeTrabajos = "";
+        if (this.state.cantTrabajos === 0) {
+            cantidadDeTrabajos = "Agregar Trabajos";
+        } else {
+            cantidadDeTrabajos = "VER TRABAJOS(" + this.state.cantTrabajos + ")";
         }
         return (
 
@@ -439,7 +445,7 @@ export default class AgregarEvento extends React.Component {
                             alignItems="center"
                         >
                             <div style={{ marginTop: 1 + 'em' }}>
-                                <Button variant="outlined" size="large" onClick={this.handleOpenLista}>{this.state.cantTrabajos} Trabajos</Button>
+                                <Button variant="outlined" size="large" onClick={this.handleOpenLista}>{cantidadDeTrabajos}</Button>
 
                             </div>
                         </Grid>
@@ -449,7 +455,7 @@ export default class AgregarEvento extends React.Component {
                             CERRAR
                          </Button>
                         <Button onClick={this.handleAgregarEvento} color="primary">
-                            AGREGAR EVENTO
+                            GUARDAR
                          </Button>
                     </DialogActions>
                 </Dialog>
