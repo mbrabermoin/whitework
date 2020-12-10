@@ -28,6 +28,7 @@ class Agregar extends React.Component {
             descripcion: descripcion,
             mail_dueño_evento: mail_dueño_evento,
             nombre_dueño_evento: nombre_dueño_evento,
+            dueñoEliminado: false,
             provincia: provincia,
             ciudad: ciudad,
             direccion: direccion,

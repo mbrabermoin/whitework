@@ -219,7 +219,7 @@ export default class ModoEmpleado extends React.Component {
 
     }
     if (this.state.filtroActivo) {
-      db.collection("eventos").get()
+      db.collection("eventos").where("dueñoEliminado", "==", false).get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
             const found = post.find(element => element === doc.data().id_evento);
@@ -235,7 +235,7 @@ export default class ModoEmpleado extends React.Component {
           console.log("Error getting documents: ", error);
         });
     } else {
-      db.collection("eventos").get()
+      db.collection("eventos").where("dueñoEliminado", "==", false).get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
             const found = post.find(element => element === doc.data().id_evento);
@@ -304,7 +304,7 @@ export default class ModoEmpleado extends React.Component {
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-    db.collection("eventos").get()
+    db.collection("eventos").where("dueñoEliminado", "==", false).get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           const found = trab.find(element => element === doc.data().id_evento);

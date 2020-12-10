@@ -9,6 +9,11 @@ import db from "./index";
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import wwsp from './logos/wwsp.png';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import Modificar from './components/DB/Editar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -21,6 +26,7 @@ class Main extends React.Component {
             modo: "empleado",
             usuario: null,
             openCortina: true,
+            openEliminado: false,
         }
     }
     componentDidMount() {
@@ -41,10 +47,29 @@ class Main extends React.Component {
                 alert("Ha ocurrido un error. Actualice la página.");
             });
             setTimeout(() => {
-                this.setState({ openCortina: false });
+                if (this.state.usuario.eliminado) {
+                    this.handleAbrirEliminado();
+                } else {
+                    this.setState({ openCortina: false });
+                }
             }, 1000);
         }
             , 3000);
+    }
+    handleAbrirEliminado = () => {
+        this.setState({ openEliminado: true });
+    };
+    handleCerrarEliminado = () => {
+        this.setState({ openEliminado: false });
+        authApi.signOut()
+    };
+    handleReactivarCuenta = () => {
+        const mail = this.state.usuario.email;
+        Modificar.activarUsuario(mail);
+        setTimeout(() => {
+            this.setState({ openEliminado: false });
+            this.setState({ openCortina: false });
+        }, 1000);
     }
     abrirEmpleador = () => {
         document.getElementById("empleador-li").style.color = "#eeeeee";
@@ -96,10 +121,10 @@ class Main extends React.Component {
                         <li id="profileTitle" onClick={this.abrirPerfil} >{this.state.usuario == null ? "" : this.state.usuario.fullname}</li>
                         <li className="dropdown">
                             <a href="#login" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i>{fotoPerfil}</i><span className="caret"></span></a>
-                            <ul className="dropdown-menu" role="menu" style={{left: '-85px'}}>
-                                <li onClick={this.abrirPerfil} style={{color: 'black'}}>Mi Perfil</li>
+                            <ul className="dropdown-menu" role="menu" style={{ left: '-85px' }}>
+                                <li onClick={this.abrirPerfil} style={{ color: 'black' }}>Mi Perfil</li>
                                 <div className="dropdown-divider"></div>
-                                <li onClick={authApi.signOut} style={{color: 'black'}}>Cerrar Sesión</li>
+                                <li onClick={authApi.signOut} style={{ color: 'black' }}>Cerrar Sesión</li>
                             </ul>
                         </li>
                     </ul>
@@ -118,6 +143,25 @@ class Main extends React.Component {
                     TransitionComponent={Transition}
                     aria-labelledby="form-dialog-title"
                 >
+                </Dialog>
+                <Dialog
+                    open={this.state.openEliminado}
+                    TransitionComponent={Transition}
+                    maxWidth={'md'}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="confirmation-dialog-title">Cuenta Desactivada</DialogTitle>
+                    <DialogContent dividers>
+                        Su cuenta se encuentra desactivada. ¿Desea activarla para volver a la aplicación?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCerrarEliminado} color="primary">
+                            No
+                         </Button>
+                        <Button onClick={this.handleReactivarCuenta} color="primary">
+                            Si
+                         </Button>
+                    </DialogActions>
                 </Dialog>
             </div>);
     }

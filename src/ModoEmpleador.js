@@ -40,7 +40,7 @@ class ModoEmpleador extends React.Component {
     this.buscarEventos("pendiente");
   }
   buscarEventos(estado) {
-    var filtro = db.collection("eventos").where("estado", "==", estado)
+    var filtro = db.collection("eventos").where("estado", "==", estado).where("dueñoEliminado", "==", false)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {
@@ -56,7 +56,7 @@ class ModoEmpleador extends React.Component {
   }
   buscarStaffCompletos() {
     var mail = this.state.usuario.email;
-    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail)
+    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail).where("dueñoEliminado", "==", false)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {
@@ -72,7 +72,7 @@ class ModoEmpleador extends React.Component {
   }
   buscarEnProceso() {
     var mail = this.state.usuario.email;
-    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail)
+    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail).where("dueñoEliminado", "==", false)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {
@@ -89,7 +89,7 @@ class ModoEmpleador extends React.Component {
   }
   buscarCompletado() {
     var mail = this.state.usuario.email;
-    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail)
+    var filtro = db.collection("eventos").where("mail_dueño_evento", "==", mail).where("dueñoEliminado", "==", false)
     filtro.onSnapshot((snapShots) => {
       this.setState({
         eventos: snapShots.docs.map(doc => {

@@ -165,7 +165,34 @@ class Editar extends React.Component {
       console.log("error")
     })
   }
+  desactivarUsuario = (email) => {
+    db.collection("usuarios").doc(email).update({
+      eliminado: true,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }  
+  activarUsuario = (email) => {
+    db.collection("usuarios").doc(email).update({
+      eliminado: false,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   //Eventos
+  desactivarEvento = (evento) => {
+    db.collection("eventos").doc(evento).update({
+      dueñoEliminado: true,
+    }).then(() => {
+      console.log("Modificado")
+    }).catch(() => {
+      console.log("error")
+    })
+  }
   cambiarEstadoEvento = (evento, estado) => {
     db.collection("eventos").doc(evento).update({
       estado: estado,

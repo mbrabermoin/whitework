@@ -25,6 +25,7 @@ import FileUploader from "react-firebase-file-uploader";
 import firebase from "firebase";
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import authApi from "./session/api";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -48,6 +49,7 @@ class PerfilEmpleado extends React.Component {
             openModalDescripcionEmpleador: false,
             openModalDescripcionEmpleado: false,
             openCortina: true,
+            openEliminar: false,
             comentariosEmpleado: [],
             puntajeEmpleado: 0,
             cantidadTrabajosRealizados: 0,
@@ -149,6 +151,37 @@ class PerfilEmpleado extends React.Component {
             this.setState({ openCortina: false });
         }, 2000);
     }
+    obtenerFechaActual() {
+        var today = new Date();
+        var mes = "";
+        if ((today.getMonth() + 1).toString().length === 2) {
+            mes = (today.getMonth() + 1)
+        } else {
+            mes = 0 + "" + (today.getMonth() + 1)
+        }
+        var dia = "";
+        if (today.getDate().toString().length === 2) {
+            dia = today.getDate()
+        } else {
+            dia = 0 + "" + today.getDate()
+        }
+        var minutos = "";
+        if (today.getMinutes().toString().length === 2) {
+            minutos = today.getMinutes()
+        } else {
+            minutos = 0 + "" + today.getMinutes()
+        }
+        var hora = "";
+        if (today.getHours().toString().length === 2) {
+            hora = today.getHours()
+        } else {
+            hora = 0 + "" + today.getHours()
+        }
+        var date = today.getFullYear() + "" + mes + "" + dia;
+        var time = hora + "" + minutos;
+        var dateTime = date + time;
+        return dateTime;
+    }
     //Files
     handleUploadSuccessFoto = filename => {
         this.setState({ openCortina: true });
@@ -201,6 +234,38 @@ class PerfilEmpleado extends React.Component {
             this.refrescarUsuario();
             this.setState({ openCortina: false });
         }, 3000);
+    };
+    handleDesactivarUsuario = () => {
+        this.setState({ openCortina: true });
+        const email = this.state.usuario.email;
+        /*DESACTIVAR USUARIO - FUNCIONA*/
+      Modificar.desactivarUsuario(email);
+        /*INVALIDAR EVENTOS EN VISTA PRESTADORES - FUNCIONA*/
+        var dateTime = this.obtenerFechaActual();
+        var filtro = db.collection("eventos").where("mail_dueño_evento", "==", email)
+        filtro.onSnapshot((snapShots) => {
+            snapShots.docs.map(doc => {
+                var fromDateConcat = doc.data().dateComienzo.substr(0, 4) + "" + doc.data().dateComienzo.substr(5, 2) + "" + doc.data().dateComienzo.substr(8, 2) + "" + doc.data().timeComienzo.substr(0, 2) + "" + doc.data().timeComienzo.substr(3, 2);
+                if (dateTime <= fromDateConcat) {
+                return Modificar.desactivarEvento(doc.id);
+                }else{
+                    return 0;
+                }
+            })
+        }, error => {
+            console.log(error)
+        });
+        setTimeout(() => {
+            this.setState({ openCortina: false });
+            this.setState({ openEliminar: false });
+            authApi.signOut();
+        }, 1000);
+    }
+    handleAbrirEliminar = () => {
+        this.setState({ openEliminar: true });
+    };
+    handleCerrarEliminar = () => {
+        this.setState({ openEliminar: false });
     };
     handleCerrarNombre = () => {
         this.setState({ openModalNombre: false });
@@ -564,27 +629,11 @@ class PerfilEmpleado extends React.Component {
         </div>
         var panelCV = "";
         if (this.state.usuario.CV === "" || this.state.usuario.CV === undefined) {
-            panelCV = 
-            <div>
-                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                    Cargar CV
-                    <FileUploader
-                        accept="pdf/*"
-                        name="avatar"
-                        randomizeFilename
-                        hidden
-                        storageRef={firebase.storage().ref("CV")}
-                        onUploadSuccess={this.handleUploadSuccessCV}
-                    />
-                </label>
-            </div>
-        } else {
-            panelCV = 
-            <div>
-                <div className="botones-files">
+            panelCV =
+                <div>
                     <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                        Actualizar CV
-                        <FileUploader
+                        Cargar CV
+                    <FileUploader
                             accept="pdf/*"
                             name="avatar"
                             randomizeFilename
@@ -594,36 +643,36 @@ class PerfilEmpleado extends React.Component {
                         />
                     </label>
                 </div>
-                <div className="botones-files">
-                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                        <a href={this.state.usuario.CV}> Ver CV</a>
-                    </label>
+        } else {
+            panelCV =
+                <div>
+                    <div className="botones-files">
+                        <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                            Actualizar CV
+                        <FileUploader
+                                accept="pdf/*"
+                                name="avatar"
+                                randomizeFilename
+                                hidden
+                                storageRef={firebase.storage().ref("CV")}
+                                onUploadSuccess={this.handleUploadSuccessCV}
+                            />
+                        </label>
+                    </div>
+                    <div className="botones-files">
+                        <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                            <a href={this.state.usuario.CV}> Ver CV</a>
+                        </label>
+                    </div>
                 </div>
-            </div>
         }
         var panelMatricula = "";
         if (this.state.usuario.Matricula === "" || this.state.usuario.Matricula === undefined) {
-            panelMatricula = 
-            <div>
-                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                    Cargar Matricula Profesional
-                    <FileUploader
-                        accept="pdf/*"
-                        name="avatar"
-                        randomizeFilename
-                        hidden
-                        storageRef={firebase.storage().ref("Matricula")}
-                        onUploadSuccess={this.handleUploadSuccessMatricula}
-                    />
-                </label>
-            </div>
-        } else {
-            panelMatricula = 
-            <div>
-                <div className="botones-files">
+            panelMatricula =
+                <div>
                     <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                        Actualizar Matricula Profesional
-                        <FileUploader
+                        Cargar Matricula Profesional
+                    <FileUploader
                             accept="pdf/*"
                             name="avatar"
                             randomizeFilename
@@ -633,36 +682,36 @@ class PerfilEmpleado extends React.Component {
                         />
                     </label>
                 </div>
-                <div className="botones-files">
-                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                        <a href={this.state.usuario.Matricula}> Ver Matricula Profesional</a>
-                    </label>
+        } else {
+            panelMatricula =
+                <div>
+                    <div className="botones-files">
+                        <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                            Actualizar Matricula Profesional
+                        <FileUploader
+                                accept="pdf/*"
+                                name="avatar"
+                                randomizeFilename
+                                hidden
+                                storageRef={firebase.storage().ref("Matricula")}
+                                onUploadSuccess={this.handleUploadSuccessMatricula}
+                            />
+                        </label>
+                    </div>
+                    <div className="botones-files">
+                        <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                            <a href={this.state.usuario.Matricula}> Ver Matricula Profesional</a>
+                        </label>
+                    </div>
                 </div>
-            </div>
         }
         var panelLicenciaConducir = "";
         if (this.state.usuario.LicenciaConducir === "" || this.state.usuario.LicenciaConducir === undefined) {
-            panelLicenciaConducir = 
-            <div>
-                <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                    Cargar Licencia Conducir
-                    <FileUploader
-                        accept="pdf/*"
-                        name="avatar"
-                        randomizeFilename
-                        hidden
-                        storageRef={firebase.storage().ref("LicenciaConducir")}
-                        onUploadSuccess={this.handleUploadSuccessLicenciaConducir}
-                    />
-                </label>
-            </div>
-        } else {
-            panelLicenciaConducir = 
-            <div>
-                <div className="botones-files">
+            panelLicenciaConducir =
+                <div>
                     <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                        Actualizar Licencia Conducir
-                        <FileUploader
+                        Cargar Licencia Conducir
+                    <FileUploader
                             accept="pdf/*"
                             name="avatar"
                             randomizeFilename
@@ -672,12 +721,28 @@ class PerfilEmpleado extends React.Component {
                         />
                     </label>
                 </div>
-                <div className="botones-files">
-                    <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
-                        <a href={this.state.usuario.LicenciaConducir}> Ver Licencia Conducir</a>
-                    </label>
+        } else {
+            panelLicenciaConducir =
+                <div>
+                    <div className="botones-files">
+                        <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                            Actualizar Licencia Conducir
+                        <FileUploader
+                                accept="pdf/*"
+                                name="avatar"
+                                randomizeFilename
+                                hidden
+                                storageRef={firebase.storage().ref("LicenciaConducir")}
+                                onUploadSuccess={this.handleUploadSuccessLicenciaConducir}
+                            />
+                        </label>
+                    </div>
+                    <div className="botones-files">
+                        <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                            <a href={this.state.usuario.LicenciaConducir}> Ver Licencia Conducir</a>
+                        </label>
+                    </div>
                 </div>
-            </div>
         }
         var perfilUsuario = "";
         var empresaValidada = "";
@@ -863,13 +928,18 @@ class PerfilEmpleado extends React.Component {
                                     />
                                 </label>
                             </div>
-                            <div onClick={this.handleAbrirNombre} className="profile-card__name" style={{marginTop: '20px'}}>{this.state.usuario.fullname}</div>
+                            <div onClick={this.handleAbrirNombre} className="profile-card__name" style={{ marginTop: '20px' }}>{this.state.usuario.fullname}</div>
                             <div>{empresaValidada}{empresaValidadaLogo}</div>
                             <FormControlLabel control={<Switch color="primary" checked={this.state.empresa} onChange={this.handleChangeModoEmpresa} name="empresaActivo" />} label="Modo Empresa" />
                             {perfilUsuario}
+                            <div onClick={this.handleAbrirEliminar} style={{ height: 40, marginTop: '20px' }}>
+                                <label style={{ backgroundColor: 'red', color: 'white', padding: 10, borderRadius: 4, cursor: 'pointer' }}>
+                                    Eliminar Cuenta
+                                </label>
+                            </div>
                         </div>
                     </div>
-                        <Dialog
+                    <Dialog
                         open={this.state.openModalCUIL}
                         onClose={this.handleCloseCUIL}
                         TransitionComponent={Transition}
@@ -879,7 +949,7 @@ class PerfilEmpleado extends React.Component {
                         <DialogTitle id="confirmation-dialog-title">Ingrese su CUIT*</DialogTitle>
                         <DialogContent dividers>
                             <TextField id="cuil" autoFocus margin="dense" label="CUIT (Sin espacios ni guiones)" defaultValue={this.state.usuario.cuil} type="cuil" fullWidth />
-                            <div className="col-sm-12" style={{paddingLeft: 0, marginTop: 10, fontSize: 12, fontStyle: 'italic'}}>*Será validado por un administrador del sitio.</div>
+                            <div className="col-sm-12" style={{ paddingLeft: 0, marginTop: 10, fontSize: 12, fontStyle: 'italic' }}>*Será validado por un administrador del sitio.</div>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={this.handleCloseCUIL} color="primary">
@@ -1160,6 +1230,26 @@ class PerfilEmpleado extends React.Component {
                             <Button onClick={this.handleCloseComentariosEmpleador} color="primary">
                                 CERRAR
                  </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.openEliminar}
+                        onClose={this.handleCerrarEliminar}
+                        TransitionComponent={Transition}
+                        maxWidth={'md'}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="confirmation-dialog-title">Eliminar Usuario</DialogTitle>
+                        <DialogContent dividers>
+                            ¿Desea eliminar el usuario definitivamente? Esta acción eliminará todos sus eventos, postulaciones y asignaciones.
+                    </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCerrarEliminar} color="primary">
+                                No
+                         </Button>
+                            <Button onClick={this.handleDesactivarUsuario} color="primary">
+                                Si
+                         </Button>
                         </DialogActions>
                     </Dialog>
                 </div>
